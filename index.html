@@ -279,6 +279,93 @@ dialog.fi .fg{display:block}
 .spec{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 14px}.spec th{text-align:left;color:var(--muted);font-weight:600;padding:6px 10px 6px 0;width:34%;vertical-align:top}.spec td{padding:6px 0}
 .spec tr{border-bottom:1px solid var(--line)}
 @media (max-width:900px){.wk-c,.fi-g{grid-template-columns:1fr}.cats{justify-content:flex-start}.cmp-sel{grid-template-columns:1fr}}
+
+/* ===== Mejoras UI/UX v3: animaciones, micro-interacciones, banner ===== */
+:root{--ease:cubic-bezier(.22,.61,.36,1);--dur:.5s;--dur-fast:.22s}
+/* Revelado suave al hacer scroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease);will-change:opacity,transform}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.07s}.reveal.d2{transition-delay:.14s}.reveal.d3{transition-delay:.21s}.reveal.d4{transition-delay:.28s}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* Elevación delicada en tarjetas de producto */
+.card{transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease)}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 34px rgba(44,93,118,.16);border-color:rgba(44,93,118,.28)}
+.card .img{transition:transform var(--dur) var(--ease)}
+.card:hover .img{transform:scale(1.02)}
+.card .acts .btn{transition:transform var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease)}
+.card .acts .btn:hover{transform:translateY(-2px)}
+.card .acts .btn.alt:hover{box-shadow:0 6px 16px rgba(44,93,118,.18)}
+
+/* Tira de categorías: micro-interacción */
+.cat-b .c{transition:transform var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease)}
+.cat-b:hover .c{transform:translateY(-3px) scale(1.05)}
+.cat-b[aria-pressed="true"] .c{transform:scale(1.06)}
+
+/* Transición fluida al cambiar de moneda */
+.prices .p-usd,.prices .p-ves{transition:color var(--dur-fast) var(--ease),font-size var(--dur-fast) var(--ease),order .01s}
+body[data-cur] .prices{animation:curFade .3s var(--ease)}
+@keyframes curFade{0%{opacity:.55}100%{opacity:1}}
+
+/* Botones generales: hover más vivo */
+.btn{transition:transform var(--dur-fast) var(--ease),background var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease),border-color var(--dur-fast) var(--ease)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(237,127,97,.30)}
+.btn.alt:hover{box-shadow:0 10px 22px rgba(44,93,118,.22)}
+.btn:active{transform:translateY(0);box-shadow:none}
+
+/* Diálogos (ficha, carrito): entrada más fluida */
+dialog.co{animation:dlgIn .26s var(--ease)}
+@keyframes dlgIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+dialog.co::backdrop{animation:bdrIn .26s var(--ease)}
+@keyframes bdrIn{from{opacity:0}to{opacity:1}}
+
+/* Comparador: filas con entrada escalonada */
+.cmp-t tbody tr{animation:rowIn .4s var(--ease) both}
+.cmp-t tbody tr:nth-child(2){animation-delay:.05s}
+.cmp-t tbody tr:nth-child(3){animation-delay:.1s}
+.cmp-t tbody tr:nth-child(4){animation-delay:.15s}
+.cmp-t tbody tr:nth-child(5){animation-delay:.2s}
+@keyframes rowIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.cmp-t td.best{position:relative}
+.cmp-t td.best::after{content:"Mejor precio";display:inline-block;margin-left:8px;font-size:11px;font-weight:800;color:#fff;background:var(--coral);padding:2px 8px;border-radius:999px;vertical-align:middle}
+
+/* Banner promocional intermedio de alto contraste */
+.banner{max-width:1200px;margin:56px auto;padding:0 20px}
+.banner-c{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(115deg,#ED7F61 0%,#D96B4D 55%,#C85A3E 100%);color:#fff;padding:40px 44px;display:grid;grid-template-columns:minmax(0,1.3fr) auto;gap:24px;align-items:center;box-shadow:0 16px 38px rgba(237,127,97,.32)}
+.banner-c::before{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none}
+.banner-c::after{content:"";position:absolute;right:60px;bottom:-70px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+.banner-c h2{margin:0 0 8px;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.15}
+.banner-c p{margin:0;font-size:16px;opacity:.96;max-width:48ch}
+.banner-c .b-cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--coral-press);font-weight:800;font-size:16px;padding:14px 26px;border-radius:12px;transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);white-space:nowrap}
+.banner-c .b-cta:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.20);color:var(--coral-press)}
+.banner-c .b-cta svg{width:20px;height:20px}
+@media (max-width:700px){.banner-c{grid-template-columns:1fr;padding:30px 24px;text-align:center}.banner-c .b-cta{justify-self:center}}
+
+/* Trust: hover sutil */
+.trust article{transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease)}
+.trust article:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(44,93,118,.12)}
+.trust .ic{transition:transform var(--dur-fast) var(--ease)}
+.trust article:hover .ic{transform:scale(1.08) rotate(-3deg)}
+
+/* Producto de la semana: entrada destacada */
+.wk-c{transition:box-shadow var(--dur) var(--ease)}
+.wk-c:hover{box-shadow:0 16px 40px rgba(237,127,97,.20)}
+
+/* Cómo funciona: hover en pasos */
+.how li{transition:transform var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease)}
+.how li:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(44,93,118,.12)}
+
+/* Foco visible mejorado en ficha y carrito */
+.co .btn:focus-visible,.popt:focus-within{outline:3px solid var(--coral);outline-offset:2px}
+
+/* Badges y etiquetas: pulso sutil en oferta */
+.tag{animation:tagPulse 2.4s var(--ease) infinite}
+@keyframes tagPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@media (prefers-reduced-motion:reduce){.tag{animation:none}}
+
+/* Scroll suave en la página */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
@@ -316,26 +403,36 @@ dialog.fi .fg{display:block}
 <figure class="hero-img"><img src="assets/hero-cargador.jpg" alt="Cargador rápido de 65 W con múltiples puertos USB-C y USB-A sobre una mesa" width="832" height="323"><figcaption>Cargador de 65 W con múltiples puertos</figcaption></figure>
 </div></section>
 
-<section class="trust" aria-label="Por qué comprar en Nexovia Store">
+<section class="trust reveal" aria-label="Por qué comprar en Nexovia Store">
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v.01M18 14.5v.01"/></svg></span><div><h3>Pagas al recibir</h3><p>Entregas el dinero cuando el producto llega a tus manos.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg></span><div><h3>Envíos a toda Venezuela</h3><p>Despachamos a todo el país con entrega a domicilio.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.4 5.6 4.3 0 1.2-1.1 2-2.9 2-1.4 0-2.5-.6-3-1.7M12 6v1.7M12 16.3V18"/></svg></span><div><h3>Precios en USD y Bs</h3><p>Ve el precio en dólares o en bolívares, como te convenga.</p></div></article>
 </section>
 <nav class="cats" id="cats" aria-label="Categorías"></nav>
-<section class="wk" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
+<section class="wk reveal" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
 
-<section class="cat" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
+<section class="cat reveal" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
 <p>Elige el tuyo y págalo cuando te llegue, o paga por adelantado. Precios en dólares y bolívares.</p>
 <div class="grid" id="grid" aria-live="polite"></div></section>
 
-<section class="cmpx" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
+<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
 <p>Elige hasta 3 productos (también puedes marcar “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
 <div class="cmp-sel" id="cmp-sel"></div>
 <div class="cmp-w"><table class="cmp-t" id="cmp-t"></table></div>
 <p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p></section>
 
-<section class="how" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
+<section class="banner reveal" aria-label="Promoción contra entrega">
+<div class="banner-c">
+<div>
+<h2>¿No quieres pagar por adelantado?</h2>
+<p>Pide hoy tu gadget y paga solo cuando lo tengas en tus manos. Sin riesgo, sin pagar antes.</p>
+</div>
+<a class="b-cta" href="#productos">Ver productos
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div></section>
+
+<section class="how reveal" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
 <ol><li><h3>Elige tu producto</h3><p>Agrégalo al carrito y revisa el total en dólares o bolívares.</p></li>
 <li><h3>Haz tu pedido</h3><p>Déjanos tu nombre, teléfono y dirección de entrega. No necesitas pagar todavía.</p></li>
 <li><h3>Recibe y paga</h3><p>Cuando el mensajero llegue con tu pedido, pagas el monto acordado.</p></li></ol></section>
@@ -652,6 +749,14 @@ $('ai-f').addEventListener('submit', (e) => {
   fetch(CONFIG.API_ASISTENTE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mensajes: hist.slice(-8) }) })
     .then((r) => r.json().then((j) => ({ ok: r.ok, j }))).then((x) => { if (!x.ok || !x.j.respuesta) throw 0; w.textContent = x.j.respuesta; hist.push({ role: 'assistant', content: x.j.respuesta }); }).catch(caer);
 });
+/* ---------- Revelado suave al hacer scroll ---------- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+const observeReveals = () => document.querySelectorAll('.reveal:not(.in)').forEach((el) => io.observe(el));
+observeReveals();
+new MutationObserver(observeReveals).observe(document.body, { childList: true, subtree: true });
+
 })();
 </script>
 </body>
