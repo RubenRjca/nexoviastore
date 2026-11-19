@@ -1,6 +1,12 @@
 {
   "name": "nexovia-store",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Nexovia Store: tienda de gadgets con Pago Contra Entrega (Venezuela) integrada con DroPanas"
+  "description": "Nexovia Store: tienda de gadgets con Pago Contra Entrega (Venezuela) integrada con DroPanas",
+  "scripts": {
+    "validar": "node scripts/catalogo.js validar",
+    "validar:produccion": "node scripts/catalogo.js validar --estricto",
+    "sugerir": "node scripts/catalogo.js sugerir",
+    "agregar": "node scripts/catalogo.js agregar"
+  }
 }

@@ -86,7 +86,7 @@ svg{display:block}
 .nav ul{overflow-x:auto;padding:0 12px;scrollbar-width:none}
 .nav li a{padding:13px 14px;white-space:nowrap}
 .cod{display:none}
-.top nav a.opt{display:none}
+.top nav a.popt{display:none}
 }
 @media (max-width:520px){.top .wrap{flex-direction:column;justify-content:center;gap:4px;padding:6px 20px;text-align:center}.brand .n b{font-size:21px}.brand img{height:42px}}
 
@@ -186,12 +186,12 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 @media (max-width:520px){.ft-g{grid-template-columns:1fr}.ft-seals ul{justify-content:flex-start}}
 .pm{border:0;padding:0;margin:0 0 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .pm legend{font-size:13px;font-weight:700;margin-bottom:8px;padding:0}
-.opt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;background:var(--field)}
-.opt input{margin-top:3px;accent-color:var(--coral);width:18px;height:18px;flex:none}
-.opt b{display:block;font-size:14px}.opt small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
-.opt:has(input:checked){border-color:var(--coral);background:rgba(237,127,97,.10)}
-.opt:has(input:focus-visible){outline:3px solid var(--coral);outline-offset:2px}
-.opt:has(input:disabled){opacity:.55;cursor:not-allowed}
+.popt{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;background:var(--field)}
+.popt input{margin-top:3px;accent-color:var(--coral);width:18px;height:18px;flex:none}
+.popt b{display:block;font-size:14px}.popt small{display:block;font-size:12.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+.popt:has(input:checked){border-color:var(--coral);background:rgba(237,127,97,.10)}
+.popt:has(input:focus-visible){outline:3px solid var(--coral);outline-offset:2px}
+.popt:has(input:disabled){opacity:.55;cursor:not-allowed}
 #ant{margin:14px 0 0}
 .pay-data{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px}
 .pay-data .amt{font-size:17px;font-weight:800;color:var(--head);margin:0 0 8px}
@@ -218,6 +218,67 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 .ai-wa[hidden]{display:none}
 @media (max-width:520px){.pm{grid-template-columns:1fr}.ai-fab span{display:none}.ai-fab{padding:15px}}
 @media (prefers-reduced-motion:no-preference){.ai-p{animation:aiin .18s ease-out}@keyframes aiin{from{opacity:0;transform:translateY(8px)}}}
+/* ===== Estilo v2: fondo blanco, banner teal, tira de categorías, footer oscuro ===== */
+:root{--foot:#1B2A33}
+body{background:var(--hdr)}
+.hero-card{background:linear-gradient(120deg,#2C5D76 0%,#1E465A 100%);border:0;color:#fff;box-shadow:0 14px 36px rgba(44,93,118,.25)}
+.hero h1{color:#fff}
+.hero .cod-line{display:inline-block;margin-top:14px;background:var(--coral);color:#fff;text-decoration:none;padding:6px 18px;border-radius:12px}
+.hero p.lead{color:#E6EEF2}
+.hero .btn.alt{color:#fff;border-color:#fff}.hero .btn.alt:hover{background:#fff;color:#2C5D76}
+.hero-img figcaption{color:#C9D9E1}
+.ft{background:var(--foot)}
+.cats{max-width:1200px;margin:30px auto 0;padding:0 20px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;justify-content:center}
+.cat-b{flex:none;width:100px;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--ink)}
+.cat-b .c{width:74px;height:74px;border-radius:50%;background:var(--cream);border:2px solid var(--line);display:grid;place-items:center;color:var(--head);transition:border-color .15s}
+.cat-b .c svg{width:38px;height:auto}.cat-b:hover .c{border-color:var(--head)}
+.cat-b[aria-pressed="true"] .c{border-color:var(--coral);background:rgba(237,127,97,.14)}
+.sec-t{margin:0 0 6px;font-size:26px;font-weight:800;color:var(--head)}
+.card .img,.wk .img,.fi .img{position:relative;aspect-ratio:1;border-radius:12px;background:var(--hdr);display:grid;place-items:center;color:var(--head);overflow:hidden}
+.card .img svg,.wk .img svg,.fi .img svg{width:58%;height:auto}
+.card .img img,.wk .img img,.fi .img img{width:100%;height:100%;object-fit:cover}
+.card{transition:box-shadow .15s}.card:hover{box-shadow:0 8px 22px rgba(0,0,0,.10)}
+.cmp{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);margin:10px 4px 0;cursor:pointer;width:max-content}
+.cmp input{accent-color:var(--coral);width:16px;height:16px}
+.card h3{margin:8px 4px 6px}
+.desc{margin:0 4px 8px;font-size:13.5px;color:var(--ink);line-height:1.45}
+.why{margin:0 4px 8px;font-size:13px;color:var(--muted);line-height:1.45}.why b{color:var(--head)}
+.ben{list-style:none;margin:0 4px 12px;padding:0;display:grid;gap:5px;font-size:13px}
+.ben li{display:flex;gap:8px;align-items:flex-start}
+.ben li::before{content:"✓";flex:none;width:18px;height:18px;border-radius:50%;background:rgba(44,93,118,.14);color:var(--head);font-size:11px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.prices s{font-weight:500;font-size:13px;color:var(--muted);margin-left:6px}
+body:not([data-cur="VES"]) .p-usd s,body[data-cur="VES"] .p-ves s{font-size:14px}
+.acts{display:flex;gap:8px;margin-top:auto}.acts .btn{flex:1;text-align:center;padding:12px 10px}.acts .btn.alt{flex:0 0 auto;padding:12px 14px}
+.btn.sm{padding:10px 14px;font-size:14px}
+.card .btn{width:auto}
+.wk{max-width:1200px;margin:40px auto 0;padding:0 20px}
+.wk-c{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:30px;align-items:center;background:var(--cream);border:2px solid var(--coral);border-radius:22px;padding:26px;position:relative}
+.wk-b{display:inline-block;background:var(--coral);color:#fff;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:12px}
+.wk h3{margin:0 0 8px;font-size:clamp(22px,3vw,30px);line-height:1.15;color:var(--head)}
+.wk .prices{margin:14px 0 4px}.wk .p-usd{font-size:30px!important}
+.save{display:inline-block;background:rgba(237,127,97,.16);color:var(--coral-press);font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;margin:0 0 12px}
+.wk .acts{margin-top:16px;max-width:420px}
+.cmpx{max-width:1200px;margin:48px auto 0;padding:0 20px}
+.cmpx>p{margin:0 0 18px;color:var(--muted)}
+.cmp-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.cmp-sel select{width:100%;font:inherit;font-weight:600;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px}
+.cmp-w{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--cream)}
+.cmp-t{width:100%;min-width:640px;border-collapse:collapse;font-size:14px}
+.cmp-t th,.cmp-t td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.cmp-t tr:last-child td{border-bottom:0}
+.cmp-t th[scope="row"]{width:150px;color:var(--muted);font-weight:700;font-size:13px;background:var(--hdr)}
+.cmp-t thead th{background:var(--hdr);vertical-align:bottom}
+.cmp-t .ct{font-weight:700;display:block;margin:8px 0}
+.cmp-t .mini{width:64px;height:64px;border-radius:10px;background:var(--cream);display:grid;place-items:center;color:var(--head);overflow:hidden}
+.cmp-t .mini svg{width:70%;height:auto}.cmp-t .mini img{width:100%;height:100%;object-fit:cover}
+.cmp-t .ben{margin:0}
+.cmp-t td.best{font-weight:700;color:var(--head)}
+dialog.fi .fg{display:block}
+.fi-g{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:24px}
+.fi h3{margin:0 0 8px;font-size:22px;color:var(--head)}
+.spec{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 14px}.spec th{text-align:left;color:var(--muted);font-weight:600;padding:6px 10px 6px 0;width:34%;vertical-align:top}.spec td{padding:6px 0}
+.spec tr{border-bottom:1px solid var(--line)}
+@media (max-width:900px){.wk-c,.fi-g{grid-template-columns:1fr}.cats{justify-content:flex-start}.cmp-sel{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -261,10 +322,18 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.4 5.6 4.3 0 1.2-1.1 2-2.9 2-1.4 0-2.5-.6-3-1.7M12 6v1.7M12 16.3V18"/></svg></span><div><h3>Precios en USD y Bs</h3><p>Ve el precio en dólares o en bolívares, como te convenga.</p></div></article>
 </section>
+<nav class="cats" id="cats" aria-label="Categorías"></nav>
+<section class="wk" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
 
-<section class="cat" id="productos" aria-labelledby="h3c"><h2 id="h3c">Gadgets más pedidos</h2>
+<section class="cat" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
 <p>Elige el tuyo y págalo cuando te llegue, o paga por adelantado. Precios en dólares y bolívares.</p>
-<div class="grid" id="grid"></div></section>
+<div class="grid" id="grid" aria-live="polite"></div></section>
+
+<section class="cmpx" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
+<p>Elige hasta 3 productos (también puedes marcar “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<div class="cmp-sel" id="cmp-sel"></div>
+<div class="cmp-w"><table class="cmp-t" id="cmp-t"></table></div>
+<p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p></section>
 
 <section class="how" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
 <ol><li><h3>Elige tu producto</h3><p>Agrégalo al carrito y revisa el total en dólares o bolívares.</p></li>
@@ -298,6 +367,10 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 <nav aria-label="Legal"><a href="#">Términos y condiciones</a><a href="#">Política de privacidad</a></nav></div></div>
 </footer>
 
+<dialog class="co fi" id="fi" aria-labelledby="fi-t">
+<div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
+<div class="co-b" id="fi-b"></div></dialog>
+
 <dialog class="co" id="co" aria-labelledby="co-t">
 <div class="co-h"><h2 id="co-t">Completa tu pedido</h2><button class="x" type="button" id="co-x" aria-label="Cerrar">×</button></div>
 <div class="co-b" id="co-form-wrap">
@@ -307,13 +380,13 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 <p class="demo" id="demo" hidden>Vista previa local: al desplegar en Vercel con tu llave, los estados y ciudades se cargan desde DroPanas y el pedido se envía de verdad.</p>
 <form id="f" novalidate autocomplete="on">
 <fieldset class="pm"><legend>¿Cómo quieres pagar?</legend>
-<label class="opt"><input type="radio" name="metodo_pago" value="contra_entrega" checked><span><b>Pago Contra Entrega</b><small>Pagas al recibir tu pedido</small></span></label>
-<label class="opt"><input type="radio" name="metodo_pago" value="anticipado" id="rad-ant"><span><b>Pago Directo Anticipado</b><small id="ant-sub">Pago Móvil, Zelle, Ávila Pay o transferencia</small></span></label>
+<label class="popt"><input type="radio" name="metodo_pago" value="contra_entrega" checked><span><b>Pago Contra Entrega</b><small>Pagas al recibir tu pedido</small></span></label>
+<label class="popt"><input type="radio" name="metodo_pago" value="anticipado" id="rad-ant"><span><b>Pago Directo Anticipado</b><small id="ant-sub">Pago Móvil, Zelle, Ávila Pay o transferencia</small></span></label>
 </fieldset>
 <div class="fg">
 <div><label for="nombre">Nombre</label><input id="nombre" name="nombre" required maxlength="50" autocomplete="given-name"></div>
 <div><label for="apellido">Apellido</label><input id="apellido" name="apellido" required maxlength="50" autocomplete="family-name"></div>
-<div class="full"><label for="telefono">Teléfono de contacto</label><input id="telefono" name="telefono" type="tel" required inputmode="tel" placeholder="0412-1234567" pattern="[0-9+\s\-()]{10,18}" autocomplete="tel"></div>
+<div class="full"><label for="telefono">Teléfono de contacto</label><input id="telefono" name="telefono" type="tel" required inputmode="tel" placeholder="0412-1234567" pattern="[0-9+\s\-\(\)]{10,18}" autocomplete="tel"></div>
 <div><label for="estado">Estado</label><select id="estado" name="estado" required><option value="">Cargando…</option></select></div>
 <div><label for="ciudad">Ciudad</label><select id="ciudad" name="ciudad" required disabled><option value="">Elige un estado</option></select></div>
 <div class="full"><label for="direccion">Dirección de entrega detallada</label><textarea id="direccion" name="direccion" required minlength="8" maxlength="250" placeholder="Calle, urbanización, edificio, piso y apartamento o casa"></textarea></div>
@@ -358,16 +431,9 @@ const CONFIG = {
     transferencia: { nombre: 'Transferencia bancaria', moneda: 'VES', datos: [['Banco', ''], ['Número de cuenta', ''], ['Titular', ''], ['Cédula / RIF', '']] }
   }
 };
-/* Solo para ver la página abriendo el archivo en tu computador (file://). En Vercel el catálogo viene de /api/productos. */
-const FALLBACK = { tasa_bs: 150, productos: [
-  { sku: 'cargador-65w', titulo: 'Cargador Rápido 65W, 4 Puertos USB-C y USB-A', usd: 24.9, icono: 'charger', etiqueta: 'Más vendido' },
-  { sku: 'smartwatch-fit', titulo: 'Smartwatch Deportivo con Llamadas Bluetooth', usd: 29.9, icono: 'watch' },
-  { sku: 'audifonos-tws', titulo: 'Audífonos Inalámbricos con Estuche de Carga', usd: 19.9, icono: 'buds', etiqueta: 'Nuevo' },
-  { sku: 'power-bank-20k', titulo: 'Power Bank 20.000 mAh con Carga Rápida', usd: 27.9, icono: 'bank' },
-  { sku: 'cable-usbc-100w', titulo: 'Cable USB-C a USB-C 100W, 1,5 m', usd: 6.9, icono: 'cable' },
-  { sku: 'parlante-bt', titulo: 'Parlante Bluetooth Portátil', usd: 22.9, icono: 'speaker' }] };
 const S='<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
 const ICONS={
+todos:S+'<rect x="26" y="26" width="26" height="26" rx="5"/><rect x="68" y="26" width="26" height="26" rx="5"/><rect x="26" y="68" width="26" height="26" rx="5"/><rect x="68" y="68" width="26" height="26" rx="5"/></svg>',
 charger:S+'<rect x="28" y="30" width="56" height="62" rx="8"/><path d="M42 30v-9M70 30v-9"/><rect x="40" y="46" width="12" height="7" rx="2"/><rect x="60" y="46" width="12" height="7" rx="2"/><circle cx="46" cy="72" r="5"/><circle cx="66" cy="72" r="5"/></svg>',
 watch:S+'<rect x="36" y="36" width="48" height="48" rx="12"/><path d="M44 36l4-18h24l4 18M44 84l4 18h24l4-18"/><path d="M60 50v11l8 5"/></svg>',
 buds:S+'<rect x="24" y="62" width="72" height="38" rx="14"/><path d="M24 78h72"/><path d="M42 62V34a8 8 0 0 1 16 0v28M62 62V34a8 8 0 0 1 16 0v28"/></svg>',
@@ -395,16 +461,84 @@ setCur(saved); curBtns.forEach((b) => b.addEventListener('click', () => setCur(b
 
 /* ---------- Catálogo ---------- */
 const grid = $('grid');
-function pintarCatalogo() {
-  grid.innerHTML = productos.map((p) =>
-    '<article class="card"><div class="img">' + (p.etiqueta ? '<span class="tag">' + esc(p.etiqueta) + '</span>' : '') + (ICONS[p.icono] || '') + '</div>' +
-    '<h3>' + esc(p.titulo) + '</h3><div class="prices"><span class="p-usd">' + usd(p.usd) + '</span><span class="p-ves">' + bs(p.usd) + '</span></div>' +
-    '<p class="cod-mini">Pago Contra Entrega o pago anticipado</p><button class="btn" type="button" data-sku="' + esc(p.sku) + '">Comprar ahora</button></article>').join('');
+let categorias = [], filtro = 'todos', cmp = [];
+const prod = (sku) => productos.find((p) => p.sku === sku);
+const precios = (p) => '<div class="prices"><span class="p-usd">' + usd(p.usd) + (p.usd_antes ? '<s>' + usd(p.usd_antes) + '</s>' : '') + '</span><span class="p-ves">' + bs(p.usd) + (p.usd_antes ? '<s>' + bs(p.usd_antes) + '</s>' : '') + '</span></div>';
+const media = (p) => (p.imagen && /^(assets\/|https:\/\/)/.test(p.imagen)) ? '<img src="' + esc(p.imagen) + '" alt="' + esc(p.titulo) + '" loading="lazy">' : (ICONS[p.icono] || '');
+const ahorro = (p) => p.usd_antes ? Math.round((1 - p.usd / p.usd_antes) * 100) : 0;
+const lis = (a) => a.map((b) => '<li>' + esc(b) + '</li>').join('');
+const etiqueta = (p) => p.etiqueta || (p.usd_antes ? 'Oferta −' + ahorro(p) + ' %' : '');
+
+function pintarCats() {
+  const hay = (id) => productos.some((p) => p.categoria === id);
+  const todas = [{ id: 'todos', nombre: 'Todos', icono: 'todos' }].concat(categorias.filter((c) => hay(c.id)));
+  $('cats').innerHTML = todas.map((c) => '<button class="cat-b" type="button" data-cat="' + esc(c.id) + '" aria-pressed="' + (c.id === filtro) + '"><span class="c">' + (ICONS[c.icono] || '') + '</span>' + esc(c.nombre) + '</button>').join('');
 }
+function pintarGrid() {
+  const l = productos.filter((p) => filtro === 'todos' || p.categoria === filtro);
+  grid.innerHTML = l.length ? l.map((p) =>
+    '<article class="card"><div class="img">' + (etiqueta(p) ? '<span class="tag">' + esc(etiqueta(p)) + '</span>' : '') + media(p) + '</div>' +
+    '<label class="cmp"><input type="checkbox" data-cmp="' + esc(p.sku) + '"' + (cmp.includes(p.sku) ? ' checked' : '') + '> Comparar</label>' +
+    '<h3>' + esc(p.titulo) + '</h3><p class="desc">' + esc(p.descripcion) + '</p>' +
+    '<p class="why"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben">' + lis(p.beneficios.slice(0, 3)) + '</ul>' +
+    precios(p) + '<p class="cod-mini">Pago Contra Entrega o pago anticipado</p>' +
+    '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></article>').join('')
+    : '<p>No hay productos en esta categoría.</p>';
+}
+function pintarSemana() {
+  const p = productos.find((x) => x.semana), s = $('semana'); if (!p) { s.hidden = true; return; }
+  s.hidden = false;
+  $('wk-c').innerHTML = '<div class="img">' + media(p) + '</div><div><span class="wk-b">Producto de la semana</span><h3 id="wk-h">' + esc(p.titulo) + '</h3>' +
+    (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' % esta semana</span>' : '') +
+    '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + precios(p) +
+    '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></div>';
+}
+function pintarCmp() {
+  const sel = $('cmp-sel');
+  sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
+    productos.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
+  const l = cmp.map(prod).filter(Boolean), t = $('cmp-t');
+  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos para compararlos.</td></tr></tbody>'; return; }
+  const keys = []; l.forEach((p) => Object.keys(p.specs || {}).forEach((k) => { if (!keys.includes(k)) keys.push(k); }));
+  const minimo = Math.min.apply(null, l.map((p) => p.usd));
+  t.innerHTML = '<thead><tr><th scope="col"></th>' + l.map((p) => '<th scope="col"><div class="mini">' + media(p) + '</div><span class="ct">' + esc(p.titulo) + '</span><button class="btn sm" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></th>').join('') + '</tr></thead><tbody>' +
+    '<tr><th scope="row">Precio</th>' + l.map((p) => '<td class="' + (p.usd === minimo ? 'best' : '') + '">' + usd(p.usd) + '<br><span style="color:var(--muted);font-weight:500">' + bs(p.usd) + '</span>' + (p.usd === minimo ? '<br>Más económico' : '') + '</td>').join('') + '</tr>' +
+    keys.map((k) => '<tr><th scope="row">' + esc(k) + '</th>' + l.map((p) => '<td>' + esc((p.specs || {})[k] || '—') + '</td>').join('') + '</tr>').join('') +
+    '<tr><th scope="row">Ventajas</th>' + l.map((p) => '<td><ul class="ben">' + lis(p.beneficios) + '</ul></td>').join('') + '</tr>' +
+    '<tr><th scope="row">¿Por qué comprarlo?</th>' + l.map((p) => '<td>' + esc(p.por_que) + '</td>').join('') + '</tr></tbody>';
+}
+function fichaP(sku) {
+  const p = prod(sku); if (!p) return;
+  $('fi-b').innerHTML = '<div class="fi-g"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
+    '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' +
+    '<table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' + precios(p) +
+    '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div></div></div>';
+  $('fi').showModal();
+}
+function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); }
 grid.innerHTML = '<p>Cargando productos…</p>';
-(local ? Promise.resolve(FALLBACK) : getJSON(CONFIG.API_PRODUCTOS)).then((j) => { tasa = j.tasa_bs || null; productos = j.productos || []; pintarCatalogo(); })
+getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); })
   .catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
-grid.addEventListener('click', (e) => { const b = e.target.closest('button[data-sku]'); if (b) abrir(b.dataset.sku); });
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-buy],[data-ficha],[data-cat]'); if (!b) return;
+  if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
+  else if (b.dataset.ficha) fichaP(b.dataset.ficha);
+  else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); }
+});
+document.addEventListener('change', (e) => {
+  const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
+  if (c) {
+    const sku = c.dataset.cmp;
+    if (c.checked) { if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
+    else cmp = cmp.filter((x) => x !== sku);
+    $('cmp-msg').textContent = ''; pintarCmp();
+  } else if (s) {
+    const v = s.value, i = Number(s.dataset.i); cmp[i] = v; cmp = cmp.filter((x, k) => x && cmp.indexOf(x) === k);
+    pintarCmp(); pintarGrid();
+  }
+});
+$('fi-x').onclick = () => $('fi').close();
+$('fi').addEventListener('click', (e) => { if (e.target === $('fi')) $('fi').close(); });
 
 /* ---------- Checkout ---------- */
 const dlg = $('co'), form = $('f'), msg = $('msg'), go = $('go'), selE = $('estado'), selC = $('ciudad'), pmet = $('pmet');
@@ -439,7 +573,7 @@ form.querySelectorAll('input[name="metodo_pago"]').forEach((r) => r.addEventList
 pmet.addEventListener('change', datosPago);
 
 function abrir(sku) {
-  cur = { p: productos.find((x) => x.sku === sku), qty: 1, ref: 'NX' + Date.now().toString(36).toUpperCase(), key: uuid(), sig: '' };
+  cur = { p: productos.find((x) => x.sku === sku), qty: 1, oid: uuid(), key: uuid(), sig: '' };
   $('ok').hidden = true; $('co-form-wrap').hidden = false; msg.textContent = ''; msg.className = 'msg'; go.disabled = false;
   form.elements.metodo_pago.value = 'contra_entrega'; refrescar(); total(); dlg.showModal();
 }
@@ -450,7 +584,7 @@ dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 
 /* Estados y ciudades (IDs de DroPanas, solo con cobertura de domicilio) */
 const DEMO_ESTADOS = ['Amazonas','Anzoátegui','Apure','Aragua','Barinas','Bolívar','Carabobo','Cojedes','Delta Amacuro','Distrito Capital','Falcón','Guárico','La Guaira','Lara','Mérida','Miranda','Monagas','Nueva Esparta','Portuguesa','Sucre','Táchira','Trujillo','Yaracuy','Zulia'];
-const fill = (sel, items, ph) => { sel.innerHTML = '<option value="">' + ph + '</option>' + items.map((i) => '<option value="' + i.id + '">' + esc(i.nombre) + '</option>').join(''); };
+const fill = (sel, items, ph) => { sel.innerHTML = '<option value="">' + ph + '</option>' + items.map((i) => '<option value="' + esc(i.id) + '">' + esc(i.nombre) + '</option>').join(''); };
 if (local) { demo = true; $('demo').hidden = false; fill(selE, DEMO_ESTADOS.map((n, i) => ({ id: 'demo' + i, nombre: n })), 'Selecciona tu estado'); }
 else getJSON(CONFIG.API_GEO).then((j) => fill(selE, j.data, 'Selecciona tu estado')).catch(() => fill(selE, [], 'No se pudo cargar. Recarga la página.'));
 selE.addEventListener('change', () => {
@@ -469,7 +603,7 @@ form.addEventListener('submit', (e) => {
   e.preventDefault(); msg.className = 'msg';
   if (!form.reportValidity()) return;
   const f = new FormData(form), ant = modo() === 'anticipado';
-  const body = { sku: cur.p.sku, cantidad: cur.qty, metodo_pago: modo(), external_reference: cur.ref, web: f.get('web'),
+  const body = { sku: cur.p.sku, cantidad: cur.qty, metodo_pago: modo(), orden_id: cur.oid, web: f.get('web'),
     cliente: { nombre: f.get('nombre').trim(), apellido: f.get('apellido').trim(), telefono: f.get('telefono').trim() },
     direccion: { state_id: Number(f.get('estado')), city_id: Number(f.get('ciudad')), direccion: f.get('direccion').trim(), referencia: (f.get('referencia') || '').trim() },
     nota_cliente: (f.get('nota') || '').trim() };
@@ -481,7 +615,7 @@ form.addEventListener('submit', (e) => {
     .then((r) => r.json().catch(() => ({})).then((j) => ({ ok: r.ok, j })))
     .then((x) => {
       if (!x.ok) throw x.j;
-      $('co-form-wrap').hidden = true; $('ok').hidden = false; $('ok-n').textContent = cur.ref;
+      $('co-form-wrap').hidden = true; $('ok').hidden = false; $('ok-n').textContent = x.j.referencia || '';
       $('ok-t').textContent = ant ? 'Recibimos tu pedido y tu referencia de pago. Verificaremos el pago antes de despachar.' : 'No pagas nada ahora: pagas al recibirlo.';
       form.reset(); fill(selC, [], 'Elige un estado'); selC.disabled = true; refrescar();
     })

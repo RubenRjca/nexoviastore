@@ -4,10 +4,14 @@ Tienda de gadgets para Venezuela con **Pago Contra Entrega** y **Pago Directo An
 Sitio estático + funciones serverless de Vercel. No requiere build.
 
 ```
-index.html            Diseño, catálogo, checkout (2 métodos de pago), asistente flotante, footer y Open Graph
+index.html            Diseño: banner, categorías, producto de la semana, catálogo, comparador, ficha, checkout (2 pagos), asistente, footer, Open Graph
+data/catalogo.json    TODOS los productos (textos, precios, ofertas, estado publicado/borrador, IDs de DroPanas)
+scripts/catalogo.js   sugerir (ranking de DroPanas) · agregar (borrador) · validar
+docs/FLUJO.md        Flujo GitHub ↔ Vercel ↔ Gemini ↔ Claude · docs/SEGURIDAD.md  Auditoría
+.github/workflows/    Validación automática en cada subida
 og-image.jpg          Imagen para vistas previas en WhatsApp/Instagram (1200×630)
 assets/               Isotipo y foto del banner
-lib/catalogo.js       ÚNICA fuente de precios e IDs de productos
+lib/catalogo.js       Lee data/catalogo.json (solo productos "publicado")
 lib/dropanas.js       Cliente de la API (cotizar envío, stock, tasa) con caché
 api/crear-orden.js    Crea el pedido: valida, protege la llave, idempotencia, cobertura y stock
 api/productos.js      Catálogo público + tasa Bs
@@ -23,7 +27,7 @@ api/asistente.js      Asistente de ventas con IA (opcional)
 5. Cuando todo funcione, cambia la variable a `live_sk_…` y vuelve a desplegar.
 
 ## Antes de vender (pendiente de tu lado)
-- **`lib/catalogo.js`**: reemplaza los 6 productos de ejemplo y completa `producto_id`, `bodega_origen_id` y `precio_venta_usd`
+- **`data/catalogo.json`**: reemplaza los 6 productos de ejemplo y completa `producto_id`, `bodega_origen_id` y `precio_venta_usd`
   (`GET /api/v1/productos` y `/bodegas`). Con `null`, el pedido se rechaza a propósito.
 - **`index.html` → `CONFIG.PAGOS`**: escribe los datos de Pago Móvil, Zelle, Ávila Pay y transferencia que aceptes.
   Los métodos sin datos no se ofrecen. Sin ninguno, "Pago Directo Anticipado" aparece como "Próximamente".
