@@ -5,14 +5,14 @@
 //  - anticipado:     tipo_pago "sin_recaudo" + requiere_aprobacion:true. El pedido queda RETENIDO (sin guía, sin descontar
 //                    stock y sin cobrar a tu wallet) hasta que verifiques el pago y lo apruebes en tu panel de DroPanas.
 // Seguridad: la llave nunca sale de este archivo; precios e IDs salen de lib/catalogo.js, jamás del navegador.
-// Duplicados: Idempotency-Key (UUID v4) + external_reference único. Un reintento devuelve el pedido original.
-const { CATALOGO, configurado } = require('../lib/catalogo');
+// Duplicados: Idempotency-Key (UUID v4) + external_reference derivado en servidor de un orden_id aleatorio. Un reintento devuelve el pedido original.
+const crypto = require('crypto');
+const { obtener, configurado, precioVigente } = require('../lib/catalogo');
 const { dp, cotizar, stockDisponible } = require('../lib/dropanas');
 
 const SHIPPING_TYPE_ID = 1; // 1 = domicilio en 24 h (Pídelo y Punto). 2 = Pídelo Express (más rápido, flete mayor).
 const METODOS_ANTICIPADO = { pagomovil: 'Pago Móvil', avilapay: 'Ávila Pay', zelle: 'Zelle', transferencia: 'Transferencia' };
 const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const REF_OK = /^[A-Za-z0-9._-]{1,100}$/;
 const NOMBRE_OK = /^[\p{L}\p{M}' .-]{1,50}$/u;
 const PAGO_REF_OK = /^[A-Za-z0-9 ._-]{4,40}$/;
 
@@ -24,7 +24,9 @@ const limitado = (ip) => {
   if (hits.size > 2000) hits.clear();
   return arr.length > 8;
 };
-const txt = (v, max) => (typeof v === 'string' && v.trim().length <= max ? v.trim() : '');
+// Texto libre: se eliminan < > y caracteres de control (evita inyección de HTML/scripts en tu panel de DroPanas).
+const limpiar = (s) => s.replace(/[<>\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+const txt = (v, max) => (typeof v === 'string' && v.trim().length <= max ? limpiar(v) : '');
 const fail = (res, status, message, code) => res.status(status).json({ ...(code ? { code } : {}), message });
 
 module.exports = async (req, res) => {
@@ -32,14 +34,16 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return fail(res, 405, 'Método no permitido.');
   try { const o = req.headers.origin; if (o && new URL(o).host !== req.headers.host) return fail(res, 403, 'Origen no permitido.'); }
   catch (e) { return fail(res, 403, 'Origen no permitido.'); }
+  const sfs = req.headers['sec-fetch-site'];
+  if (sfs && sfs !== 'same-origin') return fail(res, 403, 'Origen no permitido.'); // un navegador desde otro sitio no puede llamar esta ruta
 
   const b = req.body && typeof req.body === 'object' ? req.body : {};
   if (b.web) return res.status(200).json({ ok: true }); // campo trampa anti-bots
-  const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
+  const ip = String(req.headers['x-vercel-forwarded-for'] || req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   if (limitado(ip)) return fail(res, 429, 'Demasiados intentos. Espera unos minutos.');
 
   // ---- Validación de entrada ----
-  const item = CATALOGO[b.sku];
+  const item = obtener(b.sku);
   const idem = req.headers['idempotency-key'];
   const c = b.cliente || {}, d = b.direccion || {};
   const qty = Number(b.cantidad);
@@ -48,7 +52,9 @@ module.exports = async (req, res) => {
   if (!item) return fail(res, 400, 'Producto no disponible.');
   if (!Number.isInteger(qty) || qty < 1 || qty > 10) return fail(res, 400, 'Cantidad inválida.');
   if (!idem || !UUID_V4.test(idem)) return fail(res, 400, 'Solicitud inválida. Recarga la página.');
-  if (!REF_OK.test(b.external_reference || '')) return fail(res, 400, 'Solicitud inválida. Recarga la página.');
+  if (!UUID_V4.test(b.orden_id || '')) return fail(res, 400, 'Solicitud inválida. Recarga la página.');
+  // La referencia la fabrica el SERVIDOR a partir de un UUID aleatorio: nadie puede adivinar ni "reservar" la referencia de otro cliente.
+  const ref = 'NX' + crypto.createHash('sha256').update(String(b.orden_id).toLowerCase()).digest('hex').slice(0, 12).toUpperCase();
   if (!NOMBRE_OK.test(c.nombre || '') || !NOMBRE_OK.test(c.apellido || '')) return fail(res, 400, 'Revisa tu nombre y apellido.');
   const tel = String(c.telefono || '').replace(/\D/g, '');
   if (!/^[0-9+\s\-()]{10,18}$/.test(c.telefono || '') || tel.length < 10 || tel.length > 13) return fail(res, 400, 'Revisa tu número de teléfono.');
@@ -80,23 +86,25 @@ module.exports = async (req, res) => {
     if (anticipado) notas.push(`PAGO ANTICIPADO ${METODOS_ANTICIPADO[b.pago_metodo]} ref ${String(b.pago_referencia).trim()}`);
     if (b.nota_cliente) notas.push(txt(b.nota_cliente, 150));
     const payload = {
-      external_reference: b.external_reference,
+      external_reference: ref,
       cliente: { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim() },
       direccion: { state_id: d.state_id, city_id: d.city_id, direccion, ...(txt(d.referencia, 120) ? { referencia: txt(d.referencia, 120) } : {}) },
-      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: item.precio_venta_usd /* + variante_id si el producto es variable */ }],
+      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: precioVigente(item) /* + variante_id si el producto es variable */ }],
       bodega_origen_id: item.bodega_origen_id,
       tipo_entrega: 'domicilio',
       shipping_type_id: SHIPPING_TYPE_ID,
       tipo_pago: tipoPago,
-      ...(anticipado ? { requiere_aprobacion: true } : {}),
+      // Anticipado: siempre retenido hasta verificar el pago. Contra entrega: COD_REQUIERE_APROBACION=1 retiene también esos pedidos
+      // para que los confirmes (p. ej. por WhatsApp) antes de enviar: es la mejor defensa contra pedidos falsos.
+      ...(anticipado || process.env.COD_REQUIERE_APROBACION === '1' ? { requiere_aprobacion: true } : {}),
       ...(notas.length ? { nota_cliente: notas.join(' | ').slice(0, 250) } : {}),
     };
 
     const r = await dp('/ordenes', { method: 'POST', body: payload, headers: { 'Idempotency-Key': idem } });
     const code = r.j && r.j.code;
     const modo = anticipado ? 'anticipado' : 'contra_entrega';
-    if (r.ok) return res.status(200).json({ ok: true, referencia: b.external_reference, modo, en_cola: r.status === 202 });
-    if (code === 'EXTERNAL_REFERENCE_DUPLICADO') return res.status(200).json({ ok: true, referencia: b.external_reference, modo, duplicado: true });
+    if (r.ok) return res.status(200).json({ ok: true, referencia: ref, modo, en_cola: r.status === 202 });
+    if (code === 'EXTERNAL_REFERENCE_DUPLICADO') return res.status(200).json({ ok: true, referencia: ref, modo, duplicado: true });
     console.error('DroPanas rechazó el pedido', r.status, code, r.j && r.j.message); // detalle solo en logs de Vercel
     if (code === 'SIN_STOCK_EN_BODEGA') return fail(res, 409, 'Este producto se agotó.', 'SIN_STOCK');
     if (code === 'IDEMPOTENCY_IN_FLIGHT') return fail(res, 409, 'Tu pedido se está procesando. Espera unos segundos.', code);
