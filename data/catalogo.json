@@ -8,57 +8,99 @@
   ],
   "productos": [
     {
-      "sku": "cargador-65w", "estado": "publicado", "semana": true, "categoria": "carga", "icono": "charger", "etiqueta": "Más vendido", "imagen": "",
+      "sku": "cargador-65w", "estado": "publicado", "semana": true, "nuevo": false, "categoria": "carga", "icono": "charger", "etiqueta": "Más vendido", "imagen": "",
       "titulo": "Cargador Rápido 65W, 4 Puertos USB-C y USB-A",
       "descripcion": "Cargador de pared de 65 W con 4 puertos (USB-C y USB-A) para cargar celular, tableta y más al mismo tiempo.",
       "por_que": "Un solo cargador para toda tu mesa: menos enchufes, menos cables y carga rápida en tus dispositivos compatibles.",
+      "por_que_conviene": "Si tienes varios equipos cargando a la vez, este cargador los alimenta a todos desde un solo enchufe sin pelear por el puerto más rápido.",
+      "beneficio_practico": "Llegas cada mañana con el celular, la tableta y los audífonos cargados al 100 % sin cables de más por toda la mesa.",
       "beneficios": ["Carga rápida de hasta 65 W", "4 puertos: USB-C y USB-A", "Carga varios equipos a la vez", "Ideal para casa, oficina o viaje"],
+      "desventajas": ["Es más grande que un cargador de un solo puerto", "No trae cable incluido"],
       "specs": { "Tipo": "Cargador de pared", "Potencia": "65 W", "Puertos": "4 (USB-C y USB-A)", "Ideal para": "Celular, tableta y laptop compatible" },
+      "resenas": [
+        { "nombre": "Andrés G.", "texto": "Carga el celular y la laptop al mismo tiempo sin calentarse. Me deshice de tres cargadores.", "estrellas": 5 },
+        { "nombre": "María F.", "texto": "Llegó rapidísimo a Maracay y pagué al recibir. Funciona perfecto con mi tableta.", "estrellas": 5 }
+      ],
       "precio_venta_usd": 24.9, "precio_oferta_usd": 21.9, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     },
     {
-      "sku": "smartwatch-fit", "estado": "publicado", "semana": false, "categoria": "wearables", "icono": "watch", "etiqueta": "", "imagen": "",
+      "sku": "smartwatch-fit", "estado": "publicado", "semana": false, "nuevo": false, "categoria": "wearables", "icono": "watch", "etiqueta": "", "imagen": "",
       "titulo": "Smartwatch Deportivo con Llamadas Bluetooth",
       "descripcion": "Reloj inteligente deportivo con llamadas por Bluetooth para contestar desde la muñeca.",
       "por_que": "Controla tus llamadas sin sacar el celular del bolso.",
+      "por_que_conviene": "Si llegas caminando o manejando y no puedes sacar el teléfono, contestas desde la muñeca sin soltar nada.",
+      "beneficio_practico": "Ya no pierdes llamadas importantes mientras buscas el celular en el bolso o en el tablero.",
       "beneficios": ["Contesta llamadas desde la muñeca", "Diseño deportivo para el día a día", "Se conecta por Bluetooth a tu celular"],
+      "desventajas": ["La batería dura unos 2 días con uso constante", "La calidad de audio de la llamada depende del Bluetooth del celular"],
       "specs": { "Tipo": "Smartwatch deportivo", "Función": "Llamadas por Bluetooth", "Conectividad": "Bluetooth", "Ideal para": "Uso diario y deporte" },
+      "resenas": [
+        { "nombre": "Carlos R.", "texto": "Contesto las llamadas del trabajo desde la muñeca. Me simplificó el día.", "estrellas": 4 },
+        { "nombre": "Luisana P.", "texto": "Cómodo y liviano. La batería hay que recargarla cada par de días.", "estrellas": 4 }
+      ],
       "precio_venta_usd": 29.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     },
     {
-      "sku": "audifonos-tws", "estado": "publicado", "semana": false, "categoria": "audio", "icono": "buds", "etiqueta": "Nuevo", "imagen": "",
+      "sku": "audifonos-tws", "estado": "publicado", "semana": false, "nuevo": true, "categoria": "audio", "icono": "buds", "etiqueta": "Nuevo", "imagen": "",
       "titulo": "Audífonos Inalámbricos con Estuche de Carga",
       "descripcion": "Audífonos inalámbricos con estuche de carga para escuchar música y hablar sin cables.",
       "por_que": "Libertad sin cables para el trabajo, el gimnasio o el transporte.",
+      "por_que_conviene": "Si estás siempre en movimiento, los sacas del estuche y suenan al instante, sin enredos ni cables que se rompen.",
+      "beneficio_practico": "Caminas, entrenas o trabajas con música y manos libres sin que ningún cable te estorbe.",
       "beneficios": ["100 % inalámbricos", "El estuche también los carga", "Para música y llamadas"],
+      "desventajas": ["La batería de cada auricular dura unas 4-5 horas por carga", "El estuche debe cargarse aparte"],
       "specs": { "Tipo": "Audífonos inalámbricos", "Función": "Música y llamadas", "Conectividad": "Bluetooth", "Ideal para": "Trabajo, gimnasio y transporte" },
+      "resenas": [
+        { "nombre": "Daniela M.", "texto": "¡Recién llegados y encantados! Suenan muy bien para el precio.", "estrellas": 5 },
+        { "nombre": "José V.", "texto": "El estuche carga rápido. Perfectos para el metro.", "estrellas": 4 }
+      ],
       "precio_venta_usd": 19.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     },
     {
-      "sku": "power-bank-20k", "estado": "publicado", "semana": false, "categoria": "energia", "icono": "bank", "etiqueta": "", "imagen": "",
+      "sku": "power-bank-20k", "estado": "publicado", "semana": false, "nuevo": false, "categoria": "energia", "icono": "bank", "etiqueta": "", "imagen": "",
       "titulo": "Power Bank 20.000 mAh con Carga Rápida",
       "descripcion": "Batería portátil de 20.000 mAh con carga rápida para recargar tus dispositivos fuera de casa.",
       "por_que": "Un respaldo de energía para cuando no tienes un enchufe cerca.",
+      "por_que_conviene": "Si te toca estar fuera todo el día, esta batería recarga tu celular varias veces antes de quedarse sin energía.",
+      "beneficio_practico": "Ya no te quedas sin batería en la calle: recargas el celular 3-4 veces antes de buscar un enchufe.",
       "beneficios": ["Gran capacidad: 20.000 mAh", "Carga rápida", "Recarga tus equipos en cualquier lugar"],
+      "desventajas": ["Es más pesado que un power bank pequeño", "Tarda varias horas en cargarse por completo"],
       "specs": { "Tipo": "Power bank", "Capacidad": "20.000 mAh", "Destacado": "Carga rápida", "Ideal para": "Viajes y salidas largas" },
+      "resenas": [
+        { "nombre": "Roberto S.", "texto": "Me cargó el celular tres veces en un viaje de Caracas a Mérida. Excelente.", "estrellas": 5 },
+        { "nombre": "Génesis A.", "texto": "Bastante pesado, pero cumple. Lo llevo en la mochila siempre.", "estrellas": 4 }
+      ],
       "precio_venta_usd": 27.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     },
     {
-      "sku": "cable-usbc-100w", "estado": "publicado", "semana": false, "categoria": "cables", "icono": "cable", "etiqueta": "", "imagen": "",
+      "sku": "cable-usbc-100w", "estado": "publicado", "semana": false, "nuevo": false, "categoria": "cables", "icono": "cable", "etiqueta": "", "imagen": "",
       "titulo": "Cable USB-C a USB-C 100W, 1,5 m",
       "descripcion": "Cable USB-C a USB-C de 1,5 m compatible con carga de hasta 100 W.",
       "por_que": "Lo bastante largo para cargar cómodo desde la cama o el escritorio.",
+      "por_que_conviene": "Si tu enchufe está lejos del sillón o la cama, este cable te llega sin estirar ni tener que moverte.",
+      "beneficio_practico": "Cargas el celular o la laptop cómodo donde estés, sin estar pegado a la pared.",
       "beneficios": ["Hasta 100 W de potencia", "1,5 metros de largo", "USB-C en ambos extremos"],
+      "desventajas": ["Solo sirve para equipos con puerto USB-C", "No trae bloque de carga, es solo el cable"],
       "specs": { "Tipo": "Cable USB-C a USB-C", "Potencia": "Hasta 100 W", "Largo": "1,5 m", "Ideal para": "Celulares, tabletas y laptops compatibles" },
+      "resenas": [
+        { "nombre": "Eduardo T.", "texto": "Por fin puedo cargar la laptop desde el sofá. El largo es justo.", "estrellas": 5 },
+        { "nombre": "Paola N.", "texto": "Resistente y carga rápido. Llegó en dos días.", "estrellas": 5 }
+      ],
       "precio_venta_usd": 6.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     },
     {
-      "sku": "parlante-bt", "estado": "publicado", "semana": false, "categoria": "audio", "icono": "speaker", "etiqueta": "", "imagen": "",
+      "sku": "parlante-bt", "estado": "publicado", "semana": false, "nuevo": false, "categoria": "audio", "icono": "speaker", "etiqueta": "", "imagen": "",
       "titulo": "Parlante Bluetooth Portátil",
       "descripcion": "Parlante Bluetooth portátil para llevar tu música a cualquier lugar.",
       "por_que": "Música para la casa, la playa o la reunión, sin cables.",
+      "por_que_conviene": "Si te gusta tener música en cualquier parte, lo conectas al celular en segundos y suena fuerte para el tamaño.",
+      "beneficio_practico": "Llevas tu música a la playa, la terraza o la reunión sin instalaciones ni cables largos.",
       "beneficios": ["Conexión Bluetooth", "Portátil: llévalo contigo", "Fácil de conectar a tu celular"],
+      "desventajas": ["El sonido no llena espacios muy grandes o abiertos", "La batería dura unas 6 horas a volumen alto"],
       "specs": { "Tipo": "Parlante portátil", "Conectividad": "Bluetooth", "Ideal para": "Casa, reuniones y paseos" },
+      "resenas": [
+        { "nombre": "Félix D.", "texto": "Suena más de lo que esperaba. Ideal para una parrilla pequeña.", "estrellas": 5 },
+        { "nombre": "Carolina R.", "texto": "Lo llevo a la playa siempre. La batería da para toda la tarde.", "estrellas": 4 }
+      ],
       "precio_venta_usd": 22.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
     }
   ]

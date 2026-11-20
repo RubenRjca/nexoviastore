@@ -280,6 +280,73 @@ dialog.fi .fg{display:block}
 .spec tr{border-bottom:1px solid var(--line)}
 @media (max-width:900px){.wk-c,.fi-g{grid-template-columns:1fr}.cats{justify-content:flex-start}.cmp-sel{grid-template-columns:1fr}}
 
+/* ===== Comparador por categoría ===== */
+.cmp-cat{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.cmp-cat button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 18px;font:inherit;font-weight:600;font-size:14px;color:var(--ink);background:var(--field);transition:border-color var(--dur-fast,0.22s) var(--ease,cubic-bezier(.22,.61,.36,1)),background var(--dur-fast,0.22s) var(--ease,cubic-bezier(.22,.61,.36,1)),color var(--dur-fast,0.22s) var(--ease,cubic-bezier(.22,.61,.36,1))}
+.cmp-cat button:hover{border-color:var(--head)}
+.cmp-cat button[aria-pressed="true"]{background:var(--head);color:#fff;border-color:var(--head)}
+.cmp-cat button svg{width:20px;height:20px}
+.cmp-sel{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
+.cmp-hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+.cmp-t .neg{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px}
+.cmp-t .neg li{display:flex;gap:8px;align-items:flex-start}
+.cmp-t .neg li::before{content:"✕";flex:none;width:18px;height:18px;border-radius:50%;background:rgba(237,127,97,.14);color:var(--coral-press);font-size:11px;font-weight:800;display:grid;place-items:center;margin-top:1px}
+.cmp-t .conv{text-align:left;font-size:13px;color:var(--ink);line-height:1.45}
+.cmp-t .bp{font-size:13px;color:var(--muted);line-height:1.45}
+.cmp-t td.best{position:relative}
+
+/* Badge "Nuevo" */
+.tag.new-tag{background:#3DA76A;color:#fff}
+.tag.nuevo-hero{background:#3DA76A}
+
+/* Hero: carrusel de nuevos */
+.hero-new{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.hero-new .hn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#fff;transition:background var(--dur-fast,0.22s) var(--ease,cubic-bezier(.22,.61,.36,1))}
+.hero-new .hn:hover{background:rgba(255,255,255,.28)}
+.hero-new .hn .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);flex:none}
+
+/* Ficha: botón comparar con similares */
+.fi .acts{gap:8px}
+.fi-cmp{display:flex;gap:8px;margin-top:12px}
+.fi-cmp .btn{flex:1;text-align:center}
+
+/* ===== Barra inferior móvil ===== */
+.mnav{display:none}
+@media (max-width:900px){
+  body{padding-bottom:62px}
+  .mnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--hdr);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);justify-content:space-around;align-items:center;padding:max(4px,env(safe-area-inset-bottom,0px)) 0}
+  .mnav a,.mnav button{all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;font-size:10.5px;font-weight:600;color:var(--muted);transition:color .15s}
+  .mnav a:hover,.mnav button:hover{color:var(--head)}
+  .mnav svg{width:22px;height:22px}
+  .mnav .active{color:var(--coral)}
+  .ai-fab{bottom:max(72px,calc(env(safe-area-inset-bottom,0px) + 64px))}
+  .ai-p{bottom:max(140px,calc(env(safe-area-inset-bottom,0px) + 132px))}
+}
+
+/* ===== Formulario y lista de reseñas ===== */
+.resenas{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
+.resenas h4{margin:0 0 12px;font-size:16px;font-weight:700;color:var(--head)}
+.res-list{display:grid;gap:12px;margin-bottom:18px}
+.res-item{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.res-item .res-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.res-item .res-n{font-weight:700;font-size:14px;color:var(--ink)}
+.res-item .res-d{font-size:12px;color:var(--muted)}
+.res-stars{display:inline-flex;gap:2px;font-size:15px;line-height:1}
+.res-stars .s-on{color:var(--coral)}
+.res-stars .s-off{color:var(--line)}
+.res-item .res-t{font-size:13.5px;color:var(--ink);line-height:1.5;margin:4px 0 0}
+.res-form{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px}
+.res-form h4{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--head)}
+.res-form .fg{margin-bottom:12px}
+.res-form .star-pick{display:inline-flex;gap:4px;margin-bottom:10px}
+.res-form .star-pick button{all:unset;cursor:pointer;font-size:26px;line-height:1;color:var(--line);transition:color .12s,transform .12s}
+.res-form .star-pick button:hover{color:var(--coral);transform:scale(1.12)}
+.res-form .star-pick button.on{color:var(--coral)}
+.res-form .res-msg{font-size:13.5px;min-height:1.4em;margin-top:8px;color:var(--muted)}
+.res-form .res-msg.ok{color:#2E7D32;font-weight:600}
+.res-form .res-msg.err{color:#C0392B;font-weight:600}
+.res-form textarea{resize:vertical;min-height:80px}
+
 /* ===== Mejoras UI/UX v3: animaciones, micro-interacciones, banner ===== */
 :root{--ease:cubic-bezier(.22,.61,.36,1);--dur:.5s;--dur-fast:.22s}
 /* Revelado suave al hacer scroll */
@@ -416,11 +483,14 @@ html{scroll-behavior:smooth}
 <p>Elige el tuyo y págalo cuando te llegue, o paga por adelantado. Precios en dólares y bolívares.</p>
 <div class="grid" id="grid" aria-live="polite"></div></section>
 
-<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
-<p>Elige hasta 3 productos (también puedes marcar “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h">
+<h2 class="sec-t" id="cmp-h">Compara productos de la misma categoría</h2>
+<p class="cmp-hint">Elige primero una categoría y luego hasta 3 productos para verlos lado a lado. Solo comparamos productos del mismo tipo, para que la comparación sea justa.</p>
+<div class="cmp-cat" id="cmp-cat" role="group" aria-label="Categorías a comparar"></div>
 <div class="cmp-sel" id="cmp-sel"></div>
 <div class="cmp-w"><table class="cmp-t" id="cmp-t"></table></div>
-<p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p></section>
+<p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p>
+</section>
 
 <section class="banner reveal" aria-label="Promoción contra entrega">
 <div class="banner-c">
@@ -463,6 +533,13 @@ html{scroll-behavior:smooth}
 <div class="ft-b"><div><span>© 2026 Nexovia Store. Todos los derechos reservados.</span>
 <nav aria-label="Legal"><a href="#">Términos y condiciones</a><a href="#">Política de privacidad</a></nav></div></div>
 </footer>
+
+<nav class="mnav" aria-label="Navegación inferior">
+<a href="#pago-contra-entrega" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9M5 10v10h14V10"/></svg>Inicio</a>
+<a href="#productos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Productos</a>
+<a href="#comparador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/></svg>Comparar</a>
+<button type="button" id="mnav-cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5h3l2.4 11.2h10.2l2-8H6.6"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg>Pedido</button>
+</nav>
 
 <dialog class="co fi" id="fi" aria-labelledby="fi-t">
 <div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
@@ -558,13 +635,13 @@ setCur(saved); curBtns.forEach((b) => b.addEventListener('click', () => setCur(b
 
 /* ---------- Catálogo ---------- */
 const grid = $('grid');
-let categorias = [], filtro = 'todos', cmp = [];
+let categorias = [], filtro = 'todos', cmp = [], cmpCat = null;
 const prod = (sku) => productos.find((p) => p.sku === sku);
 const precios = (p) => '<div class="prices"><span class="p-usd">' + usd(p.usd) + (p.usd_antes ? '<s>' + usd(p.usd_antes) + '</s>' : '') + '</span><span class="p-ves">' + bs(p.usd) + (p.usd_antes ? '<s>' + bs(p.usd_antes) + '</s>' : '') + '</span></div>';
 const media = (p) => (p.imagen && /^(assets\/|https:\/\/)/.test(p.imagen)) ? '<img src="' + esc(p.imagen) + '" alt="' + esc(p.titulo) + '" loading="lazy">' : (ICONS[p.icono] || '');
 const ahorro = (p) => p.usd_antes ? Math.round((1 - p.usd / p.usd_antes) * 100) : 0;
 const lis = (a) => a.map((b) => '<li>' + esc(b) + '</li>').join('');
-const etiqueta = (p) => p.etiqueta || (p.usd_antes ? 'Oferta −' + ahorro(p) + ' %' : '');
+const etiqueta = (p) => p.etiqueta || (p.nuevo ? 'Nuevo' : '') || (p.usd_antes ? 'Oferta −' + ahorro(p) + ' %' : '');
 
 function pintarCats() {
   const hay = (id) => productos.some((p) => p.categoria === id);
@@ -574,8 +651,7 @@ function pintarCats() {
 function pintarGrid() {
   const l = productos.filter((p) => filtro === 'todos' || p.categoria === filtro);
   grid.innerHTML = l.length ? l.map((p) =>
-    '<article class="card"><div class="img">' + (etiqueta(p) ? '<span class="tag">' + esc(etiqueta(p)) + '</span>' : '') + media(p) + '</div>' +
-    '<label class="cmp"><input type="checkbox" data-cmp="' + esc(p.sku) + '"' + (cmp.includes(p.sku) ? ' checked' : '') + '> Comparar</label>' +
+    '<article class="card"><div class="img">' + (etiqueta(p) ? '<span class="tag' + (p.nuevo ? ' new-tag' : '') + '">' + esc(etiqueta(p)) + '</span>' : '') + media(p) + '</div>' +
     '<h3>' + esc(p.titulo) + '</h3><p class="desc">' + esc(p.descripcion) + '</p>' +
     '<p class="why"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben">' + lis(p.beneficios.slice(0, 3)) + '</ul>' +
     precios(p) + '<p class="cod-mini">Pago Contra Entrega o pago anticipado</p>' +
@@ -591,17 +667,28 @@ function pintarSemana() {
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></div>';
 }
 function pintarCmp() {
+  /* Botones de categoría */
+  const catsEl = $('cmp-cat');
+  catsEl.innerHTML = categorias.map((c) => '<button type="button" data-cmpcat="' + esc(c.id) + '" aria-pressed="' + (c.id === cmpCat) + '">' + (ICONS[c.icono] || '') + esc(c.nombre) + '</button>').join('');
+  /* Limpiar cmp de productos que no pertenecen a la categoría actual */
+  if (cmpCat) { cmp = cmp.filter((sku) => { const p = prod(sku); return p && p.categoria === cmpCat; }); }
+  const prodsCat = productos.filter((p) => p.categoria === cmpCat);
+  /* Selects */
   const sel = $('cmp-sel');
-  sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
-    productos.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
+  sel.innerHTML = [0, 1].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
+    prodsCat.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
   const l = cmp.map(prod).filter(Boolean), t = $('cmp-t');
-  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos para compararlos.</td></tr></tbody>'; return; }
+  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos de la misma categoría para compararlos.</td></tr></tbody>'; return; }
   const keys = []; l.forEach((p) => Object.keys(p.specs || {}).forEach((k) => { if (!keys.includes(k)) keys.push(k); }));
   const minimo = Math.min.apply(null, l.map((p) => p.usd));
+  const neg = (p) => (p.desventajas && p.desventajas.length) ? '<ul class="neg">' + lis(p.desventajas) + '</ul>' : '—';
   t.innerHTML = '<thead><tr><th scope="col"></th>' + l.map((p) => '<th scope="col"><div class="mini">' + media(p) + '</div><span class="ct">' + esc(p.titulo) + '</span><button class="btn sm" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></th>').join('') + '</tr></thead><tbody>' +
     '<tr><th scope="row">Precio</th>' + l.map((p) => '<td class="' + (p.usd === minimo ? 'best' : '') + '">' + usd(p.usd) + '<br><span style="color:var(--muted);font-weight:500">' + bs(p.usd) + '</span>' + (p.usd === minimo ? '<br>Más económico' : '') + '</td>').join('') + '</tr>' +
     keys.map((k) => '<tr><th scope="row">' + esc(k) + '</th>' + l.map((p) => '<td>' + esc((p.specs || {})[k] || '—') + '</td>').join('') + '</tr>').join('') +
     '<tr><th scope="row">Ventajas</th>' + l.map((p) => '<td><ul class="ben">' + lis(p.beneficios) + '</ul></td>').join('') + '</tr>' +
+    '<tr><th scope="row">Desventajas</th>' + l.map((p) => '<td>' + neg(p) + '</td>').join('') + '</tr>' +
+    '<tr><th scope="row">¿Por qué conviene?</th>' + l.map((p) => '<td class="conv">' + esc(p.por_que_conviene || '—') + '</td>').join('') + '</tr>' +
+    '<tr><th scope="row">Beneficio en tu día a día</th>' + l.map((p) => '<td class="bp">' + esc(p.beneficio_practico || '—') + '</td>').join('') + '</tr>' +
     '<tr><th scope="row">¿Por qué comprarlo?</th>' + l.map((p) => '<td>' + esc(p.por_que) + '</td>').join('') + '</tr></tbody>';
 }
 function fichaP(sku) {
@@ -612,10 +699,32 @@ function fichaP(sku) {
     '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div></div></div>';
   $('fi').showModal();
 }
+function fichaP(sku) {
+  const p = prod(sku); if (!p) return;
+  const neg = (p.desventajas && p.desventajas.length) ? '<div class="resenas" style="border:0;padding:0;margin:8px 0 14px"><p class="why" style="margin:0 0 6px"><b style="color:var(--coral-press)">Desventajas honestas</b></p><ul class="neg" style="list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px">' + p.desventajas.map((d) => '<li style="display:flex;gap:8px;align-items:flex-start"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:rgba(237,127,97,.14);color:var(--coral-press);font-size:11px;font-weight:800;display:grid;place-items:center;margin-top:1px">✕</span>' + esc(d) + '</li>').join('') + '</ul></div>' : '';
+  const conv = p.por_que_conviene ? '<p class="why" style="margin-left:0"><b>¿Por qué conviene?</b> ' + esc(p.por_que_conviene) + '</p>' : '';
+  const bp = p.beneficio_practico ? '<p class="why" style="margin-left:0"><b>En tu día a día:</b> ' + esc(p.beneficio_practico) + '</p>' : '';
+  $('fi-b').innerHTML = '<div class="fi-g"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
+    '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p>' + conv + bp +
+    '<ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + neg +
+    '<table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' + precios(p) +
+    '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p>' +
+    '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div>' +
+    '<div class="fi-cmp"><button class="btn alt sm" type="button" data-cmpficha="' + esc(p.sku) + '">Comparar con similares</button></div>' +
+    '<div class="resenas" id="resenas-box" data-sku="' + esc(p.sku) + '"></div>' +
+    '</div></div>';
+  $('fi').showModal();
+  cargarResenas(p.sku);
+}
 function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); }
 grid.innerHTML = '<p>Cargando productos…</p>';
-getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); })
-  .catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
+getJSON(CONFIG.API_PRODUCTOS).then((j) => {
+  tasa = j.tasa_bs || null; productos = j.productos || []; categorias = j.categorias || [];
+  cmpCat = categorias.length ? categorias[0].id : null;
+  const primerCat = productos.filter((p) => p.categoria === cmpCat);
+  cmp = primerCat.slice(0, 2).map((p) => p.sku);
+  pintarTodo();
+}).catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-buy],[data-ficha],[data-cat]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
