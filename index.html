@@ -466,7 +466,8 @@ html{scroll-behavior:smooth}
 <section class="hero" id="pago-contra-entrega" aria-labelledby="h1"><div class="hero-card">
 <div><h1 id="h1">¡Envíos a toda Venezuela!<span class="cod-line">Pago Contra Entrega</span></h1>
 <p class="lead">Elige tu producto, haz tu pedido y paga cuando lo recibas en tu casa. Sin pagar por adelantado.</p>
-<div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div></div>
+<div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div>
+<div class="hero-new" id="hero-new"></div></div>
 <figure class="hero-img"><img src="assets/hero-cargador.jpg" alt="Cargador rápido de 65 W con múltiples puertos USB-C y USB-A sobre una mesa" width="832" height="323"><figcaption>Cargador de 65 W con múltiples puertos</figcaption></figure>
 </div></section>
 
@@ -594,7 +595,7 @@ html{scroll-behavior:smooth}
 'use strict';
 /* ===== CONFIGURACIÓN (lo único que debes editar aquí) ===== */
 const CONFIG = {
-  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente',
+  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente', API_RESENAS: '/api/resenas',
   WHATSAPP: '', // tu número en formato internacional sin + ni espacios, ej. 584121234567. Vacío = sin botón de WhatsApp
   /* Datos para el Pago Directo Anticipado. Completa SOLO los métodos que aceptes: los que queden vacíos no se ofrecen.
      moneda: 'VES' muestra el monto en Bs (usa la tasa de la tienda); 'USD' lo muestra en dólares. */
@@ -693,14 +694,6 @@ function pintarCmp() {
 }
 function fichaP(sku) {
   const p = prod(sku); if (!p) return;
-  $('fi-b').innerHTML = '<div class="fi-g"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
-    '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' +
-    '<table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' + precios(p) +
-    '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div></div></div>';
-  $('fi').showModal();
-}
-function fichaP(sku) {
-  const p = prod(sku); if (!p) return;
   const neg = (p.desventajas && p.desventajas.length) ? '<div class="resenas" style="border:0;padding:0;margin:8px 0 14px"><p class="why" style="margin:0 0 6px"><b style="color:var(--coral-press)">Desventajas honestas</b></p><ul class="neg" style="list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px">' + p.desventajas.map((d) => '<li style="display:flex;gap:8px;align-items:flex-start"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:rgba(237,127,97,.14);color:var(--coral-press);font-size:11px;font-weight:800;display:grid;place-items:center;margin-top:1px">✕</span>' + esc(d) + '</li>').join('') + '</ul></div>' : '';
   const conv = p.por_que_conviene ? '<p class="why" style="margin-left:0"><b>¿Por qué conviene?</b> ' + esc(p.por_que_conviene) + '</p>' : '';
   const bp = p.beneficio_practico ? '<p class="why" style="margin-left:0"><b>En tu día a día:</b> ' + esc(p.beneficio_practico) + '</p>' : '';
@@ -716,7 +709,64 @@ function fichaP(sku) {
   $('fi').showModal();
   cargarResenas(p.sku);
 }
-function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); }
+function pintarNuevos() {
+  const nuevos = productos.filter((p) => p.nuevo);
+  const box = $('hero-new');
+  if (!nuevos.length) { if (box) box.innerHTML = ''; return; }
+  if (box) box.innerHTML = '<span style="color:#fff;font-size:13px;font-weight:700;opacity:.9;width:100%;margin-bottom:2px">¡Recién llegados!</span>' + nuevos.map((p) =>
+    '<a class="hn" href="#productos" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</a>').join('');
+}
+function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); pintarNuevos(); }
+
+/* ---------- Reseñas de clientes ---------- */
+const estrellas = (n) => { let s = ''; for (let i = 1; i <= 5; i++) s += '<span class="' + (i <= n ? 's-on' : 's-off') + '">★</span>'; return '<span class="res-stars">' + s + '</span>'; };
+let resSkuActivo = null;
+function cargarResenas(sku) {
+  resSkuActivo = sku;
+  const box = $('resenas-box'); if (!box) return;
+  box.innerHTML = '<h4>Reseñas de clientes</h4><p style="color:var(--muted);font-size:13.5px">Cargando reseñas…</p>';
+  if (local) { box.innerHTML = '<h4>Reseñas de clientes</h4><div class="res-list">' + (prod(sku).resenas || []).map((r) => '<div class="res-item"><div class="res-h"><span class="res-n">' + esc(r.nombre) + '</span>' + estrellas(r.estrellas) + '</div><p class="res-t">' + esc(r.texto) + '</p></div>').join('') + '</div>' + formResena(sku) + '<p class="res-msg" id="rm-' + esc(sku) + '">Vista previa: las reseñas nuevas se guardan cuando la página esté desplegada en Vercel.</p>'; return; }
+  fetch(CONFIG.API_RESENAS + '?sku=' + encodeURIComponent(sku)).then((r) => r.json()).then((j) => {
+    if (resSkuActivo !== sku) return;
+    const datos = (j && j.data) || [];
+    const estaticas = (prod(sku).resenas || []).filter((r) => true);
+    const todas = estaticas.concat(datos);
+    const lista = todas.length ? '<div class="res-list">' + todas.map((r) => '<div class="res-item"><div class="res-h"><span class="res-n">' + esc(r.nombre) + '</span>' + estrellas(r.estrellas || 5) + '</div><p class="res-t">' + esc(r.texto) + '</p></div>').join('') + '</div>' : '<p style="color:var(--muted);font-size:13.5px">Aún no hay reseñas. ¡Sé el primero en dejar la tuya!</p>';
+    box.innerHTML = '<h4>Reseñas de clientes</h4>' + lista + formResena(sku);
+  }).catch(() => { if (resSkuActivo === sku) box.innerHTML = '<h4>Reseñas de clientes</h4><p style="color:var(--muted);font-size:13.5px">No se pudieron cargar las reseñas.</p>' + formResena(sku); });
+}
+function formResena(sku) {
+  return '<form class="res-form" id="rf-' + esc(sku) + '"><h4>Deja tu reseña</h4>' +
+    '<div class="star-pick" id="sp-' + esc(sku) + '" role="group" aria-label="Calificación">' +
+    [1,2,3,4,5].map((n) => '<button type="button" data-star="' + n + '" aria-label="' + n + ' estrellas">★</button>').join('') + '</div>' +
+    '<div class="fg"><label for="rn-' + esc(sku) + '">Tu nombre</label><input id="rn-' + esc(sku) + '" type="text" maxlength="60" placeholder="Ej. María G." required></div>' +
+    '<div class="fg"><label for="rt-' + esc(sku) + '">Tu reseña</label><textarea id="rt-' + esc(sku) + '" maxlength="500" required placeholder="Cuéntanos cómo te fue con este producto…"></textarea></div>' +
+    '<input type="hidden" id="rs-' + esc(sku) + '" value="5"><button class="btn" type="submit">Publicar reseña</button>' +
+    '<p class="res-msg" id="rm-' + esc(sku) + '"></p></form>';
+}
+document.addEventListener('click', (e) => {
+  const sb = e.target.closest('.star-pick button'); if (!sb) return;
+  const pick = sb.closest('.star-pick'); const n = Number(sb.dataset.star);
+  pick.querySelectorAll('button').forEach((b) => { const v = Number(b.dataset.star); b.classList.toggle('on', v <= n); });
+  const form = sb.closest('form'); if (form) { const h = form.querySelector('input[type="hidden"]'); if (h) h.value = n; }
+});
+document.addEventListener('submit', (e) => {
+  const f = e.target.closest('.res-form'); if (!f) return;
+  e.preventDefault();
+  const sku = f.id.replace('rf-', '');
+  const nombre = (f.querySelector('input[id^="rn-"]') || {}).value || '';
+  const texto = (f.querySelector('textarea[id^="rt-"]') || {}).value || '';
+  const estrellasVal = Number((f.querySelector('input[type="hidden"]') || {}).value || 5);
+  const rm = $('rm-' + sku); if (!rm) return;
+  if (nombre.trim().length < 2) { rm.className = 'res-msg err'; rm.textContent = 'Escribe tu nombre.'; return; }
+  if (texto.trim().length < 5) { rm.className = 'res-msg err'; rm.textContent = 'Escribe tu reseña.'; return; }
+  if (local) { rm.className = 'res-msg'; rm.textContent = 'Vista previa: las reseñas se guardan al desplegar en Vercel.'; return; }
+  rm.className = 'res-msg'; rm.textContent = 'Enviando…';
+  fetch(CONFIG.API_RESENAS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ producto_sku: sku, nombre: nombre.trim(), texto: texto.trim(), estrellas: estrellasVal }) })
+    .then((r) => r.json().then((j) => ({ ok: r.ok, j })))
+    .then((x) => { if (!x.ok) throw x.j; rm.className = 'res-msg ok'; rm.textContent = '¡Gracias! Tu reseña fue publicada.'; f.reset(); cargarResenas(sku); })
+    .catch((err) => { rm.className = 'res-msg err'; rm.textContent = (err && err.message) || 'No se pudo guardar tu reseña. Inténtalo de nuevo.'; });
+});
 grid.innerHTML = '<p>Cargando productos…</p>';
 getJSON(CONFIG.API_PRODUCTOS).then((j) => {
   tasa = j.tasa_bs || null; productos = j.productos || []; categorias = j.categorias || [];
@@ -726,21 +776,21 @@ getJSON(CONFIG.API_PRODUCTOS).then((j) => {
   pintarTodo();
 }).catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
 document.addEventListener('click', (e) => {
-  const b = e.target.closest('[data-buy],[data-ficha],[data-cat]'); if (!b) return;
+  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpcat],[data-cmpficha],[id="mnav-cart"]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
   else if (b.dataset.ficha) fichaP(b.dataset.ficha);
+  else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = []; pintarCmp(); }
+  else if (b.dataset.cmpficha) { const p = prod(b.dataset.cmpficha); if (p) { if ($('fi').open) $('fi').close(); cmpCat = p.categoria; cmp = [p.sku]; pintarCmp(); document.getElementById('comparador').scrollIntoView({ behavior: 'smooth' }); } }
+  else if (b.id === 'mnav-cart') { if ($('fi').open) $('fi').close(); document.getElementById('comparador').scrollIntoView({ behavior: 'smooth' }); }
   else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); }
 });
 document.addEventListener('change', (e) => {
-  const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
-  if (c) {
-    const sku = c.dataset.cmp;
-    if (c.checked) { if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
-    else cmp = cmp.filter((x) => x !== sku);
-    $('cmp-msg').textContent = ''; pintarCmp();
-  } else if (s) {
+  const s = e.target.closest('#cmp-sel select');
+  if (s) {
     const v = s.value, i = Number(s.dataset.i); cmp[i] = v; cmp = cmp.filter((x, k) => x && cmp.indexOf(x) === k);
-    pintarCmp(); pintarGrid();
+    $('cmp-msg').textContent = '';
+    if (cmp.length > 2) { $('cmp-msg').textContent = 'Comparamos hasta 2 productos del mismo tipo. Elige solo 2.'; cmp = cmp.slice(0, 2); }
+    pintarCmp();
   }
 });
 $('fi-x').onclick = () => $('fi').close();
