@@ -1,0 +1,112 @@
+--- nexovia-store/api/crear-orden.js	2026-11-19 10:51:35.138725000 +0000
++++ propuestas/crear-orden.propuesta.js	2026-11-21 01:18:04.220358122 +0000
+@@ -5,10 +5,16 @@
+ //  - anticipado:     tipo_pago "sin_recaudo" + requiere_aprobacion:true. El pedido queda RETENIDO (sin guía, sin descontar
+ //                    stock y sin cobrar a tu wallet) hasta que verifiques el pago y lo apruebes en tu panel de DroPanas.
+ // Seguridad: la llave nunca sale de este archivo; precios e IDs salen de lib/catalogo.js, jamás del navegador.
++// PROPUESTA v2 (NO aplicada): manejo explícito de 403 CROSS_MODE, 202 MAINTENANCE_QUEUED, 422 de stock/variante/bodega, 503 y 429,
++// variante_id y respaldo de pedidos fallidos. Idempotencia y tipo_pago: sin cambios.
+ // Duplicados: Idempotency-Key (UUID v4) + external_reference derivado en servidor de un orden_id aleatorio. Un reintento devuelve el pedido original.
+ const crypto = require('crypto');
+ const { obtener, configurado, precioVigente } = require('../lib/catalogo');
+-const { dp, cotizar, stockDisponible } = require('../lib/dropanas');
++const { llamar } = require('../lib/cliente');
++const { cotizarRuta } = require('../lib/cotizacion');
++const { clasificar, alertar } = require('../lib/errores');
++const { puedeComprar } = require('../lib/stock');
++const respaldo = require('../lib/respaldo');
+ 
+ const SHIPPING_TYPE_ID = 1; // 1 = domicilio en 24 h (Pídelo y Punto). 2 = Pídelo Express (más rápido, flete mayor).
+ const METODOS_ANTICIPADO = { pagomovil: 'Pago Móvil', avilapay: 'Ávila Pay', zelle: 'Zelle', transferencia: 'Transferencia' };
+@@ -66,20 +72,42 @@
+     if (!PAGO_REF_OK.test(String(b.pago_referencia || '').trim())) return fail(res, 400, 'Escribe el número de referencia de tu pago.');
+   }
+   if (!configurado(item)) return fail(res, 503, 'Este producto no está disponible por ahora.');
++  const varianteId = b.variante_id === undefined || b.variante_id === null ? null : Number(b.variante_id);
++  if (varianteId !== null && (!Number.isInteger(varianteId) || varianteId < 1)) return fail(res, 400, 'Opción inválida.');
+ 
+   const tipoPago = anticipado ? 'sin_recaudo' : 'con_recaudo';
++  const modo = anticipado ? 'anticipado' : 'contra_entrega';
++  // Datos para el respaldo (el detalle completo va a un almacén privado; en los logs solo sale enmascarado).
++  const ctx = {
++    ref, sku: b.sku, cantidad: qty, metodo_pago: b.metodo_pago, variante_id: varianteId,
++    cliente: { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim() },
++    direccion: { state_id: d.state_id, city_id: d.city_id, direccion, referencia: txt(d.referencia, 120) },
++    pago: anticipado ? { metodo: b.pago_metodo, referencia: String(b.pago_referencia).trim() } : null, nota: txt(b.nota_cliente, 150),
++  };
++  // Todo fallo al CREAR el pedido se clasifica, se respalda (salvo reintentos de idempotencia) y se responde con un texto seguro.
++  const rechazar = async (clas, tipo) => {
++    alertar(clas, { ref, sku: b.sku });
++    if (!String(clas.code).startsWith('IDEMPOTENCY')) await respaldo.registrar({ ...ctx, tipo: tipo || 'rechazo', http: clas.http, code: clas.code });
++    if (clas.retryAfter) res.setHeader('Retry-After', String(clas.retryAfter));
++    return fail(res, clas.http, clas.message, clas.code);
++  };
++
+   try {
+     // ---- Cobertura: ¿hay entrega a domicilio a esa ciudad con este tipo de pago? ----
+-    const opciones = await cotizar({ bodega: item.bodega_origen_id, state: d.state_id, city: d.city_id, tipoPago });
+-    if (!opciones) return fail(res, 503, 'No pudimos verificar la cobertura. Inténtalo de nuevo en un momento.');
+-    const opcion = opciones.find((o) => o.shipping_type_id === SHIPPING_TYPE_ID && o.tipo_entrega === 'domicilio' && o.disponible !== false && (anticipado || o.soporta_recaudo !== false));
++    const cot = await cotizarRuta({ bodega: item.bodega_origen_id, state: d.state_id, city: d.city_id, tipoPago });
++    if (!cot.ok) {
++      alertar(cot.clas, { ref, ruta: 'cotizar-envio' });
++      if (cot.clas.retryAfter) res.setHeader('Retry-After', String(cot.clas.retryAfter));
++      return fail(res, cot.clas.http === 404 ? 503 : cot.clas.http, cot.clas.message, cot.clas.code);
++    }
++    const opcion = cot.v.find((o) => o.shipping_type_id === SHIPPING_TYPE_ID && o.tipo_entrega === 'domicilio' && o.disponible !== false && (anticipado || o.soporta_recaudo !== false));
+     if (!opcion) return fail(res, 422, anticipado
+       ? 'Por ahora no tenemos entrega a domicilio en tu ciudad.'
+       : 'En tu ciudad no está disponible el Pago Contra Entrega. Prueba con Pago Directo Anticipado.', 'SIN_COBERTURA');
+ 
+-    // ---- Stock (mejor esfuerzo): si DroPanas informa menos unidades de las pedidas, se frena aquí ----
+-    const stock = await stockDisponible(item.bodega_origen_id, item.producto_id).catch(() => null);
+-    if (stock !== null && stock < qty) return fail(res, 409, stock === 1 ? 'Solo queda 1 unidad de este producto.' : stock > 0 ? `Solo quedan ${stock} unidades de este producto.` : 'Este producto se agotó.', 'SIN_STOCK');
++    // ---- Variante y stock reales (lib/stock.js). Solo bloquea con evidencia; la palabra final la tiene DroPanas ----
++    const pc = await puedeComprar(item, qty, varianteId);
++    if (!pc.ok) return fail(res, pc.http, pc.message, pc.code);
+ 
+     // ---- Pedido con el formato de POST /api/v1/ordenes ----
+     const notas = [];
+@@ -89,7 +117,7 @@
+       external_reference: ref,
+       cliente: { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim() },
+       direccion: { state_id: d.state_id, city_id: d.city_id, direccion, ...(txt(d.referencia, 120) ? { referencia: txt(d.referencia, 120) } : {}) },
+-      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: precioVigente(item) /* + variante_id si el producto es variable */ }],
++      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: precioVigente(item), ...(varianteId ? { variante_id: varianteId } : {}) }],
+       bodega_origen_id: item.bodega_origen_id,
+       tipo_entrega: 'domicilio',
+       shipping_type_id: SHIPPING_TYPE_ID,
+@@ -100,20 +128,20 @@
+       ...(notas.length ? { nota_cliente: notas.join(' | ').slice(0, 250) } : {}),
+     };
+ 
+-    const r = await dp('/ordenes', { method: 'POST', body: payload, headers: { 'Idempotency-Key': idem } });
+-    const code = r.j && r.j.code;
+-    const modo = anticipado ? 'anticipado' : 'contra_entrega';
+-    if (r.ok) return res.status(200).json({ ok: true, referencia: ref, modo, en_cola: r.status === 202 });
+-    if (code === 'EXTERNAL_REFERENCE_DUPLICADO') return res.status(200).json({ ok: true, referencia: ref, modo, duplicado: true });
+-    console.error('DroPanas rechazó el pedido', r.status, code, r.j && r.j.message); // detalle solo en logs de Vercel
+-    if (code === 'SIN_STOCK_EN_BODEGA') return fail(res, 409, 'Este producto se agotó.', 'SIN_STOCK');
+-    if (code === 'IDEMPOTENCY_IN_FLIGHT') return fail(res, 409, 'Tu pedido se está procesando. Espera unos segundos.', code);
+-    if (code === 'IDEMPOTENCY_CONFLICT') return fail(res, 409, 'Revisa tus datos e inténtalo de nuevo.', code);
+-    if (r.status === 429) { if (r.retryAfter) res.setHeader('Retry-After', r.retryAfter); return fail(res, 429, 'Hay mucha demanda. Inténtalo en un minuto.'); }
+-    if (r.status === 503) return fail(res, 503, 'Estamos en mantenimiento. Inténtalo en unos minutos.');
+-    return fail(res, r.status >= 500 ? 502 : 422, 'No pudimos procesar tu pedido. Revisa tus datos e inténtalo de nuevo.');
++    const r = await llamar('/ordenes', { method: 'POST', body: payload, headers: { 'Idempotency-Key': idem } });
++    const clas = clasificar(r);
++    if (clas.tipo === 'ok') return res.status(200).json({ ok: true, estado: 'creado', referencia: ref, modo });
++    if (clas.tipo === 'duplicado') return res.status(200).json({ ok: true, estado: 'creado', referencia: ref, modo, duplicado: true });
++    if (clas.tipo === 'en_cola') {
++      // 202: aceptado, NO se reenvía. Se guarda el solicitud_id para poder consultarlo en /api/rastreo.
++      const sid = r.j && r.j.data && r.j.data.solicitud_id;
++      await respaldo.registrar({ ...ctx, tipo: 'en_cola', http: 202, code: clas.code, solicitud_id: sid });
++      return res.status(202).json({ ok: true, estado: 'en_cola', referencia: ref, modo, message: clas.message });
++    }
++    // Error de red / timeout: el pedido pudo haberse creado. El reintento con la MISMA Idempotency-Key lo resuelve sin duplicar.
++    return rechazar(clas, clas.tipo === 'red' ? 'error_red' : 'rechazo');
+   } catch (e) {
+     console.error('crear-orden', e.message);
+-    return fail(res, e.config ? 500 : 502, 'No pudimos conectar con el servicio de pedidos. Inténtalo de nuevo.');
++    return rechazar({ http: 502, code: 'EXCEPCION', message: 'No pudimos procesar tu pedido. Inténtalo de nuevo.' }, 'error_red');
+   }
+ };
