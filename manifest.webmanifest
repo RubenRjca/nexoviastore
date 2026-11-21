@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "Nexovia Store",
+  "short_name": "Nexovia",
+  "description": "Gadgets y accesorios tech con Pago Contra Entrega en Venezuela.",
+  "lang": "es-VE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#2C5D76",
+  "icons": [
+    {
+      "src": "/assets/isotipo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
