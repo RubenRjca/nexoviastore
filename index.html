@@ -9,6 +9,7 @@
 <link rel="canonical" href="https://www.nexovia.store/">
 <link rel="icon" type="image/png" href="assets/isotipo.png">
 <link rel="apple-touch-icon" href="assets/isotipo.png">
+<link rel="manifest" href="manifest.webmanifest">
 <!-- Open Graph (Facebook, WhatsApp, Instagram, LinkedIn). TODO: cambia www.nexovia.store por tu dominio real; og:image debe ser una URL absoluta -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nexovia Store">
@@ -279,13 +280,59 @@ dialog.fi .fg{display:block}
 .spec{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 14px}.spec th{text-align:left;color:var(--muted);font-weight:600;padding:6px 10px 6px 0;width:34%;vertical-align:top}.spec td{padding:6px 0}
 .spec tr{border-bottom:1px solid var(--line)}
 @media (max-width:900px){.wk-c,.fi-g{grid-template-columns:1fr}.cats{justify-content:flex-start}.cmp-sel{grid-template-columns:1fr}}
+/* PWA install banner */
+#pwa-banner{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:12px;background:var(--teal);color:#fff;padding:8px 20px;font-size:13.5px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+#pwa-banner img{height:28px;width:auto;flex:none}
+#pwa-banner .pwa-txt{flex:1;min-width:0}
+#pwa-banner .pwa-txt b{font-weight:700}
+#pwa-banner .pwa-txt small{display:block;font-size:12px;opacity:.85;font-weight:400}
+#pwa-banner .pwa-btns{display:flex;gap:8px;align-items:center;flex:none}
+#pwa-banner .pwa-install{background:var(--coral);color:#fff;border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
+#pwa-banner .pwa-install:hover{background:var(--coral-press)}
+#pwa-banner .pwa-close{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;font-size:20px;border-radius:50%;opacity:.8}
+#pwa-banner .pwa-close:hover{background:rgba(255,255,255,.18);opacity:1}
+#pwa-banner[hidden]{display:none}
+@media (max-width:520px){#pwa-banner{font-size:12.5px;padding:8px 14px}#pwa-banner .pwa-txt small{display:none}}
+/* Stock badges */
+.stock-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin:0 4px 8px;width:max-content}
+.stock-badge.disp{background:rgba(46,160,67,.14);color:#1e7e34}
+.stock-badge.low{background:rgba(237,127,97,.16);color:var(--coral-press)}
+.stock-badge.out{background:rgba(192,57,43,.12);color:#C0392B}
+.stock-badge.unk{background:var(--cream);color:var(--muted);border:1px solid var(--line)}
+.stock-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+/* Variant selector */
+#variant-wrap{margin-bottom:14px}
+#variant-wrap label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+#variant-wrap select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px}
+#variant-wrap select:focus{border-color:var(--coral);outline:0}
+/* Rastreo dialog */
+.rastreo-form{display:grid;gap:14px}
+.rastreo-form .rfg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rastreo-form .full{grid-column:1/-1}
+.rastreo-result{margin-top:18px}
+.rastreo-result .rEstado{font-size:18px;font-weight:800;color:var(--head);margin:0 0 4px}
+.rastreo-result .rMsg{font-size:14px;color:var(--ink);margin:0 0 12px}
+.rastreo-result .rGuia{font-size:13px;color:var(--muted);margin:0 0 6px}
+.rastreo-result .rHist{list-style:none;margin:12px 0 0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rastreo-result .rHist li{padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px}
+.rastreo-result .rHist li:last-child{border-bottom:0}
+.rastreo-result .rHist .rFecha{display:block;font-size:11.5px;color:var(--muted)}
+@media (max-width:520px){.rastreo-form .rfg{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div id="pwa-banner" hidden>
+<img src="assets/isotipo.png" alt="">
+<div class="pwa-txt"><b>Descarga la app de Nexovia</b><small>Instálala para acceso rápido y sin navegador</small></div>
+<div class="pwa-btns">
+<button class="pwa-install" type="button" id="pwa-install-btn">Instalar</button>
+<button class="pwa-close" type="button" id="pwa-close-btn" aria-label="Cerrar">×</button>
+</div>
+</div>
 <div class="top"><div class="wrap">
 <p style="margin:0"><b>¡Envíos a toda Venezuela!</b> Pago Contra Entrega</p>
 <nav aria-label="Menú secundario">
-<a class="opt" href="#contacto">Rastrear pedido</a>
+<a class="opt" href="#rastreo" id="rastreo-link">Rastrear pedido</a>
 <a class="opt" href="#contacto">Ayuda</a>
 <div class="cur" role="group" aria-label="Moneda"><button type="button" aria-pressed="true" data-cur="USD">USD</button><button type="button" aria-pressed="false" data-cur="VES">Bs</button></div>
 </nav></div></div>
@@ -351,7 +398,7 @@ dialog.fi .fg{display:block}
 <div id="nosotros"><div class="fb"><img src="assets/isotipo.png" alt="" width="50" height="42"><div><b>NEXOVIA</b><span>STORE</span></div></div>
 <p>Gadgets y accesorios tech con envíos a toda Venezuela y Pago Contra Entrega.</p></div>
 <div><h3>Servicio al cliente</h3><ul class="l">
-<li><a href="#como-funciona">Cómo comprar</a></li><li><a href="#contacto">Rastrear mi pedido</a></li><li><a href="#contacto">Preguntas frecuentes</a></li><li><a href="#contacto">Contáctanos</a></li></ul></div>
+<li><a href="#como-funciona">Cómo comprar</a></li><li><a href="#rastreo" class="rastreo-open">Rastrear mi pedido</a></li><li><a href="#contacto">Preguntas frecuentes</a></li><li><a href="#contacto">Contáctanos</a></li></ul></div>
 <div><h3>Envíos y devoluciones</h3>
 <p>Despachamos a domicilio a toda Venezuela. Al elegir tu ciudad en el pedido verás si hay cobertura.</p>
 <ul class="l"><li><a href="#como-funciona">Cómo funciona el Pago Contra Entrega</a></li><li><a href="#">Política de devoluciones</a></li></ul></div>
@@ -379,6 +426,7 @@ dialog.fi .fg{display:block}
 <div class="tot"><small id="s-lbl">Total a pagar al recibir</small><strong id="s-usd"></strong><small id="s-ves"></small></div></div>
 <p class="demo" id="demo" hidden>Vista previa local: al desplegar en Vercel con tu llave, los estados y ciudades se cargan desde DroPanas y el pedido se envía de verdad.</p>
 <form id="f" novalidate autocomplete="on">
+<div id="variant-wrap" hidden></div>
 <fieldset class="pm"><legend>¿Cómo quieres pagar?</legend>
 <label class="popt"><input type="radio" name="metodo_pago" value="contra_entrega" checked><span><b>Pago Contra Entrega</b><small>Pagas al recibir tu pedido</small></span></label>
 <label class="popt"><input type="radio" name="metodo_pago" value="anticipado" id="rad-ant"><span><b>Pago Directo Anticipado</b><small id="ant-sub">Pago Móvil, Zelle, Ávila Pay o transferencia</small></span></label>
@@ -405,6 +453,20 @@ dialog.fi .fg{display:block}
 <div class="okbox" id="ok" hidden><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ED7F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
 <h3>¡Pedido recibido!</h3><p>Guarda tu número de pedido:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div>
 </dialog>
+
+<dialog class="co" id="rastreo-dlg" aria-labelledby="rastreo-t">
+<div class="co-h"><h2 id="rastreo-t">Rastrea tu pedido</h2><button class="x" type="button" id="rastreo-x" aria-label="Cerrar">×</button></div>
+<div class="co-b">
+<form class="rastreo-form" id="rastreo-form">
+<div class="rfg">
+<div><label for="rref">Número de pedido</label><input id="rref" name="rref" type="text" placeholder="NX1A2B3C4D5E6F" required pattern="NX[A-F0-9]{12}" autocomplete="off" style="text-transform:uppercase"></div>
+<div><label for="rtel">Últimos 4 dígitos de tu teléfono</label><input id="rtel" name="rtel" type="text" inputmode="numeric" maxlength="4" placeholder="1234" required pattern="[0-9]{4}" autocomplete="off"></div>
+</div>
+<button class="btn go" type="submit">Consultar</button>
+<p class="msg" id="rastreo-msg" role="status" aria-live="polite"></p>
+</form>
+<div class="rastreo-result" id="rastreo-result" hidden></div>
+</div></dialog>
 
 <div id="ai">
 <button class="ai-fab" id="ai-fab" type="button" aria-expanded="false" aria-controls="ai-panel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg><span>¿Necesitas ayuda?</span></button>
