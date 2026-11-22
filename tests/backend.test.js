@@ -21,7 +21,7 @@ const si = (c, m) => { if (!c) throw new Error(m || 'se esperaba verdadero'); };
 
 // ---------- DroPanas y almacén simulados ----------
 let rutas = [], llamadas = [];
-const kv = new Map(), lista = []; let kvFalla = false;
+const kv = new Map(), listas = new Map(); const L = (k) => { if (!listas.has(k)) listas.set(k, []); return listas.get(k); }; let kvFalla = false;
 const mk = (s, j, h = {}) => ({ ok: s >= 200 && s < 300, status: s, headers: { get: (k) => h[k.toLowerCase()] || null }, json: async () => j });
 global.fetch = async (url, opt = {}) => {
   const u = new URL(url), clave = (opt.method || 'GET') + ' ' + u.pathname + u.search;
@@ -31,9 +31,11 @@ global.fetch = async (url, opt = {}) => {
       if (c === 'SET') { kv.set(a[0], a[1]); return { result: 'OK' }; }
       if (c === 'GET') return { result: kv.get(a[0]) || null };
       if (c === 'MGET') return { result: a.map((k) => kv.get(k) || null) };
-      if (c === 'LPUSH') { lista.unshift(a[1]); return { result: lista.length }; }
+      if (c === 'LPUSH') { L(a[0]).unshift(a[1]); return { result: L(a[0]).length }; }
       if (c === 'LTRIM') return { result: 'OK' };
-      if (c === 'LRANGE') return { result: lista.slice(a[1], a[2] + 1) };
+      if (c === 'LLEN') return { result: L(a[0]).length };
+      if (c === 'LREM') { listas.set(a[0], L(a[0]).filter((x) => x !== a[2])); return { result: 1 }; }
+      if (c === 'LRANGE') return { result: L(a[0]).slice(a[1], a[2] + 1) };
       return { result: null };
     });
     return mk(200, res);
@@ -43,7 +45,7 @@ global.fetch = async (url, opt = {}) => {
   return mk(404, { code: 'ORDER_NOT_FOUND' });
 };
 const ruta = (re, r) => rutas.unshift({ re, r });
-const reset = () => { rutas = []; llamadas = []; cache.reiniciar(); cliente.reiniciarPausa(); logs.length = 0; kv.clear(); lista.length = 0; kvFalla = false; };
+const reset = () => { rutas = []; llamadas = []; cache.reiniciar(); cliente.reiniciarPausa(); logs.length = 0; kv.clear(); listas.clear(); kvFalla = false; };
 const n = (re) => llamadas.filter((c) => re.test(c.clave)).length;
 const call = async (h, { method = 'GET', query = {}, body, headers = {} } = {}) => {
   const o = { h: {} }; const res = { setHeader(k, v) { o.h[k.toLowerCase()] = v; }, status(s) { o.s = s; return this; }, json(j) { o.j = j; return this; } };
@@ -166,9 +168,9 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('429 de DroPanas → 429 con Retry-After', async () => { reset(); ruta(/ordenes\/ext:/, { s: 429, j: { code: 'RATE_LIMIT_EXCEEDED' }, h: { 'retry-after': '12' } }); const r = await call(hRastreo, { query: { ref: REF('4'), tel: '4567' } }); eq([r.s, r.h['retry-after']], [429, '12']); });
 
   // ---------- Propuesta de crear-orden (solo si el archivo está en el repo) ----------
-  const prop = path.join(root, 'propuestas/crear-orden.propuesta.js');
+  const prop = path.join(root, 'api/crear-orden.js');
   if (fs.existsSync(prop)) {
-    out('\n== Propuesta api/crear-orden (v2, NO aplicada) ==');
+    out('\n== api/crear-orden (v2: códigos de DroPanas, cola, variantes y respaldo) ==');
     const hOrden = require(prop); let ipN = 0;
     const cuerpo = (x = {}) => ({ sku: 'cargador-65w', cantidad: 1, metodo_pago: 'contra_entrega', orden_id: crypto.randomUUID(), cliente: { nombre: 'Ana', apellido: 'Pérez', telefono: '0414-1234567' }, direccion: { state_id: 24, city_id: 149, direccion: 'Av. Principal, casa 4' }, ...x });
     const pedir = (body, headers = {}) => call(hOrden, { method: 'POST', body, headers: { 'idempotency-key': crypto.randomUUID(), 'x-vercel-forwarded-for': '8.8.8.' + (ipN++ % 250) + '.' + Math.floor(ipN / 250), ...headers } });
@@ -190,6 +192,49 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     await t('el precio y los IDs siguen saliendo del servidor (no del navegador)', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ precio_venta_usd: 0.01, producto_id: 1 })); eq([body().productos[0].precio_venta_usd, body().productos[0].producto_id], [21.9, 101]); });
     await t('cobertura: CROSS_MODE al cotizar → 503 con ALERTA (sin crear pedido)', async () => { base(); ruta(/cotizar-envio/, { s: 403, j: { code: 'CROSS_MODE_OPERATION_FORBIDDEN' } }); const r = await pedir(cuerpo()); eq([r.s, r.j.code], [503, 'CONFIG_ENTORNO']); eq(n(/POST .*ordenes$/), 0); });
   }
+
+  out('\n== /api/productos: tasa en vivo, manual o de respaldo ==');
+  const hProd = require(path.join(root, 'api/productos.js'));
+  const limpiarEnv = () => { delete process.env.TASA_BS; delete process.env.TASA_BS_RESPALDO; };
+  await t('sin ninguna tasa: solo USD (tasa y fuente nulas) y NINGUNA reseña sembrada en el catálogo', async () => { reset(); limpiarEnv(); ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [null, null]); si(r.j.productos.every((p) => Array.isArray(p.resenas) && p.resenas.length === 0), 'resenas debe ir vacío'); });
+  await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
+  await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, { s: 200, j: { data: { id: 101, tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
+  await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });
+
+  out('\n== /api/resenas: solo reseñas reales, con moderación ==');
+  const hRes = require(path.join(root, 'api/resenas.js')), moderar = require(path.join(root, 'scripts/resenas-moderar.js'));
+  const rv = (x = {}) => ({ producto_sku: 'cargador-65w', nombre: 'María', texto: 'Lo recibí en tres días y carga mi laptop y mi celular a la vez. Muy buen producto.', estrellas: 5, ...x });
+  const silencio = async (f) => { const l = console.log; console.log = () => {}; try { return await f(); } finally { console.log = l; } };
+  const idPendiente = () => [...kv.keys()].find((k) => k.startsWith('nx:resena:')).split(':')[2];
+  await t('sin almacén: GET responde lista vacía (disponible:false) y POST 503, sin inventar nada', async () => { reset(); sinAlmacen(); const g = await call(hRes, { query: { sku: 'cargador-65w' } }); eq([g.s, g.j.disponible, g.j.data.length], [200, false, 0]); eq((await call(hRes, { method: 'POST', body: rv() })).s, 503); });
+  await t('una reseña nueva queda PENDIENTE y no se ve hasta que la apruebes', async () => {
+    reset(); conAlmacen(); const p = await call(hRes, { method: 'POST', body: rv() }); eq([p.s, p.j.estado], [202, 'pendiente']);
+    eq((await call(hRes, { query: { sku: 'cargador-65w' } })).j.data.length, 0, 'no debe publicarse sola');
+    await silencio(() => moderar.aprobar(idPendiente()));
+    const g = await call(hRes, { query: { sku: 'cargador-65w' } }); eq([g.j.disponible, g.j.data.length, g.j.resumen.promedio, g.j.data[0].nombre], [true, 1, 5, 'María']); si(/s-maxage/.test(g.h['cache-control']));
+  });
+  await t('rechazar y quitar: la reseña deja de verse', async () => {
+    reset(); conAlmacen(); await call(hRes, { method: 'POST', body: rv(), headers: { 'x-vercel-forwarded-for': '1.1.1.1' } }); const id = idPendiente();
+    await silencio(() => moderar.aprobar(id)); eq((await call(hRes, { query: { sku: 'cargador-65w' } })).j.data.length, 1);
+    await silencio(() => moderar.quitar(id)); eq((await call(hRes, { query: { sku: 'cargador-65w' } })).j.data.length, 0);
+  });
+  await t('promedio con varias reseñas', async () => { reset(); conAlmacen(); for (const [i, e] of [5, 4, 4].entries()) { await call(hRes, { method: 'POST', body: rv({ estrellas: e }), headers: { 'x-vercel-forwarded-for': '2.2.2.' + i } }); } for (const k of [...kv.keys()].filter((x) => x.startsWith('nx:resena:'))) await silencio(() => moderar.aprobar(k.split(':')[2])); eq((await call(hRes, { query: { sku: 'cargador-65w' } })).j.resumen, { total: 3, promedio: 4.3 }); });
+  await t('validaciones: enlaces, estrellas, nombre, texto corto, producto inexistente', async () => {
+    reset(); conAlmacen(); const p = (x) => call(hRes, { method: 'POST', body: rv(x) });
+    eq((await p({ texto: 'Compren en www.tiendafalsa.com que es mejor y más barato que aquí.' })).s, 400); eq((await p({ estrellas: 6 })).s, 400); eq((await p({ estrellas: 0 })).s, 400); eq((await p({ estrellas: 4.5 })).s, 400);
+    eq((await p({ nombre: 'M' })).s, 400); eq((await p({ nombre: '123' })).s, 400); eq((await p({ texto: 'Bueno' })).s, 400); eq((await p({ producto_sku: 'no-existe' })).s, 400); eq((await p({ producto_sku: '__proto__' })).s, 400);
+    eq(kv.size, 0, 'no debe guardar nada inválido');
+  });
+  await t('HTML/scripts en el texto se eliminan antes de guardar y nunca salen en la respuesta', async () => {
+    reset(); conAlmacen(); await call(hRes, { method: 'POST', body: rv({ texto: 'Excelente <script>alert(1)</script> producto, me llegó rápido a la casa y funciona.' }) });
+    const guardado = [...kv.values()].join(''); si(!/[<>]/.test(guardado.replace(/\{|\}/g, '')), 'quedó HTML en el almacén'); await silencio(() => moderar.aprobar(idPendiente()));
+    si(!/[<>]/.test(JSON.stringify((await call(hRes, { query: { sku: 'cargador-65w' } })).j)));
+  });
+  await t('campo trampa anti-bots, límite de 3 por hora, origen ajeno, GET con sku inválido y método no permitido', async () => {
+    reset(); conAlmacen(); const bot = await call(hRes, { method: 'POST', body: rv({ web: 'http://spam' }) }); eq(bot.s, 202); eq(kv.size, 0);
+    const ip = { 'x-vercel-forwarded-for': '9.9.9.9' }; const r = []; for (let i = 0; i < 4; i++) r.push((await call(hRes, { method: 'POST', body: rv(), headers: ip })).s); eq(r, [202, 202, 202, 429]);
+    eq((await call(hRes, { method: 'POST', body: rv(), headers: { origin: 'https://evil.com' } })).s, 403); eq((await call(hRes, { query: { sku: '../x' } })).s, 404); eq((await call(hRes, { method: 'DELETE' })).s, 405);
+  });
 
   console.error = origErr;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);

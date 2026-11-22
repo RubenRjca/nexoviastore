@@ -1,51 +1,32 @@
 'use strict';
+// Service worker de Nexovia Store. Objetivo: que la app abra rápido y muestre una página amable sin conexión.
+// REGLAS: NUNCA toca /api/* (pedidos, stock, rastreo, reseñas siempre van directo a la red), ni peticiones que no sean GET,
+// ni otros dominios, ni /data/ /lib/ /scripts/ /docs/. Para cambiar lo que se guarda, sube VERSION.
+const VERSION = 'nx-v1';
+const SHELL = `${VERSION}-shell`, ASSETS = `${VERSION}-assets`;
+const PRECACHE = ['/offline.html', '/assets/isotipo.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'];
+const NUNCA = /^\/(api|data|lib|scripts|docs|tests|propuestas|_vercel)\//;
 
-// Solo se almacenan recursos estáticos locales. Nunca interceptar /api/*.
-const CACHE_NAME = 'nexovia-static-v1';
-const STATIC_SHELL = ['/manifest.webmanifest', '/assets/isotipo.png'];
-const STATIC_EXTENSIONS = /\.(?:avif|css|gif|ico|jpe?g|js|mjs|png|svg|webmanifest|webp|woff2?)$/i;
-
-function isApi(url) {
-  return url.origin === self.location.origin && /^\/api(?:\/|$)/i.test(url.pathname);
-}
-
-function isCacheableStatic(request, url) {
-  return request.method === 'GET' &&
-    url.origin === self.location.origin &&
-    !isApi(url) &&
-    STATIC_EXTENSIONS.test(url.pathname);
-}
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME)
-    .then((cache) => cache.addAll(STATIC_SHELL))
-    .then(() => self.skipWaiting()));
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(SHELL).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', (e) => {
+  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => !k.startsWith(VERSION)).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(caches.keys()
-    .then((keys) => Promise.all(keys
-      .filter((key) => key.startsWith('nexovia-static-') && key !== CACHE_NAME)
-      .map((key) => caches.delete(key))))
-    .then(() => self.clients.claim()));
-});
+self.addEventListener('fetch', (e) => {
+  const req = e.request, url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin || NUNCA.test(url.pathname)) return; // el navegador lo resuelve solo
 
-self.addEventListener('fetch', (event) => {
-  const request = event.request;
-  const url = new URL(request.url);
-
-  // Sin caché ni redirección de ningún tipo para las APIs.
-  if (isApi(url) || !isCacheableStatic(request, url)) return;
-
-  event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(request);
-    if (cached) return cached;
-
-    const response = await fetch(request);
-    if (response.ok && response.type === 'basic') {
-      await cache.put(request, response.clone());
-    }
-    return response;
-  })());
+  if (req.mode === 'navigate') { // páginas: red primero; si no hay conexión, la última versión guardada o la página sin conexión
+    e.respondWith(fetch(req).then((r) => { const copia = r.clone(); caches.open(SHELL).then((c) => c.put('/', copia)); return r; })
+      .catch(() => caches.match('/').then((c) => c || caches.match('/offline.html'))));
+    return;
+  }
+  if (url.pathname.startsWith('/assets/')) { // imágenes e iconos: guardados primero, se refrescan en segundo plano
+    e.respondWith(caches.open(ASSETS).then((c) => c.match(req).then((hit) => {
+      const red = fetch(req).then((r) => { if (r.ok) c.put(req, r.clone()); return r; }).catch(() => hit);
+      return hit || red;
+    })));
+  }
 });

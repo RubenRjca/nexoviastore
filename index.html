@@ -8,8 +8,10 @@
 <meta name="theme-color" content="#2C5D76">
 <link rel="canonical" href="https://www.nexovia.store/">
 <link rel="icon" type="image/png" href="assets/isotipo.png">
-<link rel="apple-touch-icon" href="assets/isotipo.png">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nexovia">
 <!-- Open Graph (Facebook, WhatsApp, Instagram, LinkedIn). TODO: cambia www.nexovia.store por tu dominio real; og:image debe ser una URL absoluta -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Nexovia Store">
@@ -87,7 +89,7 @@ svg{display:block}
 .nav ul{overflow-x:auto;padding:0 12px;scrollbar-width:none}
 .nav li a{padding:13px 14px;white-space:nowrap}
 .cod{display:none}
-.top nav a.popt{display:none}
+.top nav a.opt{display:none}
 }
 @media (max-width:520px){.top .wrap{flex-direction:column;justify-content:center;gap:4px;padding:6px 20px;text-align:center}.brand .n b{font-size:21px}.brand img{height:42px}}
 
@@ -280,59 +282,42 @@ dialog.fi .fg{display:block}
 .spec{width:100%;border-collapse:collapse;font-size:13.5px;margin:6px 0 14px}.spec th{text-align:left;color:var(--muted);font-weight:600;padding:6px 10px 6px 0;width:34%;vertical-align:top}.spec td{padding:6px 0}
 .spec tr{border-bottom:1px solid var(--line)}
 @media (max-width:900px){.wk-c,.fi-g{grid-template-columns:1fr}.cats{justify-content:flex-start}.cmp-sel{grid-template-columns:1fr}}
-/* PWA install banner */
-#pwa-banner{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:12px;background:var(--teal);color:#fff;padding:8px 20px;font-size:13.5px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-#pwa-banner img{height:28px;width:auto;flex:none}
-#pwa-banner .pwa-txt{flex:1;min-width:0}
-#pwa-banner .pwa-txt b{font-weight:700}
-#pwa-banner .pwa-txt small{display:block;font-size:12px;opacity:.85;font-weight:400}
-#pwa-banner .pwa-btns{display:flex;gap:8px;align-items:center;flex:none}
-#pwa-banner .pwa-install{background:var(--coral);color:#fff;border:0;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
-#pwa-banner .pwa-install:hover{background:var(--coral-press)}
-#pwa-banner .pwa-close{all:unset;cursor:pointer;width:32px;height:32px;display:grid;place-items:center;font-size:20px;border-radius:50%;opacity:.8}
-#pwa-banner .pwa-close:hover{background:rgba(255,255,255,.18);opacity:1}
-#pwa-banner[hidden]{display:none}
-@media (max-width:520px){#pwa-banner{font-size:12.5px;padding:8px 14px}#pwa-banner .pwa-txt small{display:none}}
-/* Stock badges */
-.stock-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin:0 4px 8px;width:max-content}
-.stock-badge.disp{background:rgba(46,160,67,.14);color:#1e7e34}
-.stock-badge.low{background:rgba(237,127,97,.16);color:var(--coral-press)}
-.stock-badge.out{background:rgba(192,57,43,.12);color:#C0392B}
-.stock-badge.unk{background:var(--cream);color:var(--muted);border:1px solid var(--line)}
-.stock-badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
-/* Variant selector */
-#variant-wrap{margin-bottom:14px}
-#variant-wrap label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
-#variant-wrap select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px}
-#variant-wrap select:focus{border-color:var(--coral);outline:0}
-/* Rastreo dialog */
-.rastreo-form{display:grid;gap:14px}
-.rastreo-form .rfg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.rastreo-form .full{grid-column:1/-1}
-.rastreo-result{margin-top:18px}
-.rastreo-result .rEstado{font-size:18px;font-weight:800;color:var(--head);margin:0 0 4px}
-.rastreo-result .rMsg{font-size:14px;color:var(--ink);margin:0 0 12px}
-.rastreo-result .rGuia{font-size:13px;color:var(--muted);margin:0 0 6px}
-.rastreo-result .rHist{list-style:none;margin:12px 0 0;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.rastreo-result .rHist li{padding:10px 14px;border-bottom:1px solid var(--line);font-size:13px}
-.rastreo-result .rHist li:last-child{border-bottom:0}
-.rastreo-result .rHist .rFecha{display:block;font-size:11.5px;color:var(--muted)}
-@media (max-width:520px){.rastreo-form .rfg{grid-template-columns:1fr}}
+/* ===== Fase 3: app instalable, stock, variantes, rastreo ===== */
+.pwa{display:flex;align-items:center;gap:12px;background:#1B2A33;color:#fff;font-size:13px;padding:7px 14px;position:relative;z-index:30}
+.pwa[hidden]{display:none}
+.pwa img{height:25px;width:auto;background:#fff;border-radius:6px;padding:2px;flex:none}
+.pwa-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}.pwa-t span{opacity:.85;font-size:12px}.pwa-t span[hidden]{display:none}
+.pwa-ok{border:0;background:var(--coral);color:#fff;font:inherit;font-weight:700;font-size:12.5px;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.pwa-x{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;font-size:20px;border-radius:50%;flex:none}.pwa-x:hover{background:rgba(255,255,255,.15)}
+.pwa-x:focus-visible,.pwa-ok:focus-visible{outline:3px solid var(--coral)}
+@media (min-width:1100px){.pwa{position:fixed;top:5px;left:50%;transform:translateX(-50%);z-index:60;border-radius:999px;padding:5px 8px 5px 12px;box-shadow:0 6px 20px rgba(0,0,0,.28);max-width:min(480px,calc(100vw - 40px));animation:pwain .35s ease-out}}
+@keyframes pwain{from{opacity:0;transform:translate(-50%,-10px)}}
+@media (prefers-reduced-motion:reduce){.pwa{animation:none}}
+.stk{position:absolute;top:10px;right:10px;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;color:#fff;background:#1B2A33}
+.stk.low{background:#B7791F}.stk.soon{background:var(--teal)}
+.is-out .img svg,.is-out .img img{opacity:.4}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.vsel{margin:0 0 16px}.vsel label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+.vsel select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px}
+.tasa-nota{margin:-10px 0 18px;font-size:13px;color:var(--muted)}.tasa-nota[hidden]{display:none}
+#rs-out h3{margin:18px 0 6px;color:var(--head);font-size:18px}.rs-meta{margin:2px 0;font-size:13.5px;color:var(--muted)}
+.tl{list-style:none;margin:16px 0 0 6px;padding:0;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:0 0 14px 18px;font-size:14px}.tl li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--coral)}
+.tl small{display:block;color:var(--muted);font-size:12px}
+.top nav a.opt{display:inline}
+@media (max-width:900px){.top nav a.opt{display:none}}
 </style>
 </head>
 <body>
-<div id="pwa-banner" hidden>
-<img src="assets/isotipo.png" alt="">
-<div class="pwa-txt"><b>Descarga la app de Nexovia</b><small>Instálala para acceso rápido y sin navegador</small></div>
-<div class="pwa-btns">
-<button class="pwa-install" type="button" id="pwa-install-btn">Instalar</button>
-<button class="pwa-close" type="button" id="pwa-close-btn" aria-label="Cerrar">×</button>
-</div>
-</div>
+<aside class="pwa" id="pwa" hidden role="region" aria-label="Instalar la app de Nexovia">
+<img src="assets/isotipo.png" alt="" width="30" height="25">
+<div class="pwa-t"><b>Descarga la app de Nexovia</b><span id="pwa-guia" hidden></span></div>
+<button class="pwa-ok" type="button" id="pwa-ok">Instalar</button>
+<button class="pwa-x" type="button" id="pwa-x" aria-label="Cerrar aviso">×</button></aside>
 <div class="top"><div class="wrap">
 <p style="margin:0"><b>¡Envíos a toda Venezuela!</b> Pago Contra Entrega</p>
 <nav aria-label="Menú secundario">
-<a class="opt" href="#rastreo" id="rastreo-link">Rastrear pedido</a>
+<a class="opt" href="#rastreo" data-rastreo>Rastrear pedido</a>
 <a class="opt" href="#contacto">Ayuda</a>
 <div class="cur" role="group" aria-label="Moneda"><button type="button" aria-pressed="true" data-cur="USD">USD</button><button type="button" aria-pressed="false" data-cur="VES">Bs</button></div>
 </nav></div></div>
@@ -366,7 +351,7 @@ dialog.fi .fg{display:block}
 <section class="trust" aria-label="Por qué comprar en Nexovia Store">
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v.01M18 14.5v.01"/></svg></span><div><h3>Pagas al recibir</h3><p>Entregas el dinero cuando el producto llega a tus manos.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg></span><div><h3>Envíos a toda Venezuela</h3><p>Despachamos a todo el país con entrega a domicilio.</p></div></article>
-<article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta.</p></div></article>
+<article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta. <a href="#rastreo" data-rastreo style="color:var(--head);font-weight:700;text-decoration:underline">Consultar ahora</a></p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.4 5.6 4.3 0 1.2-1.1 2-2.9 2-1.4 0-2.5-.6-3-1.7M12 6v1.7M12 16.3V18"/></svg></span><div><h3>Precios en USD y Bs</h3><p>Ve el precio en dólares o en bolívares, como te convenga.</p></div></article>
 </section>
 <nav class="cats" id="cats" aria-label="Categorías"></nav>
@@ -374,6 +359,7 @@ dialog.fi .fg{display:block}
 
 <section class="cat" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
 <p>Elige el tuyo y págalo cuando te llegue, o paga por adelantado. Precios en dólares y bolívares.</p>
+<p class="tasa-nota" id="tasa-nota" hidden></p>
 <div class="grid" id="grid" aria-live="polite"></div></section>
 
 <section class="cmpx" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
@@ -398,7 +384,7 @@ dialog.fi .fg{display:block}
 <div id="nosotros"><div class="fb"><img src="assets/isotipo.png" alt="" width="50" height="42"><div><b>NEXOVIA</b><span>STORE</span></div></div>
 <p>Gadgets y accesorios tech con envíos a toda Venezuela y Pago Contra Entrega.</p></div>
 <div><h3>Servicio al cliente</h3><ul class="l">
-<li><a href="#como-funciona">Cómo comprar</a></li><li><a href="#rastreo" class="rastreo-open">Rastrear mi pedido</a></li><li><a href="#contacto">Preguntas frecuentes</a></li><li><a href="#contacto">Contáctanos</a></li></ul></div>
+<li><a href="#como-funciona">Cómo comprar</a></li><li><a href="#rastreo" data-rastreo>Rastrear mi pedido</a></li><li><a href="#contacto">Preguntas frecuentes</a></li><li><a href="#contacto">Contáctanos</a></li></ul></div>
 <div><h3>Envíos y devoluciones</h3>
 <p>Despachamos a domicilio a toda Venezuela. Al elegir tu ciudad en el pedido verás si hay cobertura.</p>
 <ul class="l"><li><a href="#como-funciona">Cómo funciona el Pago Contra Entrega</a></li><li><a href="#">Política de devoluciones</a></li></ul></div>
@@ -418,6 +404,16 @@ dialog.fi .fg{display:block}
 <div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
 <div class="co-b" id="fi-b"></div></dialog>
 
+<dialog class="co" id="rs" aria-labelledby="rs-t">
+<div class="co-h"><h2 id="rs-t">Rastrear mi pedido</h2><button class="x" type="button" id="rs-x" aria-label="Cerrar">×</button></div>
+<div class="co-b"><p style="margin:0 0 14px;color:var(--muted);font-size:14px">Escribe tu número de pedido y los últimos 4 dígitos del teléfono con el que pediste.</p>
+<form id="rs-f" novalidate><div class="fg">
+<div class="full"><label for="rs-ref">Número de pedido</label><input id="rs-ref" name="ref" required maxlength="14" placeholder="NX1A2B3C4D5E6F" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+<div class="full"><label for="rs-tel">Últimos 4 dígitos de tu teléfono</label><input id="rs-tel" name="tel" required inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="off"></div></div>
+<button class="btn go" type="submit" id="rs-go" style="margin-top:16px">Consultar estado</button></form>
+<p class="msg" id="rs-msg" role="status" aria-live="polite"></p>
+<div id="rs-out" hidden></div></div></dialog>
+
 <dialog class="co" id="co" aria-labelledby="co-t">
 <div class="co-h"><h2 id="co-t">Completa tu pedido</h2><button class="x" type="button" id="co-x" aria-label="Cerrar">×</button></div>
 <div class="co-b" id="co-form-wrap">
@@ -426,7 +422,6 @@ dialog.fi .fg{display:block}
 <div class="tot"><small id="s-lbl">Total a pagar al recibir</small><strong id="s-usd"></strong><small id="s-ves"></small></div></div>
 <p class="demo" id="demo" hidden>Vista previa local: al desplegar en Vercel con tu llave, los estados y ciudades se cargan desde DroPanas y el pedido se envía de verdad.</p>
 <form id="f" novalidate autocomplete="on">
-<div id="variant-wrap" hidden></div>
 <fieldset class="pm"><legend>¿Cómo quieres pagar?</legend>
 <label class="popt"><input type="radio" name="metodo_pago" value="contra_entrega" checked><span><b>Pago Contra Entrega</b><small>Pagas al recibir tu pedido</small></span></label>
 <label class="popt"><input type="radio" name="metodo_pago" value="anticipado" id="rad-ant"><span><b>Pago Directo Anticipado</b><small id="ant-sub">Pago Móvil, Zelle, Ávila Pay o transferencia</small></span></label>
@@ -451,22 +446,8 @@ dialog.fi .fg{display:block}
 <p class="msg" id="msg" role="status" aria-live="polite"></p>
 </form></div>
 <div class="okbox" id="ok" hidden><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ED7F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
-<h3>¡Pedido recibido!</h3><p>Guarda tu número de pedido:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div>
+<h3>¡Pedido recibido!</h3><p>Guarda tu número de pedido:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p><button class="btn" type="button" id="ok-rs" style="margin-right:8px">Rastrear este pedido</button><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div>
 </dialog>
-
-<dialog class="co" id="rastreo-dlg" aria-labelledby="rastreo-t">
-<div class="co-h"><h2 id="rastreo-t">Rastrea tu pedido</h2><button class="x" type="button" id="rastreo-x" aria-label="Cerrar">×</button></div>
-<div class="co-b">
-<form class="rastreo-form" id="rastreo-form">
-<div class="rfg">
-<div><label for="rref">Número de pedido</label><input id="rref" name="rref" type="text" placeholder="NX1A2B3C4D5E6F" required pattern="NX[A-F0-9]{12}" autocomplete="off" style="text-transform:uppercase"></div>
-<div><label for="rtel">Últimos 4 dígitos de tu teléfono</label><input id="rtel" name="rtel" type="text" inputmode="numeric" maxlength="4" placeholder="1234" required pattern="[0-9]{4}" autocomplete="off"></div>
-</div>
-<button class="btn go" type="submit">Consultar</button>
-<p class="msg" id="rastreo-msg" role="status" aria-live="polite"></p>
-</form>
-<div class="rastreo-result" id="rastreo-result" hidden></div>
-</div></dialog>
 
 <div id="ai">
 <button class="ai-fab" id="ai-fab" type="button" aria-expanded="false" aria-controls="ai-panel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg><span>¿Necesitas ayuda?</span></button>
@@ -483,6 +464,7 @@ dialog.fi .fg{display:block}
 /* ===== CONFIGURACIÓN (lo único que debes editar aquí) ===== */
 const CONFIG = {
   API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente',
+  API_STOCK: '/api/stock', API_RASTREO: '/api/rastreo',
   WHATSAPP: '', // tu número en formato internacional sin + ni espacios, ej. 584121234567. Vacío = sin botón de WhatsApp
   /* Datos para el Pago Directo Anticipado. Completa SOLO los métodos que aceptes: los que queden vacíos no se ofrecen.
      moneda: 'VES' muestra el monto en Bs (usa la tasa de la tienda); 'USD' lo muestra en dólares. */
@@ -508,7 +490,7 @@ const $ = (i) => document.getElementById(i);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = (n) => n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const local = location.protocol === 'file:';
-let tasa = null, productos = [], demo = false, cur = null;
+let tasa = null, tasaFuente = null, stock = {}, productos = [], demo = false, cur = null;
 const usd = (n) => 'US$ ' + fmt(n);
 const bs = (n) => (tasa ? 'Bs ' + fmt(n * tasa) : 'Bs: por confirmar');
 const uuid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
@@ -575,17 +557,68 @@ function fichaP(sku) {
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' +
     '<table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' + precios(p) +
     '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div></div></div>';
-  $('fi').showModal();
+  aplicarStock(); $('fi').showModal();
 }
-function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); }
+/* ---------- Stock real (GET /api/stock). Si no se pudo verificar, NO se afirma nada ---------- */
+const stk = (sku) => stock[sku] || null;
+const sinVenta = (s) => !!s && (s.estado === 'agotado' || s.estado === 'no_configurado');
+async function cargarStock() {
+  if (local || !productos.length) return;
+  try {
+    const skus = productos.map((p) => p.sku), nuevo = {};
+    for (let i = 0; i < skus.length; i += 12) { const j = await getJSON(CONFIG.API_STOCK + '?skus=' + skus.slice(i, i + 12).map(encodeURIComponent).join(',')); Object.assign(nuevo, j.items || {}); }
+    stock = nuevo; aplicarStock();
+  } catch (e) { /* sin datos: todo queda como estaba (nunca se inventa disponibilidad) */ }
+}
+function aplicarStock() {
+  document.querySelectorAll('[data-buy]').forEach((b) => {
+    const s = stk(b.dataset.buy); if (!b.dataset.txt) b.dataset.txt = b.textContent;
+    b.disabled = sinVenta(s); b.setAttribute('aria-disabled', sinVenta(s));
+    b.textContent = s && s.estado === 'agotado' ? 'Agotado' : s && s.estado === 'no_configurado' ? 'No disponible' : b.dataset.txt;
+  });
+  document.querySelectorAll('.card, #wk-c').forEach((c) => {
+    const b = c.querySelector('[data-buy]'), img = c.querySelector('.img'); if (!b || !img) return;
+    const s = stk(b.dataset.buy); img.querySelectorAll('.stk').forEach((x) => x.remove()); c.classList.remove('is-out');
+    const tag = (t, k) => { const e = document.createElement('span'); e.className = 'stk ' + k; e.textContent = t; img.appendChild(e); };
+    if (!s) return;
+    if (s.estado === 'agotado') { tag('Agotado', 'out'); c.classList.add('is-out'); }
+    else if (s.estado === 'no_configurado') { tag('Próximamente', 'soon'); c.classList.add('is-out'); }
+    else if (s.estado === 'disponible' && s.verificado && s.bajo) tag('Últimas unidades', 'low');
+  });
+}
+function maxQty() {
+  const s = cur ? stk(cur.p.sku) : null; if (!s) return 10;
+  let n = null;
+  if (s.tipo === 'variable') { const id = Number(($('variante') || {}).value), v = (s.variantes || []).find((x) => x.id === id); n = v ? v.disponible : null; } else n = s.disponible;
+  return Math.max(1, Math.min(10, typeof n === 'number' ? n : 10));
+}
+function prepararVariantes() {
+  const viejo = $('vsel'); if (viejo) viejo.remove();
+  const s = cur ? stk(cur.p.sku) : null; cur.variable = !!s && s.tipo === 'variable';
+  if (!cur.variable) return;
+  const d = document.createElement('div'); d.id = 'vsel'; d.className = 'vsel';
+  const lab = document.createElement('label'); lab.htmlFor = 'variante'; lab.textContent = 'Elige tu opción';
+  const sel = document.createElement('select'); sel.id = 'variante'; sel.name = 'variante'; sel.required = true; sel.add(new Option('Selecciona…', ''));
+  (s.variantes || []).forEach((v) => { const o = new Option((v.nombre || 'Opción ' + v.id) + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
+  sel.addEventListener('change', () => { cur.qty = Math.min(cur.qty, maxQty()); total(); });
+  d.append(lab, sel); form.insertBefore(d, form.firstChild);
+  if (!(s.variantes || []).length) { sel.disabled = true; sel.required = false; go.disabled = true; msg.className = 'msg err'; msg.textContent = 'No pudimos cargar las opciones de este producto. Inténtalo de nuevo en un momento.'; }
+}
+function notaTasa() {
+  const n = $('tasa-nota'); if (!n) return;
+  if (tasaFuente === 'respaldo') { n.textContent = 'Los precios en Bs son aproximados (tasa de referencia). El monto final en bolívares se confirma al hacer tu pedido.'; n.hidden = false; }
+  else if (!tasa) { n.textContent = 'Mostramos los precios en USD. El equivalente en Bs se confirma al hacer tu pedido.'; n.hidden = false; }
+  else n.hidden = true;
+}
+function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); aplicarStock(); }
 grid.innerHTML = '<p>Cargando productos…</p>';
-getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); })
+getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); notaTasa(); cargarStock(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
   .catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-buy],[data-ficha],[data-cat]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
   else if (b.dataset.ficha) fichaP(b.dataset.ficha);
-  else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); }
+  else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); aplicarStock(); }
 });
 document.addEventListener('change', (e) => {
   const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
@@ -593,10 +626,10 @@ document.addEventListener('change', (e) => {
     const sku = c.dataset.cmp;
     if (c.checked) { if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
     else cmp = cmp.filter((x) => x !== sku);
-    $('cmp-msg').textContent = ''; pintarCmp();
+    $('cmp-msg').textContent = ''; pintarCmp(); aplicarStock();
   } else if (s) {
     const v = s.value, i = Number(s.dataset.i); cmp[i] = v; cmp = cmp.filter((x, k) => x && cmp.indexOf(x) === k);
-    pintarCmp(); pintarGrid();
+    pintarCmp(); pintarGrid(); aplicarStock();
   }
 });
 $('fi-x').onclick = () => $('fi').close();
@@ -614,7 +647,7 @@ function total() { const p = cur.p; $('q-n').textContent = cur.qty; $('s-t').tex
 function datosPago() {
   const box = $('pdata'); box.textContent = '';
   const m = CONFIG.PAGOS[pmet.value]; if (!m || modo() !== 'anticipado') return;
-  const t = cur.p.usd * cur.qty, enBs = m.moneda === 'VES' && tasa;
+  const t = cur.p.usd * cur.qty, enBs = m.moneda === 'VES' && tasa && tasaFuente !== 'respaldo'; // una tasa de respaldo es aproximada: no se usa para dar montos de pago
   const a = document.createElement('p'); a.className = 'amt'; a.textContent = 'Monto a pagar: ' + (m.moneda === 'USD' ? usd(t) : enBs ? 'Bs ' + fmt(t * tasa) : usd(t) + ' (equivalente en Bs al cambio del día)'); box.appendChild(a);
   const dl = document.createElement('dl');
   m.datos.filter(([, v]) => v).forEach(([k, v]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); });
@@ -635,12 +668,13 @@ form.querySelectorAll('input[name="metodo_pago"]').forEach((r) => r.addEventList
 pmet.addEventListener('change', datosPago);
 
 function abrir(sku) {
+  if (sinVenta(stk(sku))) return;
   cur = { p: productos.find((x) => x.sku === sku), qty: 1, oid: uuid(), key: uuid(), sig: '' };
   $('ok').hidden = true; $('co-form-wrap').hidden = false; msg.textContent = ''; msg.className = 'msg'; go.disabled = false;
-  form.elements.metodo_pago.value = 'contra_entrega'; refrescar(); total(); dlg.showModal();
+  form.elements.metodo_pago.value = 'contra_entrega'; refrescar(); total(); prepararVariantes(); dlg.showModal();
 }
 $('q-').onclick = () => { if (cur.qty > 1) { cur.qty--; total(); } };
-$('q+').onclick = () => { if (cur.qty < 10) { cur.qty++; total(); } };
+$('q+').onclick = () => { if (cur.qty < maxQty()) { cur.qty++; total(); } };
 $('co-x').onclick = $('ok-x').onclick = () => dlg.close();
 dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
 
@@ -658,7 +692,7 @@ selE.addEventListener('change', () => {
 });
 
 /* ===== ENVÍO DEL PEDIDO =====
-   El navegador NUNCA habla con DroPanas ni lleva el token: llama a /api/crear-orden (Vercel), que usa DROPANAS_API_KEY,
+   El navegador NUNCA habla con DroPanas ni lleva el token: llama a /api/crear-orden (Vercel), que usa la llave guardada solo en el servidor,
    valida cobertura y stock, y crea el pedido (con_recaudo o sin_recaudo + aprobación). Idempotencia: la misma
    Idempotency-Key y external_reference se reutilizan en los reintentos del mismo pedido, así nunca se duplica. */
 form.addEventListener('submit', (e) => {
@@ -670,6 +704,7 @@ form.addEventListener('submit', (e) => {
     direccion: { state_id: Number(f.get('estado')), city_id: Number(f.get('ciudad')), direccion: f.get('direccion').trim(), referencia: (f.get('referencia') || '').trim() },
     nota_cliente: (f.get('nota') || '').trim() };
   if (ant) { body.pago_metodo = f.get('pago_metodo'); body.pago_referencia = f.get('pago_referencia').trim(); }
+  if (cur.variable) body.variante_id = Number(f.get('variante')); // el servidor valida que pertenezca al producto
   if (demo) { console.log('Pedido (vista previa local, no enviado):', body); msg.textContent = 'Vista previa: el pedido no se envía hasta desplegar en Vercel con tu llave. Revisa la consola para ver el formato.'; return; }
   const sig = JSON.stringify(body); if (cur.sig !== sig) { cur.sig = sig; cur.key = uuid(); } // datos distintos = llave nueva; mismos datos = reintento seguro
   go.disabled = true; msg.textContent = 'Enviando tu pedido…';
@@ -678,10 +713,10 @@ form.addEventListener('submit', (e) => {
     .then((x) => {
       if (!x.ok) throw x.j;
       $('co-form-wrap').hidden = true; $('ok').hidden = false; $('ok-n').textContent = x.j.referencia || '';
-      $('ok-t').textContent = ant ? 'Recibimos tu pedido y tu referencia de pago. Verificaremos el pago antes de despachar.' : 'No pagas nada ahora: pagas al recibirlo.';
+      $('ok-t').textContent = x.j.estado === 'en_cola' ? (x.j.message || 'Tu pedido quedó en cola por mantenimiento y se procesará automáticamente.') : ant ? 'Recibimos tu pedido y tu referencia de pago. Verificaremos el pago antes de despachar.' : 'No pagas nada ahora: pagas al recibirlo.';
       form.reset(); fill(selC, [], 'Elige un estado'); selC.disabled = true; refrescar();
     })
-    .catch((err) => { go.disabled = false; msg.className = 'msg err'; msg.textContent = (err && err.message) || 'No pudimos enviar tu pedido. Revisa tus datos e inténtalo de nuevo.'; });
+    .catch((err) => { go.disabled = false; msg.className = 'msg err'; if (err && /SIN_STOCK|VARIANTE/.test(err.code || '')) cargarStock(); msg.textContent = (err && err.message) || 'No pudimos enviar tu pedido. Revisa tus datos e inténtalo de nuevo.'; });
 });
 
 /* ---------- Asistente de ventas (widget flotante) ----------
@@ -695,7 +730,7 @@ const FAQ = [
   ['¿Cómo pago por adelantado?', 'En el pedido elige "Pago Directo Anticipado", selecciona el método, paga con los datos que verás y escribe tu número de referencia. Verificamos el pago antes de despachar.'],
   ['¿Llegan a mi ciudad?', 'Hacemos envíos a domicilio en Venezuela. En el pedido eliges tu estado y ciudad, y solo verás las zonas con cobertura.'],
   ['Ver productos', null],
-  ['Rastrear mi pedido', wa ? 'Escríbenos por WhatsApp con tu número de pedido y te ayudamos.' : 'Contáctanos desde el pie de página con tu número de pedido y te ayudamos.']
+  ['Rastrear mi pedido', 'RASTREO']
 ];
 const say = (t, who) => { const d = document.createElement('div'); d.className = 'm ' + who; d.textContent = t; aiLog.appendChild(d); aiLog.scrollTop = aiLog.scrollHeight; return d; };
 const abrirAI = (v) => { aiPanel.hidden = !v; aiFab.setAttribute('aria-expanded', v); if (v) { if (!aiLog.children.length) say('¡Hola! Soy el asistente de Nexovia Store. ¿En qué te ayudo?', 'bot'); aiIn.focus(); } else aiFab.focus(); };
@@ -704,6 +739,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !aiPanel
 $('ai-chips').innerHTML = FAQ.map((q, i) => '<button type="button" data-i="' + i + '">' + esc(q[0]) + '</button>').join('');
 $('ai-chips').addEventListener('click', (e) => {
   const b = e.target.closest('button'); if (!b) return; const q = FAQ[b.dataset.i];
+  if (q[1] === 'RASTREO') { abrirAI(false); abrirRastreo(); return; }
   if (q[1] === null) { abrirAI(false); document.getElementById('productos').scrollIntoView({ behavior: 'smooth' }); return; }
   say(q[0], 'me'); say(q[1], 'bot');
 });
@@ -714,6 +750,60 @@ $('ai-f').addEventListener('submit', (e) => {
   fetch(CONFIG.API_ASISTENTE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mensajes: hist.slice(-8) }) })
     .then((r) => r.json().then((j) => ({ ok: r.ok, j }))).then((x) => { if (!x.ok || !x.j.respuesta) throw 0; w.textContent = x.j.respuesta; hist.push({ role: 'assistant', content: x.j.respuesta }); }).catch(caer);
 });
+
+/* ---------- Rastreo (GET /api/rastreo: número de pedido + últimos 4 dígitos del teléfono) ---------- */
+const rs = $('rs'), rsF = $('rs-f'), rsMsg = $('rs-msg'), rsOut = $('rs-out'), rsGo = $('rs-go');
+function abrirRastreo(ref) {
+  rsOut.hidden = true; rsOut.textContent = ''; rsMsg.textContent = ''; rsMsg.className = 'msg'; $('rs-ref').value = ref || ''; $('rs-tel').value = '';
+  if (!rs.open) rs.showModal(); (ref ? $('rs-tel') : $('rs-ref')).focus();
+}
+document.addEventListener('click', (e) => { if (e.target.closest('[data-rastreo]')) { e.preventDefault(); abrirRastreo(); } });
+if (location.hash === '#rastreo') abrirRastreo();
+$('rs-x').onclick = () => rs.close(); rs.addEventListener('click', (e) => { if (e.target === rs) rs.close(); });
+$('ok-rs').onclick = () => { const r = $('ok-n').textContent; dlg.close(); abrirRastreo(r); };
+const fechaTxt = (s) => { const d = new Date(s); return isNaN(d) ? String(s) : d.toLocaleString('es-VE', { dateStyle: 'medium', timeStyle: 'short' }); };
+function pintarRastreo(j) {
+  rsMsg.textContent = ''; rsOut.textContent = '';
+  const h = document.createElement('h3'); h.textContent = j.mensaje || j.estado_texto || 'Estado de tu pedido'; rsOut.appendChild(h);
+  [j.estado_texto && 'Estado: ' + j.estado_texto, j.numero_guia && 'Guía: ' + j.numero_guia, j.fecha_entrega && 'Entrega: ' + j.fecha_entrega].filter(Boolean).forEach((t) => { const p = document.createElement('p'); p.className = 'rs-meta'; p.textContent = t; rsOut.appendChild(p); });
+  if ((j.historial || []).length) {
+    const ol = document.createElement('ol'); ol.className = 'tl';
+    j.historial.slice().reverse().forEach((x) => { const li = document.createElement('li'), b = document.createElement('b'); b.textContent = x.estado || ''; li.appendChild(b); if (x.detalle) li.appendChild(document.createTextNode(' · ' + x.detalle)); if (x.fecha) { const s = document.createElement('small'); s.textContent = fechaTxt(x.fecha); li.appendChild(s); } ol.appendChild(li); });
+    rsOut.appendChild(ol);
+  }
+  rsOut.hidden = false;
+}
+rsF.addEventListener('submit', (e) => {
+  e.preventDefault(); rsMsg.className = 'msg'; rsOut.hidden = true;
+  const ref = $('rs-ref').value.trim().toUpperCase(), tel = $('rs-tel').value.replace(/\D/g, '');
+  if (!/^NX[A-F0-9]{12}$/.test(ref) || tel.length !== 4) { rsMsg.className = 'msg err'; rsMsg.textContent = 'Revisa tu número de pedido (empieza por NX) y los 4 dígitos de tu teléfono.'; return; }
+  if (local) { rsMsg.textContent = 'Vista previa: el rastreo funciona cuando la página está desplegada en Vercel.'; return; }
+  rsGo.disabled = true; rsMsg.textContent = 'Consultando…';
+  fetch(CONFIG.API_RASTREO + '?ref=' + encodeURIComponent(ref) + '&tel=' + tel, { headers: { Accept: 'application/json' } })
+    .then((r) => r.json().catch(() => ({})).then((j) => ({ ok: r.ok, j })))
+    .then((x) => { if (!x.ok || !x.j.ok) throw x.j; pintarRastreo(x.j); })
+    .catch((err) => { rsMsg.className = 'msg err'; rsMsg.textContent = (err && err.message) || 'No pudimos consultar tu pedido. Inténtalo de nuevo.'; })
+    .finally(() => { rsGo.disabled = false; });
+});
+
+/* ---------- App instalable (PWA) ---------- */
+if ('serviceWorker' in navigator && !local) window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js').catch(() => {}));
+const pwa = $('pwa'); let evInst = null;
+const standalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const movil = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent) || ios;
+const descartada = () => { try { return Date.now() - Number(localStorage.getItem('nx-pwa-off') || 0) < 14 * 864e5; } catch (e) { return false; } };
+const descartar = () => { pwa.hidden = true; try { localStorage.setItem('nx-pwa-off', String(Date.now())); } catch (e) {} };
+function mostrarPWA() {
+  if (local || standalone() || descartada() || !pwa.hidden || (!evInst && !movil)) return;
+  $('pwa-guia').textContent = ios ? 'En iPhone/iPad: toca Compartir y luego «Añadir a pantalla de inicio».' : 'Abre el menú del navegador (⋮) y elige «Instalar app» o «Añadir a pantalla de inicio».';
+  $('pwa-ok').textContent = evInst ? 'Instalar' : 'Cómo instalar'; pwa.hidden = false;
+}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); evInst = e; setTimeout(mostrarPWA, 1500); });
+window.addEventListener('appinstalled', descartar);
+if (movil) setTimeout(mostrarPWA, 2500);
+$('pwa-ok').onclick = async () => { if (evInst) { evInst.prompt(); try { await evInst.userChoice; } catch (e) {} evInst = null; descartar(); } else $('pwa-guia').hidden = !$('pwa-guia').hidden; };
+$('pwa-x').onclick = descartar;
 })();
 </script>
 </body>

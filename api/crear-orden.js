@@ -5,7 +5,7 @@
 //  - anticipado:     tipo_pago "sin_recaudo" + requiere_aprobacion:true. El pedido queda RETENIDO (sin guía, sin descontar
 //                    stock y sin cobrar a tu wallet) hasta que verifiques el pago y lo apruebes en tu panel de DroPanas.
 // Seguridad: la llave nunca sale de este archivo; precios e IDs salen de lib/catalogo.js, jamás del navegador.
-// Manejo explícito de 403 CROSS_MODE, 202 MAINTENANCE_QUEUED, 422 de stock/variante/bodega, 503 MAINTENANCE_ACTIVE, 429 (Retry-After),
+// v2: manejo explícito de 403 CROSS_MODE, 202 MAINTENANCE_QUEUED, 422 de stock/variante/bodega, 503 y 429,
 // variante_id y respaldo de pedidos fallidos. Idempotencia y tipo_pago: sin cambios.
 // Duplicados: Idempotency-Key (UUID v4) + external_reference derivado en servidor de un orden_id aleatorio. Un reintento devuelve el pedido original.
 const crypto = require('crypto');

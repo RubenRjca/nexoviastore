@@ -1,20 +1,24 @@
 {
-  "id": "/",
   "name": "Nexovia Store",
   "short_name": "Nexovia",
   "description": "Gadgets y accesorios tech con Pago Contra Entrega en Venezuela.",
-  "lang": "es-VE",
-  "start_url": "/",
+  "id": "/",
+  "start_url": "/?origen=app",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
+  "lang": "es-VE",
+  "dir": "ltr",
   "background_color": "#FFFFFF",
   "theme_color": "#2C5D76",
+  "categories": ["shopping"],
   "icons": [
-    {
-      "src": "/assets/isotipo.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Ver productos", "short_name": "Productos", "url": "/#productos", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Rastrear mi pedido", "short_name": "Rastrear", "url": "/#rastreo", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
