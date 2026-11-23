@@ -119,12 +119,12 @@ module.exports = async (req, res) => {
       ? 'Por ahora no tenemos entrega a domicilio en tu ciudad.'
       : 'En tu ciudad no está disponible el Pago Contra Entrega. Prueba con Pago Directo Anticipado.', 'SIN_COBERTURA');
 
-    // ---- Precio (Opción A): producto + envío cotizado. Lo calcula el servidor; el navegador solo muestra y confirma. ----
+    // ---- Precio final único (envío incluido). El flete cotizado solo alimenta el margen interno; el cliente nunca lo ve. ----
     const envio = Number(opcion.precio_usd);
     if (!Number.isFinite(envio) || envio < 0) return fail(res, 503, 'No pudimos calcular el envío. Inténtalo de nuevo en un momento.', 'ENVIO_NO_DISPONIBLE');
     const calc = precio.calcular(precioVigente(item), qty, envio);
     if (b.total_esperado_usd !== undefined && Math.abs(Number(b.total_esperado_usd) - calc.total) > 0.02)
-      return res.status(409).json({ code: 'PRECIO_CAMBIO', message: 'El costo de envío cambió. Revisa el nuevo total y confirma de nuevo.', total_usd: calc.total, envio_usd: calc.envio });
+      return res.status(409).json({ code: 'PRECIO_CAMBIO', message: 'El precio cambió. Revisa el nuevo total y confirma de nuevo.', total_usd: calc.total });
     const gan = precio.margen(calc, item.costo_usd, qty);
     if (gan < precio.MARGEN_MIN()) console.error(JSON.stringify({ nivel: 'ALERTA', code: 'MARGEN_BAJO', ref, sku: b.sku, ganancia_usd: gan, minimo_usd: precio.MARGEN_MIN(), envio_usd: calc.envio, total_usd: calc.total, cantidad: qty,
       que_hacer: 'La ganancia estimada de este pedido está bajo tu mínimo. Revisa precio de venta o costo de envío.' }));
@@ -163,7 +163,7 @@ module.exports = async (req, res) => {
         if (ses) await usuarios.guardarPerfil(ses.sub, { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim(), direccion, referencia: txt(d.referencia, 120) });
       } catch (e) { console.error(JSON.stringify({ nivel: 'ALERTA', code: 'PEDIDO_NO_GUARDADO', ref, que_hacer: 'El pedido SÍ se creó en DroPanas; falló el registro en el almacén (Mis pedidos).' })); }
     };
-    const resumen = { subtotal_usd: calc.subtotal, envio_usd: calc.envio, total_usd: calc.total };
+    const resumen = { total_usd: calc.total };
     if (clas.tipo === 'ok' || clas.tipo === 'duplicado') {
       // Diagnóstico de variantes SIN datos personales: qué ID enviamos y qué devolvió DroPanas por cada línea.
       const lineas = ((r.j && r.j.data && r.j.data.productos) || []).map((x) => ({ producto_id: x.producto_id, variante_id: x.variante_id !== undefined ? x.variante_id : null, variante: x.variante || x.variante_nombre || null }));

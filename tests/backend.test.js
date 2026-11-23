@@ -193,22 +193,26 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     await t('EXTERNAL_REFERENCE_DUPLICADO → creado (no se duplica)', async () => { base(); post({ s: 422, j: { code: 'EXTERNAL_REFERENCE_DUPLICADO' } }); const r = await pedir(cuerpo()); eq([r.s, r.j.duplicado], [200, true]); });
     await t('pago anticipado: sin_recaudo + requiere_aprobacion', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ metodo_pago: 'anticipado', pago_metodo: 'zelle', pago_referencia: 'ZL998877' })); const b = body(); eq([b.tipo_pago, b.requiere_aprobacion], ['sin_recaudo', true]); });
     await t('producto con variantes: sin variante → 422 antes de llamar; con variante → viaja variante_id', async () => { base(); post({ s: 201, j: { data: {} } }); const r1 = await pedir(cuerpo({ sku: 'smartwatch-fit' })); eq([r1.s, r1.j.code], [422, 'VARIANTE_REQUERIDA']); eq(n(/POST .*ordenes$/), 0); const r2 = await pedir(cuerpo({ sku: 'smartwatch-fit', variante_id: 42 })); eq(r2.s, 200); eq(body().productos[0].variante_id, 42); });
-    await t('el precio y los IDs siguen saliendo del servidor (no del navegador)', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ precio_venta_usd: 0.01, producto_id: 1 })); eq([body().productos[0].precio_venta_usd, body().productos[0].producto_id], [26.9, 101]); }); // 21,90 del catálogo + 5 de envío cotizado (Opción A)
+    await t('el precio y los IDs siguen saliendo del servidor (no del navegador)', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ precio_venta_usd: 0.01, producto_id: 1 })); eq([body().productos[0].precio_venta_usd, body().productos[0].producto_id], [21.9, 101]); }); // precio final único del catálogo (el envío cotizado no se suma)
     await t('cobertura: CROSS_MODE al cotizar → 503 con ALERTA (sin crear pedido)', async () => { base(); ruta(/cotizar-envio/, { s: 403, j: { code: 'CROSS_MODE_OPERATION_FORBIDDEN' } }); const r = await pedir(cuerpo()); eq([r.s, r.j.code], [503, 'CONFIG_ENTORNO']); eq(n(/POST .*ordenes$/), 0); });
-    out('\n== Cuentas, Opción A (producto + envío), margen y variantes estrictas ==');
+    out('\n== Cuentas, precio final único (envío incluido), margen y variantes estrictas ==');
     const SES = 'x'.repeat(40); process.env.SESSION_SECRET = SES;
     const sesionLib = require(path.join(root, 'lib/sesion.js'));
     const cookie = (sub = 'g-1') => 'nx_sesion=' + sesionLib.firmar({ sub, email: 'a@b.c', nombre: 'Ana' });
-    await t('Opción A: el cliente paga producto + envío y la respuesta trae el desglose', async () => { base(); post({ s: 201, j: { data: { id: 5 } } }); const r = await pedir(cuerpo()); eq([r.s, r.j.envio_usd, r.j.total_usd], [200, 5, 26.9]); eq(body().productos[0].precio_venta_usd, 26.9); });
-    await t('total_esperado distinto al calculado → 409 PRECIO_CAMBIO y NO se crea el pedido', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo({ total_esperado_usd: 21.9 })); eq([r.s, r.j.code, r.j.total_usd], [409, 'PRECIO_CAMBIO', 26.9]); si(!llamadas.some((c) => /POST .*ordenes$/.test(c.clave)), 'no debe crear'); });
-    await t('total_esperado correcto → se crea', async () => { base(); post({ s: 201, j: { data: {} } }); eq((await pedir(cuerpo({ total_esperado_usd: 26.9 }))).s, 200); });
+    await t('precio final único: el cliente paga solo el precio del catálogo y la respuesta NO revela el envío', async () => { base(); post({ s: 201, j: { data: { id: 5 } } }); const r = await pedir(cuerpo()); eq([r.s, r.j.envio_usd, r.j.subtotal_usd, r.j.total_usd], [200, undefined, undefined, 21.9]); eq(body().productos[0].precio_venta_usd, 21.9); });
+    await t('total_esperado distinto al calculado → 409 PRECIO_CAMBIO y NO se crea el pedido', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo({ total_esperado_usd: 26.9 })); eq([r.s, r.j.code, r.j.total_usd, r.j.envio_usd], [409, 'PRECIO_CAMBIO', 21.9, undefined]); si(!llamadas.some((c) => /POST .*ordenes$/.test(c.clave)), 'no debe crear'); });
+    await t('margen de la lámpara a US$ 29 con envío 4,50 / 6,90 y comisión 0,50 (cálculo interno)', async () => {
+      const P = require('../lib/precio'); const c1 = P.calcular(29, 1, 6.9), c2 = P.calcular(29, 1, 4.5);
+      eq([c1.total, c1.unit, P.margen(c1, 14.99, 1), P.margen(c2, 14.99, 1)], [29, 29, 6.61, 9.01]);
+    });
+    await t('total_esperado correcto → se crea', async () => { base(); post({ s: 201, j: { data: {} } }); eq((await pedir(cuerpo({ total_esperado_usd: 21.9 }))).s, 200); });
     await t('margen bajo el mínimo → ALERTA MARGEN_BAJO en logs (no bloquea la venta)', async () => { base(); post({ s: 201, j: { data: {} } }); process.env.MARGEN_MIN_USD = '1000'; const r = await pedir(cuerpo()); delete process.env.MARGEN_MIN_USD; eq(r.s, 200); si(logs.some((l) => /MARGEN_BAJO/.test(l)), 'falta la alerta'); });
     await t('margen sano → sin alerta', async () => { base(); post({ s: 201, j: { data: {} } }); process.env.MARGEN_MIN_USD = '0'; await pedir(cuerpo()); delete process.env.MARGEN_MIN_USD; si(!logs.some((l) => /MARGEN_BAJO/.test(l)), 'no debía alertar'); });
     await t('REQUIERE_CUENTA=1 sin sesión → 401 LOGIN_REQUERIDO; apagado → compra libre', async () => {
       base(); post({ s: 201, j: { data: {} } }); process.env.REQUIERE_CUENTA = '1'; const r = await pedir(cuerpo()); eq([r.s, r.j.code], [401, 'LOGIN_REQUERIDO']); delete process.env.REQUIERE_CUENTA; eq((await pedir(cuerpo())).s, 200); });
     await t('con sesión: el pedido se guarda por usuario (Mis pedidos) con tel4 y variante, y el perfil queda para autollenar', async () => {
       base(); post({ s: 201, j: { data: { id: 55 } } }); process.env.REQUIERE_CUENTA = '1'; const r = await pedir(cuerpo(), { cookie: cookie('g-9') }); delete process.env.REQUIERE_CUENTA; eq(r.s, 200);
-      const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq([rec.sub, rec.tel4, rec.total_usd, rec.orden_id], ['g-9', '4567', 26.9, 55]); si(zsets.get('nx:uo:g-9').has(r.j.referencia), 'falta en la lista del usuario'); si(JSON.parse(kv.get('nx:u:g-9')).perfil.telefono, 'falta el perfil'); });
+      const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq([rec.sub, rec.tel4, rec.total_usd, rec.orden_id], ['g-9', '4567', 21.9, 55]); si(zsets.get('nx:uo:g-9').has(r.j.referencia), 'falta en la lista del usuario'); si(JSON.parse(kv.get('nx:u:g-9')).perfil.telefono, 'falta el perfil'); });
     await t('compra sin cuenta (modo libre) igual deja registro por referencia, sin usuario', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo()); const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq(rec.sub, null); });
     await t('si el almacén falla, el pedido igual se crea y queda ALERTA PEDIDO_NO_GUARDADO', async () => { base(); post({ s: 201, j: { data: {} } }); kvFalla = true; const r = await pedir(cuerpo()); eq(r.s, 200); si(logs.some((l) => /PEDIDO_NO_GUARDADO/.test(l)), 'falta alerta'); });
     await t('variantes estrictas: lámpara sin variante → 400; modelo ajeno → 400; 1950/1951 pasan esa validación', async () => {
@@ -216,9 +220,9 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
       const r1 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos' })); eq([r1.s, r1.j.code], [400, 'VARIANTE_REQUERIDA']);
       const r2 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos', variante_id: 999 })); eq([r2.s, r2.j.code], [400, 'VARIANTE_INVALIDA']);
       for (const id of [1950, 1951]) { const r3 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos', variante_id: id })); si(!/VARIANTE_(REQUERIDA|INVALIDA)/.test(r3.j.code || ''), 'rechazó ' + id); } });
-    await t('GET /api/cotizar: devuelve producto + envío; sin cobertura → 422', async () => {
+    await t('GET /api/cotizar: devuelve solo el precio final (sin envío); sin cobertura → 422', async () => {
       base(); const hCot = require(path.join(root, 'api/cotizar.js'));
-      const r = await call(hCot, { query: { sku: 'cargador-65w', estado: '24', ciudad: '149', cantidad: '2' } }); eq([r.s, r.j.subtotal_usd, r.j.envio_usd, r.j.total_usd], [200, 43.8, 5, 48.8]);
+      const r = await call(hCot, { query: { sku: 'cargador-65w', estado: '24', ciudad: '149', cantidad: '2' } }); eq([r.s, r.j.subtotal_usd, r.j.envio_usd, r.j.total_usd], [200, undefined, undefined, 43.8]);
       ruta(/cotizar-envio/, { s: 200, j: { data: [] } }); cache.reiniciar(); const r2 = await call(hCot, { query: { sku: 'cargador-65w', estado: '24', ciudad: '150' } }); eq([r2.s, r2.j.code], [422, 'SIN_COBERTURA']); });
     delete process.env.SESSION_SECRET;
   }
