@@ -1,65 +1,234 @@
 {
   "categorias": [
-    { "id": "carga",     "nombre": "Cargadores",      "icono": "charger" },
-    { "id": "energia",   "nombre": "Power banks",     "icono": "bank" },
-    { "id": "cables",    "nombre": "Cables",          "icono": "cable" },
-    { "id": "audio",     "nombre": "Audio",           "icono": "buds" },
-    { "id": "wearables", "nombre": "Smartwatches",    "icono": "watch" }
+    {
+      "id": "carga",
+      "nombre": "Cargadores",
+      "icono": "charger"
+    },
+    {
+      "id": "energia",
+      "nombre": "Power banks",
+      "icono": "bank"
+    },
+    {
+      "id": "cables",
+      "nombre": "Cables",
+      "icono": "cable"
+    },
+    {
+      "id": "audio",
+      "nombre": "Audio",
+      "icono": "buds"
+    },
+    {
+      "id": "wearables",
+      "nombre": "Smartwatches",
+      "icono": "watch"
+    },
+    {
+      "id": "hogar",
+      "nombre": "Hogar",
+      "icono": "todos"
+    }
   ],
   "productos": [
     {
-      "sku": "cargador-65w", "estado": "publicado", "semana": true, "categoria": "carga", "icono": "charger", "etiqueta": "Más vendido", "imagen": "",
+      "sku": "cargador-65w",
+      "estado": "publicado",
+      "semana": true,
+      "categoria": "carga",
+      "icono": "charger",
+      "etiqueta": "Más vendido",
+      "imagen": "",
       "titulo": "Cargador Rápido 65W, 4 Puertos USB-C y USB-A",
       "descripcion": "Cargador de pared de 65 W con 4 puertos (USB-C y USB-A) para cargar celular, tableta y más al mismo tiempo.",
       "por_que": "Un solo cargador para toda tu mesa: menos enchufes, menos cables y carga rápida en tus dispositivos compatibles.",
-      "beneficios": ["Carga rápida de hasta 65 W", "4 puertos: USB-C y USB-A", "Carga varios equipos a la vez", "Ideal para casa, oficina o viaje"],
-      "specs": { "Tipo": "Cargador de pared", "Potencia": "65 W", "Puertos": "4 (USB-C y USB-A)", "Ideal para": "Celular, tableta y laptop compatible" },
-      "precio_venta_usd": 24.9, "precio_oferta_usd": 21.9, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "Carga rápida de hasta 65 W",
+        "4 puertos: USB-C y USB-A",
+        "Carga varios equipos a la vez",
+        "Ideal para casa, oficina o viaje"
+      ],
+      "specs": {
+        "Tipo": "Cargador de pared",
+        "Potencia": "65 W",
+        "Puertos": "4 (USB-C y USB-A)",
+        "Ideal para": "Celular, tableta y laptop compatible"
+      },
+      "precio_venta_usd": 24.9,
+      "precio_oferta_usd": 21.9,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
     },
     {
-      "sku": "smartwatch-fit", "estado": "publicado", "semana": false, "categoria": "wearables", "icono": "watch", "etiqueta": "", "imagen": "",
+      "sku": "smartwatch-fit",
+      "estado": "publicado",
+      "semana": false,
+      "categoria": "wearables",
+      "icono": "watch",
+      "etiqueta": "",
+      "imagen": "",
       "titulo": "Smartwatch Deportivo con Llamadas Bluetooth",
       "descripcion": "Reloj inteligente deportivo con llamadas por Bluetooth para contestar desde la muñeca.",
       "por_que": "Controla tus llamadas sin sacar el celular del bolso.",
-      "beneficios": ["Contesta llamadas desde la muñeca", "Diseño deportivo para el día a día", "Se conecta por Bluetooth a tu celular"],
-      "specs": { "Tipo": "Smartwatch deportivo", "Función": "Llamadas por Bluetooth", "Conectividad": "Bluetooth", "Ideal para": "Uso diario y deporte" },
-      "precio_venta_usd": 29.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "Contesta llamadas desde la muñeca",
+        "Diseño deportivo para el día a día",
+        "Se conecta por Bluetooth a tu celular"
+      ],
+      "specs": {
+        "Tipo": "Smartwatch deportivo",
+        "Función": "Llamadas por Bluetooth",
+        "Conectividad": "Bluetooth",
+        "Ideal para": "Uso diario y deporte"
+      },
+      "precio_venta_usd": 29.9,
+      "precio_oferta_usd": null,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
     },
     {
-      "sku": "audifonos-tws", "estado": "publicado", "semana": false, "categoria": "audio", "icono": "buds", "etiqueta": "Nuevo", "imagen": "",
+      "sku": "audifonos-tws",
+      "estado": "publicado",
+      "semana": false,
+      "categoria": "audio",
+      "icono": "buds",
+      "etiqueta": "Nuevo",
+      "imagen": "",
       "titulo": "Audífonos Inalámbricos con Estuche de Carga",
       "descripcion": "Audífonos inalámbricos con estuche de carga para escuchar música y hablar sin cables.",
       "por_que": "Libertad sin cables para el trabajo, el gimnasio o el transporte.",
-      "beneficios": ["100 % inalámbricos", "El estuche también los carga", "Para música y llamadas"],
-      "specs": { "Tipo": "Audífonos inalámbricos", "Función": "Música y llamadas", "Conectividad": "Bluetooth", "Ideal para": "Trabajo, gimnasio y transporte" },
-      "precio_venta_usd": 19.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "100 % inalámbricos",
+        "El estuche también los carga",
+        "Para música y llamadas"
+      ],
+      "specs": {
+        "Tipo": "Audífonos inalámbricos",
+        "Función": "Música y llamadas",
+        "Conectividad": "Bluetooth",
+        "Ideal para": "Trabajo, gimnasio y transporte"
+      },
+      "precio_venta_usd": 19.9,
+      "precio_oferta_usd": null,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
     },
     {
-      "sku": "power-bank-20k", "estado": "publicado", "semana": false, "categoria": "energia", "icono": "bank", "etiqueta": "", "imagen": "",
+      "sku": "power-bank-20k",
+      "estado": "publicado",
+      "semana": false,
+      "categoria": "energia",
+      "icono": "bank",
+      "etiqueta": "",
+      "imagen": "",
       "titulo": "Power Bank 20.000 mAh con Carga Rápida",
       "descripcion": "Batería portátil de 20.000 mAh con carga rápida para recargar tus dispositivos fuera de casa.",
       "por_que": "Un respaldo de energía para cuando no tienes un enchufe cerca.",
-      "beneficios": ["Gran capacidad: 20.000 mAh", "Carga rápida", "Recarga tus equipos en cualquier lugar"],
-      "specs": { "Tipo": "Power bank", "Capacidad": "20.000 mAh", "Destacado": "Carga rápida", "Ideal para": "Viajes y salidas largas" },
-      "precio_venta_usd": 27.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "Gran capacidad: 20.000 mAh",
+        "Carga rápida",
+        "Recarga tus equipos en cualquier lugar"
+      ],
+      "specs": {
+        "Tipo": "Power bank",
+        "Capacidad": "20.000 mAh",
+        "Destacado": "Carga rápida",
+        "Ideal para": "Viajes y salidas largas"
+      },
+      "precio_venta_usd": 27.9,
+      "precio_oferta_usd": null,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
     },
     {
-      "sku": "cable-usbc-100w", "estado": "publicado", "semana": false, "categoria": "cables", "icono": "cable", "etiqueta": "", "imagen": "",
+      "sku": "cable-usbc-100w",
+      "estado": "publicado",
+      "semana": false,
+      "categoria": "cables",
+      "icono": "cable",
+      "etiqueta": "",
+      "imagen": "",
       "titulo": "Cable USB-C a USB-C 100W, 1,5 m",
       "descripcion": "Cable USB-C a USB-C de 1,5 m compatible con carga de hasta 100 W.",
       "por_que": "Lo bastante largo para cargar cómodo desde la cama o el escritorio.",
-      "beneficios": ["Hasta 100 W de potencia", "1,5 metros de largo", "USB-C en ambos extremos"],
-      "specs": { "Tipo": "Cable USB-C a USB-C", "Potencia": "Hasta 100 W", "Largo": "1,5 m", "Ideal para": "Celulares, tabletas y laptops compatibles" },
-      "precio_venta_usd": 6.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "Hasta 100 W de potencia",
+        "1,5 metros de largo",
+        "USB-C en ambos extremos"
+      ],
+      "specs": {
+        "Tipo": "Cable USB-C a USB-C",
+        "Potencia": "Hasta 100 W",
+        "Largo": "1,5 m",
+        "Ideal para": "Celulares, tabletas y laptops compatibles"
+      },
+      "precio_venta_usd": 6.9,
+      "precio_oferta_usd": null,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
     },
     {
-      "sku": "parlante-bt", "estado": "publicado", "semana": false, "categoria": "audio", "icono": "speaker", "etiqueta": "", "imagen": "",
+      "sku": "parlante-bt",
+      "estado": "publicado",
+      "semana": false,
+      "categoria": "audio",
+      "icono": "speaker",
+      "etiqueta": "",
+      "imagen": "",
       "titulo": "Parlante Bluetooth Portátil",
       "descripcion": "Parlante Bluetooth portátil para llevar tu música a cualquier lugar.",
       "por_que": "Música para la casa, la playa o la reunión, sin cables.",
-      "beneficios": ["Conexión Bluetooth", "Portátil: llévalo contigo", "Fácil de conectar a tu celular"],
-      "specs": { "Tipo": "Parlante portátil", "Conectividad": "Bluetooth", "Ideal para": "Casa, reuniones y paseos" },
-      "precio_venta_usd": 22.9, "precio_oferta_usd": null, "costo_usd": null, "producto_id": null, "bodega_origen_id": null
+      "beneficios": [
+        "Conexión Bluetooth",
+        "Portátil: llévalo contigo",
+        "Fácil de conectar a tu celular"
+      ],
+      "specs": {
+        "Tipo": "Parlante portátil",
+        "Conectividad": "Bluetooth",
+        "Ideal para": "Casa, reuniones y paseos"
+      },
+      "precio_venta_usd": 22.9,
+      "precio_oferta_usd": null,
+      "costo_usd": null,
+      "producto_id": null,
+      "bodega_origen_id": null
+    },
+    {
+      "sku": "lampara-atrapazancudos",
+      "estado": "borrador",
+      "semana": false,
+      "nuevo": true,
+      "categoria": "hogar",
+      "icono": "todos",
+      "etiqueta": "",
+      "imagen": "assets/lampara-atrapazancudos.jpg",
+      "titulo": "Lámpara Atrapazancudos con Luz Violeta",
+      "descripcion": "Lámpara con luz violeta y ventilador de succión que atrae a los insectos hacia un depósito inferior. Elige el modelo enchufable (USB) o el recargable sin cable.",
+      "por_que": "Un formato compacto y sin químicos para dejar en tu mesa, repisa o mesa de noche, con luz suave que también sirve de luz nocturna.",
+      "beneficios": [
+        "Luz violeta y ventilador de succión",
+        "Depósito inferior translúcido",
+        "Modelo enchufable o recargable",
+        "Se coloca en mesa, repisa o superficie plana"
+      ],
+      "specs": {
+        "Tipo": "Lámpara atrapainsectos",
+        "Modelos": "Enchufable (USB) o con pila recargable",
+        "Alto": "23,5 cm",
+        "Diámetro": "12,5 cm"
+      },
+      "precio_venta_usd": 23.0,
+      "precio_oferta_usd": null,
+      "costo_usd": 14.99,
+      "producto_id": 21692,
+      "bodega_origen_id": null
     }
   ]
 }
