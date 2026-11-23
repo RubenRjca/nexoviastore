@@ -358,6 +358,10 @@ dialog.fi .fg{display:block}
 .fi-cmp{display:flex;gap:8px;margin-top:12px}.fi-cmp .btn{flex:1;text-align:center}
 .neg{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px}
 .neg li::before{content:"✕ ";color:var(--coral-press);font-weight:800}
+.cmp-cat{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.cmp-cat button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600;color:var(--ink)}
+.cmp-cat button:hover{border-color:var(--head)}.cmp-cat button[aria-pressed="true"]{background:var(--head);color:#fff;border-color:var(--head)}
+.cmp-cat button:focus-visible{outline:3px solid var(--coral)}.cmp-cat button svg{width:20px;height:20px}
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -380,7 +384,7 @@ dialog.fi .fg{display:block}
 <img src="assets/isotipo.png" alt="" width="60" height="50">
 <span class="n"><b>NEXOVIA</b><span>STORE</span></span></a>
 <form class="search" role="search" onsubmit="return false">
-<input type="search" placeholder="Busca cargadores, zapatos, morrales…" aria-label="Buscar productos">
+<input type="search" placeholder="Busca productos…" aria-label="Buscar productos">
 <button type="submit" aria-label="Buscar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
 <div class="icons">
 <a href="#cuenta" aria-label="Mi cuenta"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.2-6.5 8-6.5s7 2 8 6.5"/></svg></a>
@@ -399,7 +403,7 @@ dialog.fi .fg{display:block}
 <p class="lead">Elige tu producto, haz tu pedido y paga cuando lo recibas en tu casa. Sin pagar por adelantado.</p>
 <div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div>
 <div class="hero-new" id="hero-new"></div></div>
-<figure class="hero-img"><img src="assets/hero-cargador.jpg" alt="Cargador rápido de 65 W con múltiples puertos USB-C y USB-A sobre una mesa" width="832" height="323"><figcaption>Cargador de 65 W con múltiples puertos</figcaption></figure>
+<figure class="hero-img"><img src="assets/hero-lampara.jpg" alt="Lámpara atrapazancudos con luz violeta en dos modelos: Modelo 1 enchufable y Modelo 2 recargable con pila" width="1100" height="451"><figcaption>Lámpara atrapazancudos: enchufable o recargable</figcaption></figure>
 </div></section>
 
 <section class="trust reveal" aria-label="Por qué comprar en Nexovia Store">
@@ -417,7 +421,8 @@ dialog.fi .fg{display:block}
 <div class="grid" id="grid" aria-live="polite"></div></section>
 
 <section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
-<p>Elige hasta 3 productos (también puedes marcar “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<p>Comparamos productos de la misma categoría. Elige hasta 3 (o marca “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<div class="cmp-cat" id="cmp-cat" role="group" aria-label="Categoría a comparar"></div>
 <div class="cmp-sel" id="cmp-sel"></div>
 <div class="cmp-w"><table class="cmp-t" id="cmp-t"></table></div>
 <p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p></section>
@@ -603,13 +608,21 @@ function pintarSemana() {
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + precios(p) +
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></div>';
 }
+let cmpCat = null, cmpListo = false;
 function pintarCmp() {
-  const cs = $('comparador'); if (cs) cs.hidden = productos.length < 2; // con un solo producto no hay nada que comparar
+  /* Solo se comparan productos de la MISMA categoría. Sin ninguna categoría con 2+ productos, la sección se oculta. */
+  const cs = $('comparador'), cats = categorias.filter((c) => productos.filter((p) => p.categoria === c.id).length >= 2);
+  if (cs) cs.hidden = !cats.length; if (!cats.length) return;
+  if (!cats.some((c) => c.id === cmpCat)) cmpCat = cats[0].id;
+  const enCat = productos.filter((p) => p.categoria === cmpCat);
+  cmp = cmp.filter((sku) => enCat.some((p) => p.sku === sku));
+  if (!cmpListo) { cmpListo = true; if (cmp.length < 2) cmp = enCat.slice(0, 3).map((p) => p.sku); }
+  $('cmp-cat').innerHTML = cats.map((c) => '<button type="button" data-cmpcat="' + esc(c.id) + '" aria-pressed="' + (c.id === cmpCat) + '">' + (ICONS[c.icono] || '') + esc(c.nombre) + '</button>').join('');
   const sel = $('cmp-sel');
   sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
-    productos.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
+    enCat.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
   const l = cmp.map(prod).filter(Boolean), t = $('cmp-t');
-  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos para compararlos.</td></tr></tbody>'; return; }
+  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos de esta categoría para compararlos.</td></tr></tbody>'; return; }
   const keys = []; l.forEach((p) => Object.keys(p.specs || {}).forEach((k) => { if (!keys.includes(k)) keys.push(k); }));
   const minimo = Math.min.apply(null, l.map((p) => p.usd));
   t.innerHTML = '<thead><tr><th scope="col"></th>' + l.map((p) => '<th scope="col"><div class="mini">' + media(p) + '</div><span class="ct">' + esc(p.titulo) + '</span><button class="btn sm" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></th>').join('') + '</tr></thead><tbody>' +
@@ -735,20 +748,21 @@ document.addEventListener('submit', (e) => {
     .finally(() => { btn.disabled = false; });
 });
 grid.innerHTML = '<p>Cargando productos…</p>';
-getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); notaTasa(); cargarStock(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
+getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = []; pintarTodo(); notaTasa(); cargarStock(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
   .catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
 document.addEventListener('click', (e) => {
-  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha]'); if (!b) return;
+  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha],[data-cmpcat]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
   else if (b.dataset.ficha) fichaP(b.dataset.ficha);
-  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha; if ($('fi').open) $('fi').close(); if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
+  else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
+  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
   else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); aplicarStock(); }
 });
 document.addEventListener('change', (e) => {
   const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
   if (c) {
     const sku = c.dataset.cmp;
-    if (c.checked) { if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
+    if (c.checked) { const pc = prod(sku); if (pc && pc.categoria !== cmpCat) { cmpCat = pc.categoria; cmp = []; } if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
     else cmp = cmp.filter((x) => x !== sku);
     $('cmp-msg').textContent = ''; pintarCmp(); aplicarStock();
   } else if (s) {
