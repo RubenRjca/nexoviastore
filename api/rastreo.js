@@ -5,59 +5,21 @@
 // con el respaldo (lib/respaldo.js) y GET /ordenes/en-cola/{solicitud_id}. La llave DROPANAS_API_KEY solo vive en el servidor.
 // Privacidad: la respuesta NUNCA incluye nombre, teléfono, dirección ni enlaces a la guía. Si el número o los 4 dígitos no
 // coinciden, la respuesta es idéntica a "no existe" (no se puede averiguar qué pedidos existen).
-const { llamar } = require('../lib/cliente');
 const { recordar, limitar } = require('../lib/cache');
 const { falloDe, alertar } = require('../lib/errores');
-const respaldo = require('../lib/respaldo');
+const { cargar, armar, ult4 } = require('../lib/seguimiento');
+const usuarios = require('../lib/usuarios');
 
 const REF_OK = /^NX[A-F0-9]{12}$/; // las referencias las fabrica crear-orden: 'NX' + 12 hex en mayúsculas
 const NO_ENCONTRADO = { ok: false, estado: 'no_encontrado', message: 'No encontramos un pedido con esos datos. Revisa tu número de pedido y los últimos 4 dígitos de tu teléfono.' };
 const fallos = new Map(); // ref -> { n, hasta }: tras 5 intentos con 4 dígitos erróneos se bloquea la consulta 15 min
 
-const ult4 = (t) => String(t || '').replace(/\D/g, '').slice(-4);
 const bloqueada = (ref) => { const f = fallos.get(ref); return !!f && f.hasta > Date.now(); };
 function falloTel(ref) {
   const f = fallos.get(ref) || { n: 0, hasta: 0 };
   if (++f.n >= 5) { f.hasta = Date.now() + 15 * 60 * 1000; f.n = 0; }
   fallos.set(ref, f); if (fallos.size > 3000) fallos.clear();
 }
-const etapa = (txt) => {
-  const s = String(txt || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-  return s.includes('entregad') ? 'entregado' : s.includes('novedad') ? 'novedad' : s.includes('reparto') ? 'en_reparto' : s.includes('camino') ? 'en_camino' : s.includes('preparaci') ? 'preparando' : 'recibido';
-};
-const TEXTO = {
-  recibido: 'Recibimos tu pedido y lo estamos organizando.', preparando: 'Tu pedido está en preparación.', en_camino: 'Tu pedido va en camino.',
-  en_reparto: 'Tu pedido salió a reparto: pronto llegará a tu dirección.', entregado: '¡Tu pedido fue entregado!', novedad: 'Hubo una novedad con tu entrega. Revisa el detalle abajo.',
-  en_revision: 'Estamos verificando tu pedido (y tu pago, si pagaste por adelantado). Te avisaremos cuando salga.', en_cola: 'Tu pedido quedó en cola por mantenimiento de la plataforma y se procesará automáticamente.',
-  no_procesado: 'No pudimos procesar tu pedido. Te contactaremos para ayudarte.',
-};
-
-async function cargar(ref) {
-  const o = await llamar('/ordenes/ext:' + ref);
-  if (o.ok && o.j && o.j.data) { const d = o.j.data; return { ok: true, v: { id: d.id, telefono: (d.cliente || {}).telefono, aprobacion: d.estado_aprobacion || null } }; }
-  if (o.status !== 404) return falloDe(o);
-  const rec = await respaldo.obtener(ref); // ¿quedó en cola o fue rechazado?
-  if (!rec) return { ok: true, v: null };
-  const tel = rec.cliente && rec.cliente.telefono;
-  if (rec.tipo === 'en_cola' && rec.solicitud_id) {
-    const q = await llamar('/ordenes/en-cola/' + encodeURIComponent(rec.solicitud_id));
-    if (!q.ok) return falloDe(q);
-    const s = (q.j && q.j.data) || {};
-    if (s.estado === 'procesado' && s.orden_id) {
-      const o2 = await llamar('/ordenes/' + encodeURIComponent(s.orden_id));
-      if (o2.ok && o2.j && o2.j.data) return { ok: true, v: { id: s.orden_id, telefono: tel, aprobacion: o2.j.data.estado_aprobacion || null } };
-    }
-    return { ok: true, v: { id: null, telefono: tel, estado: s.estado === 'fallido' || s.estado === 'descartado' ? 'no_procesado' : 'en_cola' } };
-  }
-  return { ok: true, v: { id: null, telefono: tel, estado: 'no_procesado' } };
-}
-
-const tracking = (id) => recordar('trk:' + id, { ttlOk: 20 * 1000, ttlFail: 15 * 1000 }, async () => {
-  const x = await llamar(`/ordenes/${encodeURIComponent(id)}/tracking`);
-  if (x.ok) return { ok: true, v: (x.j && x.j.data) || {} };
-  if (x.j && x.j.code === 'TRACKING_NOT_AVAILABLE') return { ok: true, v: { sin_guia: true } }; // aún sin guía (p. ej. pendiente de aprobación)
-  return falloDe(x);
-});
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -78,22 +40,19 @@ module.exports = async (req, res) => {
     return res.status(r.clas.http === 404 ? 502 : r.clas.http).json({ ok: false, code: r.clas.code, message: r.clas.message });
   }
   const v = r.v;
-  if (!v || ult4(v.telefono) !== cuatro) { falloTel(ref); return res.status(404).json(NO_ENCONTRADO); }
-
-  const base = { ok: true, referencia: ref, actualizado: new Date().toISOString() };
-  if (!v.id) return res.status(200).json({ ...base, estado: v.estado, mensaje: TEXTO[v.estado], historial: [] });
-
-  const t = await tracking(v.id);
-  if (!t.ok) {
-    alertar(t.clas, { ruta: 'rastreo', ref });
-    if (t.clas.retryAfter) res.setHeader('Retry-After', String(t.clas.retryAfter));
-    return res.status(t.clas.http === 404 ? 502 : t.clas.http).json({ ok: false, code: t.clas.code, message: t.clas.message });
+  // Autorización: los 4 dígitos deben coincidir con el teléfono de DroPanas o con el que guardamos al crear el pedido.
+  let ok = !!v && ult4(v.telefono) === cuatro;
+  if (v && !ok) { const mio = await usuarios.pedidoPorRef(ref).catch(() => null); ok = !!mio && mio.tel4 === cuatro; }
+  if (!ok) {
+    // Diagnóstico SIN datos personales: ¿DroPanas no la encuentra o los 4 dígitos no coinciden?
+    console.warn(JSON.stringify({ nivel: 'AVISO', code: 'RASTREO_NO_ENCONTRADO', causa: v ? 'telefono_no_coincide' : 'orden_no_encontrada', ref }));
+    falloTel(ref); return res.status(404).json(NO_ENCONTRADO);
   }
-  const d = t.v || {};
-  const pendiente = /pendiente/i.test(v.aprobacion || ''), rechazada = /rechaz|cancel/i.test(v.aprobacion || '');
-  const estado = rechazada ? 'no_procesado' : (pendiente && (d.sin_guia || !d.status_actual)) ? 'en_revision' : etapa(d.status_actual);
-  return res.status(200).json({
-    ...base, estado, mensaje: TEXTO[estado], estado_texto: d.status_actual || null, numero_guia: d.numero_guia || null, fecha_entrega: d.fecha_entrega || null,
-    historial: (Array.isArray(d.historial) ? d.historial : []).slice(-20).map((h) => ({ estado: h.status, detalle: h.descripcion || null, fecha: h.created_at || null })),
-  });
+  const a2 = await armar(ref, v);
+  if (!a2.ok) {
+    alertar(a2.clas, { ruta: 'rastreo', ref });
+    if (a2.clas.retryAfter) res.setHeader('Retry-After', String(a2.clas.retryAfter));
+    return res.status(a2.clas.http === 404 ? 502 : a2.clas.http).json({ ok: false, code: a2.clas.code, message: a2.clas.message });
+  }
+  return res.status(200).json(a2.body);
 };

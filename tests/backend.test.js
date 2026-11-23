@@ -15,7 +15,7 @@ const hStock = require(path.join(root, 'api/stock.js')), hRastreo = require(path
 
 // ---------- mini runner ----------
 let ok = 0, mal = 0; const logs = [];
-const origErr = console.error; console.error = (...a) => logs.push(a.join(' '));
+const origErr = console.error, origWarn = console.warn, origLog = console.log; console.error = (...a) => logs.push(a.join(' ')); console.warn = console.error; console.log = (...a) => { if (!/ORDEN_CREADA/.test(a.join(' '))) origLog(...a); };
 const out = (m) => process.stdout.write(m + '\n');
 async function t(nombre, fn) { try { await fn(); ok++; out('  ✔ ' + nombre); } catch (e) { mal++; out('  ✖ ' + nombre + '\n      ' + (e && e.message)); } }
 const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) throw new Error((m || 'no coincide') + ': ' + JSON.stringify(a) + ' ≠ ' + JSON.stringify(b)); };
@@ -23,7 +23,7 @@ const si = (c, m) => { if (!c) throw new Error(m || 'se esperaba verdadero'); };
 
 // ---------- DroPanas y almacén simulados ----------
 let rutas = [], llamadas = [];
-const kv = new Map(), listas = new Map(); const L = (k) => { if (!listas.has(k)) listas.set(k, []); return listas.get(k); }; let kvFalla = false;
+const kv = new Map(), listas = new Map(), zsets = new Map(); const L = (k) => { if (!listas.has(k)) listas.set(k, []); return listas.get(k); }; let kvFalla = false;
 const mk = (s, j, h = {}) => ({ ok: s >= 200 && s < 300, status: s, headers: { get: (k) => h[k.toLowerCase()] || null }, json: async () => j });
 global.fetch = async (url, opt = {}) => {
   const u = new URL(url), clave = (opt.method || 'GET') + ' ' + u.pathname + u.search;
@@ -38,6 +38,8 @@ global.fetch = async (url, opt = {}) => {
       if (c === 'LLEN') return { result: L(a[0]).length };
       if (c === 'LREM') { listas.set(a[0], L(a[0]).filter((x) => x !== a[2])); return { result: 1 }; }
       if (c === 'LRANGE') return { result: L(a[0]).slice(a[1], a[2] + 1) };
+      if (c === 'ZADD') { const z = (zsets.get(a[0]) || new Map()); z.set(a[2], Number(a[1])); zsets.set(a[0], z); return { result: 1 }; }
+      if (c === 'ZREVRANGE') { const z = [...(zsets.get(a[0]) || new Map()).entries()].sort((x, y) => y[1] - x[1]).map((e) => e[0]); return { result: z.slice(a[1], a[2] + 1) }; }
       return { result: null };
     });
     return mk(200, res);
@@ -47,7 +49,7 @@ global.fetch = async (url, opt = {}) => {
   return mk(404, { code: 'ORDER_NOT_FOUND' });
 };
 const ruta = (re, r) => rutas.unshift({ re, r });
-const reset = () => { rutas = []; llamadas = []; cache.reiniciar(); cliente.reiniciarPausa(); logs.length = 0; kv.clear(); listas.clear(); kvFalla = false; };
+const reset = () => { rutas = []; llamadas = []; cache.reiniciar(); cliente.reiniciarPausa(); logs.length = 0; kv.clear(); listas.clear(); zsets.clear(); kvFalla = false; };
 const n = (re) => llamadas.filter((c) => re.test(c.clave)).length;
 const call = async (h, { method = 'GET', query = {}, body, headers = {} } = {}) => {
   const o = { h: {} }; const res = { setHeader(k, v) { o.h[k.toLowerCase()] = v; }, status(s) { o.s = s; return this; }, json(j) { o.j = j; return this; } };
@@ -176,7 +178,7 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     const hOrden = require(prop); let ipN = 0;
     const cuerpo = (x = {}) => ({ sku: 'cargador-65w', cantidad: 1, metodo_pago: 'contra_entrega', orden_id: crypto.randomUUID(), cliente: { nombre: 'Ana', apellido: 'Pérez', telefono: '0414-1234567' }, direccion: { state_id: 24, city_id: 149, direccion: 'Av. Principal, casa 4' }, ...x });
     const pedir = (body, headers = {}) => call(hOrden, { method: 'POST', body, headers: { 'idempotency-key': crypto.randomUUID(), 'x-vercel-forwarded-for': '8.8.8.' + (ipN++ % 250) + '.' + Math.floor(ipN / 250), ...headers } });
-    const base = () => { reset(); conAlmacen(); ruta(/cotizar-envio/, { s: 200, j: { data: [{ tipo_entrega: 'domicilio', shipping_type_id: 1, disponible: true, soporta_recaudo: true }] } }); ruta(/inventario/, inv([fila(101, 50), fila(202, 9, { id: 42 })])); ruta(/productos\/101$/, detSimple); ruta(/productos\/202$/, detVar); };
+    const base = () => { reset(); conAlmacen(); ruta(/cotizar-envio/, { s: 200, j: { data: [{ tipo_entrega: 'domicilio', shipping_type_id: 1, disponible: true, soporta_recaudo: true, precio_usd: 5 }] } }); ruta(/inventario/, inv([fila(101, 50), fila(202, 9, { id: 42 })])); ruta(/productos\/101$/, detSimple); ruta(/productos\/202$/, detVar); };
     const post = (r) => ruta(/POST \/api\/v1\/ordenes$/, r);
     const body = () => JSON.parse(llamadas.filter((c) => /POST .*ordenes$/.test(c.clave)).pop().opt.body);
     await t('201 → creado (con_recaudo, Idempotency-Key reenviada)', async () => { base(); post({ s: 201, j: { data: { id: 1 } } }); const k = crypto.randomUUID(); const r = await pedir(cuerpo(), { 'idempotency-key': k }); eq([r.s, r.j.estado], [200, 'creado']); const p = llamadas.filter((c) => /POST .*ordenes$/.test(c.clave))[0]; eq([JSON.parse(p.opt.body).tipo_pago, p.opt.headers['Idempotency-Key']], ['con_recaudo', k]); });
@@ -191,8 +193,34 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     await t('EXTERNAL_REFERENCE_DUPLICADO → creado (no se duplica)', async () => { base(); post({ s: 422, j: { code: 'EXTERNAL_REFERENCE_DUPLICADO' } }); const r = await pedir(cuerpo()); eq([r.s, r.j.duplicado], [200, true]); });
     await t('pago anticipado: sin_recaudo + requiere_aprobacion', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ metodo_pago: 'anticipado', pago_metodo: 'zelle', pago_referencia: 'ZL998877' })); const b = body(); eq([b.tipo_pago, b.requiere_aprobacion], ['sin_recaudo', true]); });
     await t('producto con variantes: sin variante → 422 antes de llamar; con variante → viaja variante_id', async () => { base(); post({ s: 201, j: { data: {} } }); const r1 = await pedir(cuerpo({ sku: 'smartwatch-fit' })); eq([r1.s, r1.j.code], [422, 'VARIANTE_REQUERIDA']); eq(n(/POST .*ordenes$/), 0); const r2 = await pedir(cuerpo({ sku: 'smartwatch-fit', variante_id: 42 })); eq(r2.s, 200); eq(body().productos[0].variante_id, 42); });
-    await t('el precio y los IDs siguen saliendo del servidor (no del navegador)', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ precio_venta_usd: 0.01, producto_id: 1 })); eq([body().productos[0].precio_venta_usd, body().productos[0].producto_id], [21.9, 101]); });
+    await t('el precio y los IDs siguen saliendo del servidor (no del navegador)', async () => { base(); post({ s: 201, j: { data: {} } }); await pedir(cuerpo({ precio_venta_usd: 0.01, producto_id: 1 })); eq([body().productos[0].precio_venta_usd, body().productos[0].producto_id], [26.9, 101]); }); // 21,90 del catálogo + 5 de envío cotizado (Opción A)
     await t('cobertura: CROSS_MODE al cotizar → 503 con ALERTA (sin crear pedido)', async () => { base(); ruta(/cotizar-envio/, { s: 403, j: { code: 'CROSS_MODE_OPERATION_FORBIDDEN' } }); const r = await pedir(cuerpo()); eq([r.s, r.j.code], [503, 'CONFIG_ENTORNO']); eq(n(/POST .*ordenes$/), 0); });
+    out('\n== Cuentas, Opción A (producto + envío), margen y variantes estrictas ==');
+    const SES = 'x'.repeat(40); process.env.SESSION_SECRET = SES;
+    const sesionLib = require(path.join(root, 'lib/sesion.js'));
+    const cookie = (sub = 'g-1') => 'nx_sesion=' + sesionLib.firmar({ sub, email: 'a@b.c', nombre: 'Ana' });
+    await t('Opción A: el cliente paga producto + envío y la respuesta trae el desglose', async () => { base(); post({ s: 201, j: { data: { id: 5 } } }); const r = await pedir(cuerpo()); eq([r.s, r.j.envio_usd, r.j.total_usd], [200, 5, 26.9]); eq(body().productos[0].precio_venta_usd, 26.9); });
+    await t('total_esperado distinto al calculado → 409 PRECIO_CAMBIO y NO se crea el pedido', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo({ total_esperado_usd: 21.9 })); eq([r.s, r.j.code, r.j.total_usd], [409, 'PRECIO_CAMBIO', 26.9]); si(!llamadas.some((c) => /POST .*ordenes$/.test(c.clave)), 'no debe crear'); });
+    await t('total_esperado correcto → se crea', async () => { base(); post({ s: 201, j: { data: {} } }); eq((await pedir(cuerpo({ total_esperado_usd: 26.9 }))).s, 200); });
+    await t('margen bajo el mínimo → ALERTA MARGEN_BAJO en logs (no bloquea la venta)', async () => { base(); post({ s: 201, j: { data: {} } }); process.env.MARGEN_MIN_USD = '1000'; const r = await pedir(cuerpo()); delete process.env.MARGEN_MIN_USD; eq(r.s, 200); si(logs.some((l) => /MARGEN_BAJO/.test(l)), 'falta la alerta'); });
+    await t('margen sano → sin alerta', async () => { base(); post({ s: 201, j: { data: {} } }); process.env.MARGEN_MIN_USD = '0'; await pedir(cuerpo()); delete process.env.MARGEN_MIN_USD; si(!logs.some((l) => /MARGEN_BAJO/.test(l)), 'no debía alertar'); });
+    await t('REQUIERE_CUENTA=1 sin sesión → 401 LOGIN_REQUERIDO; apagado → compra libre', async () => {
+      base(); post({ s: 201, j: { data: {} } }); process.env.REQUIERE_CUENTA = '1'; const r = await pedir(cuerpo()); eq([r.s, r.j.code], [401, 'LOGIN_REQUERIDO']); delete process.env.REQUIERE_CUENTA; eq((await pedir(cuerpo())).s, 200); });
+    await t('con sesión: el pedido se guarda por usuario (Mis pedidos) con tel4 y variante, y el perfil queda para autollenar', async () => {
+      base(); post({ s: 201, j: { data: { id: 55 } } }); process.env.REQUIERE_CUENTA = '1'; const r = await pedir(cuerpo(), { cookie: cookie('g-9') }); delete process.env.REQUIERE_CUENTA; eq(r.s, 200);
+      const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq([rec.sub, rec.tel4, rec.total_usd, rec.orden_id], ['g-9', '4567', 26.9, 55]); si(zsets.get('nx:uo:g-9').has(r.j.referencia), 'falta en la lista del usuario'); si(JSON.parse(kv.get('nx:u:g-9')).perfil.telefono, 'falta el perfil'); });
+    await t('compra sin cuenta (modo libre) igual deja registro por referencia, sin usuario', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo()); const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq(rec.sub, null); });
+    await t('si el almacén falla, el pedido igual se crea y queda ALERTA PEDIDO_NO_GUARDADO', async () => { base(); post({ s: 201, j: { data: {} } }); kvFalla = true; const r = await pedir(cuerpo()); eq(r.s, 200); si(logs.some((l) => /PEDIDO_NO_GUARDADO/.test(l)), 'falta alerta'); });
+    await t('variantes estrictas: lámpara sin variante → 400; modelo ajeno → 400; 1950/1951 pasan esa validación', async () => {
+      base(); post({ s: 201, j: { data: {} } });
+      const r1 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos' })); eq([r1.s, r1.j.code], [400, 'VARIANTE_REQUERIDA']);
+      const r2 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos', variante_id: 999 })); eq([r2.s, r2.j.code], [400, 'VARIANTE_INVALIDA']);
+      for (const id of [1950, 1951]) { const r3 = await pedir(cuerpo({ sku: 'lampara-atrapazancudos', variante_id: id })); si(!/VARIANTE_(REQUERIDA|INVALIDA)/.test(r3.j.code || ''), 'rechazó ' + id); } });
+    await t('GET /api/cotizar: devuelve producto + envío; sin cobertura → 422', async () => {
+      base(); const hCot = require(path.join(root, 'api/cotizar.js'));
+      const r = await call(hCot, { query: { sku: 'cargador-65w', estado: '24', ciudad: '149', cantidad: '2' } }); eq([r.s, r.j.subtotal_usd, r.j.envio_usd, r.j.total_usd], [200, 43.8, 5, 48.8]);
+      ruta(/cotizar-envio/, { s: 200, j: { data: [] } }); cache.reiniciar(); const r2 = await call(hCot, { query: { sku: 'cargador-65w', estado: '24', ciudad: '150' } }); eq([r2.s, r2.j.code], [422, 'SIN_COBERTURA']); });
+    delete process.env.SESSION_SECRET;
   }
 
   out('\n== /api/productos: tasa en vivo, manual o de respaldo ==');
@@ -261,7 +289,58 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('variantes: "No detallado" nunca llega como nombre', async () => { reset(); ruta(/inventario/, inv([fila(202, 3, { id: 42 })])); ruta(/productos\/202$/, { s: 200, j: { data: { tipo_producto: 'variable', variantes: [{ id: 42, color: 'No detallado', size: 'No detallado', cantidad: 3 }, { id: 43, nombre: 'Echufable' }] } } }); const i = (await call(hStock, { query: { skus: 'smartwatch-fit' } })).j.items['smartwatch-fit']; eq(i.variantes.map((v) => v.nombre), [null, 'Echufable']); });
   await t('la lámpara trae etiquetas para las variantes 1950 y 1951', async () => { const l = catalogo.publico(100).find((p) => p.sku === 'lampara-atrapazancudos'); si(l && l.variantes && l.variantes['1950'] && l.variantes['1951'] && l.variantes['1950'].nombre !== l.variantes['1951'].nombre, 'faltan variantes'); });
 
-  console.error = origErr;
+  out('\n== Sesión firmada y Google ==');
+  process.env.SESSION_SECRET = 'y'.repeat(40);
+  const ses = require(path.join(root, 'lib/sesion.js')), goo = require(path.join(root, 'lib/google.js')), hAuth = require(path.join(root, 'api/auth.js')), hMp = require(path.join(root, 'api/mis-pedidos.js')), usr = require(path.join(root, 'lib/usuarios.js'));
+  await t('sesión: firma válida pasa; manipulada, vencida o sin secreto NO', async () => {
+    const tk = ses.firmar({ sub: 'u1' }); eq(ses.verificar(tk).sub, 'u1');
+    const [c, f] = tk.split('.'); eq(ses.verificar(Buffer.from(JSON.stringify({ sub: 'u2', exp: 9999999999 })).toString('base64url') + '.' + f), null); eq(ses.verificar(c + '.' + 'A'.repeat(f.length)), null);
+    eq(ses.verificar(ses.firmar({ sub: 'u1' }, -10)), null); const sv = process.env.SESSION_SECRET; delete process.env.SESSION_SECRET; eq(ses.firmar({ sub: 'u1' }), null); process.env.SESSION_SECRET = sv; });
+  const par = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 }), otro = crypto.generateKeyPairSync('rsa', { modulusLength: 2048 });
+  const jwk = { ...par.publicKey.export({ format: 'jwk' }), kid: 'k1', alg: 'RS256', use: 'sig' }, jwks = async () => [jwk];
+  const jwt = (claims, key = par.privateKey, kid = 'k1') => { const b = (o) => Buffer.from(JSON.stringify(o)).toString('base64url'); const h = b({ alg: 'RS256', kid, typ: 'JWT' }), p = b(claims), sg = crypto.sign('RSA-SHA256', Buffer.from(h + '.' + p), key).toString('base64url'); return h + '.' + p + '.' + sg; };
+  const ahora = Math.floor(Date.now() / 1000), CID = 'cid-123.apps.googleusercontent.com';
+  const claims = (x = {}) => ({ iss: 'https://accounts.google.com', aud: CID, sub: 'g-777', email: 'ana@gmail.com', email_verified: true, name: 'Ana Pérez', given_name: 'Ana', family_name: 'Pérez', picture: 'https://lh3.googleusercontent.com/a', iat: ahora, exp: ahora + 3600, ...x });
+  await t('Google: token válido → usuario; audiencia, firma, emisor, vencimiento o correo sin verificar → rechazado', async () => {
+    const u = await goo.verificarCredencial(jwt(claims()), CID, { jwks }); eq([u.sub, u.email, u.nombres], ['g-777', 'ana@gmail.com', 'Ana']);
+    eq(await goo.verificarCredencial(jwt(claims({ aud: 'otro' })), CID, { jwks }), null);
+    eq(await goo.verificarCredencial(jwt(claims(), otro.privateKey), CID, { jwks }), null);
+    eq(await goo.verificarCredencial(jwt(claims({ iss: 'https://evil.com' })), CID, { jwks }), null);
+    eq(await goo.verificarCredencial(jwt(claims({ exp: ahora - 3600 })), CID, { jwks }), null);
+    eq(await goo.verificarCredencial(jwt(claims({ email_verified: false })), CID, { jwks }), null);
+    eq(await goo.verificarCredencial(jwt(claims(), par.privateKey, 'desconocida'), CID, { jwks }), null);
+    eq(await goo.verificarCredencial('basura', CID, { jwks }), null); });
+  const auth = (opt) => call((rq, rs) => hAuth(rq, rs, { opciones: { jwks } }), opt);
+  await t('/api/auth: login con Google crea cookie HttpOnly; "yo" la reconoce; "salir" la borra; token malo → 401', async () => {
+    reset(); conAlmacen(); process.env.GOOGLE_CLIENT_ID = CID;
+    const r = await auth({ method: 'POST', query: { accion: 'google' }, body: { credential: jwt(claims()) } }); eq(r.s, 200); si(/nx_sesion=.+HttpOnly/.test(r.h['set-cookie']) && /Secure/.test(r.h['set-cookie']), 'cookie insegura');
+    const ck = r.h['set-cookie'].split(';')[0]; si(JSON.parse(kv.get('nx:u:g-777')).email === 'ana@gmail.com', 'no guardó el usuario');
+    const y = await auth({ query: { accion: 'yo' }, headers: { cookie: ck } }); eq([y.j.usuario.email, y.j.google_client_id, y.j.requiere_cuenta], ['ana@gmail.com', CID, false]);
+    process.env.REQUIERE_CUENTA = '1'; eq((await auth({ query: { accion: 'yo' } })).j.requiere_cuenta, true); delete process.env.REQUIERE_CUENTA;
+    eq((await auth({ method: 'POST', query: { accion: 'google' }, body: { credential: 'mala' } })).s, 401);
+    si(/Max-Age=0/.test((await auth({ method: 'POST', query: { accion: 'salir' } })).h['set-cookie']), 'no borró la cookie');
+    delete process.env.GOOGLE_CLIENT_ID; const sin = await auth({ query: { accion: 'yo' } }); eq([sin.j.google_client_id, sin.j.requiere_cuenta], [null, false]); eq((await auth({ method: 'POST', query: { accion: 'google' }, body: { credential: jwt(claims()) } })).s, 503); });
+  await t('/api/auth: POST desde otro origen → 403', async () => { reset(); eq((await auth({ method: 'POST', query: { accion: 'salir' }, headers: { origin: 'https://evil.com' } })).s, 403); });
+  out('\n== Mis pedidos y rastreo de respaldo ==');
+  const REFX = 'NX' + 'A'.repeat(12), REFY = 'NX' + 'B'.repeat(12);
+  const regs = (ref, sub, tel4 = '5888') => ({ ref, sub, creado: new Date().toISOString(), sku: 'lampara-atrapazancudos', titulo: 'Lámpara', variante_id: 1951, variante_nombre: 'Modelo 2 · Recargable con pila', cantidad: 1, subtotal_usd: 23, envio_usd: 6.9, total_usd: 29.9, modo: 'contra_entrega', estado: 'creado', orden_id: null, tel4 });
+  await t('mis-pedidos: sin sesión 401; con sesión solo ve los SUYOS; DroPanas sin la orden → "pendiente de confirmación" con su código NX', async () => {
+    reset(); conAlmacen(); eq((await call(hMp, {})).s, 401);
+    await usr.guardarPedido(regs(REFX, 'g-1')); await usr.guardarPedido(regs(REFY, 'g-2'));
+    const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.s, r.j.pedidos.length, r.j.pedidos[0].referencia, r.j.pedidos[0].estado], [200, 1, REFX, 'pendiente_confirmacion']);
+    eq([r.j.pedidos[0].variante, r.j.pedidos[0].total_usd], ['Modelo 2 · Recargable con pila', 29.9]); si(!JSON.stringify(r.j).includes('tel4'), 'no debe exponer tel4'); });
+  await t('mis-pedidos: con la orden en DroPanas muestra estado real y guía', async () => {
+    reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, 'g-1'));
+    ruta(/ordenes\/ext:/, { s: 200, j: { data: { id: 88, estado_aprobacion: 'no_aplica', cliente: { telefono: '04125885888' } } } }); ruta(/ordenes\/88\/tracking/, { s: 200, j: { data: { numero_guia: 'DP88', status_actual: 'En reparto', historial: [] } } });
+    const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.j.pedidos[0].estado, r.j.pedidos[0].numero_guia], ['en_reparto', 'DP88']); });
+  await t('mis-pedidos sin almacén: disponible:false (no rompe)', async () => { reset(); delete process.env.KV_REST_API_URL; delete process.env.KV_REST_API_TOKEN; const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.s, r.j.disponible], [200, false]); });
+  await t('rastreo: DroPanas no la encuentra pero la creamos nosotros → "pendiente de confirmación" (4 dígitos correctos); incorrectos → 404 y diagnóstico en logs', async () => {
+    reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, null, '5888'));
+    const ok1 = await call(hRastreo, { query: { ref: REFX, tel: '5888' } }); eq([ok1.s, ok1.j.estado], [200, 'pendiente_confirmacion']); si(/pendiente de confirmaci/.test(ok1.j.mensaje), 'texto');
+    const mal1 = await call(hRastreo, { query: { ref: REFX, tel: '0000' } }); eq(mal1.s, 404); si(logs.some((l) => /RASTREO_NO_ENCONTRADO/.test(l) && /telefono_no_coincide|orden_no_encontrada/.test(l)), 'falta diagnóstico'); });
+  delete process.env.SESSION_SECRET;
+
+  console.error = origErr; console.warn = origWarn; console.log = origLog;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);
   process.exit(mal ? 1 : 0);
 })();
