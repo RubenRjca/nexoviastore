@@ -592,9 +592,9 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 
 <dialog class="co" id="rs" aria-labelledby="rs-t">
 <div class="co-h"><h2 id="rs-t">Rastrear mi pedido</h2><button class="x" type="button" id="rs-x" aria-label="Cerrar">×</button></div>
-<div class="co-b"><p style="margin:0 0 14px;color:var(--muted);font-size:14px">Escribe tu número de pedido y los últimos 4 dígitos del teléfono con el que pediste.</p>
+<div class="co-b"><p style="margin:0 0 14px;color:var(--muted);font-size:14px">Escribe tu código de compra (empieza por NX) y los últimos 4 dígitos del teléfono con el que pediste.</p>
 <form id="rs-f" novalidate><div class="fg">
-<div class="full"><label for="rs-ref">Número de pedido</label><input id="rs-ref" name="ref" required maxlength="14" placeholder="NX1A2B3C4D5E6F" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+<div class="full"><label for="rs-ref">Código de compra</label><input id="rs-ref" name="ref" required maxlength="14" placeholder="NX1A2B3C4D5E6F" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
 <div class="full"><label for="rs-tel">Últimos 4 dígitos de tu teléfono</label><input id="rs-tel" name="tel" required inputmode="numeric" maxlength="4" placeholder="1234" autocomplete="off"></div></div>
 <button class="btn go" type="submit" id="rs-go" style="margin-top:16px">Consultar estado</button></form>
 <p class="msg" id="rs-msg" role="status" aria-live="polite"></p>
@@ -633,7 +633,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 <p class="msg" id="msg" role="status" aria-live="polite"></p>
 </form></div>
 <div class="okbox" id="ok" hidden><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ED7F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
-<h3>¡Pedido recibido!</h3><p>Guarda tu número de pedido:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p>
+<h3>¡Pedido recibido!</h3><p>Guarda tu código de compra:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p>
 <a class="btn wa" id="ok-wa" href="#" target="_blank" rel="noopener" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.3Z"/></svg>Confirmar mi pedido por WhatsApp</a>
 <p class="wa-n" id="ok-wan" hidden>Envíanos el mensaje para confirmar tu pedido y coordinar la entrega. Es el paso que nos avisa para despacharlo.</p><div class="ok-bt"><button class="btn" type="button" id="ok-rs">Rastrear este pedido</button><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div></div>
 </dialog>
@@ -1219,7 +1219,7 @@ $('ai-f').addEventListener('submit', (e) => {
     .then((r) => r.json().then((j) => ({ ok: r.ok, j }))).then((x) => { if (!x.ok || !x.j.respuesta) throw 0; w.textContent = x.j.respuesta; hist.push({ role: 'assistant', content: x.j.respuesta }); }).catch(caer);
 });
 
-/* ---------- Rastreo (GET /api/rastreo: número de pedido + últimos 4 dígitos del teléfono) ---------- */
+/* ---------- Rastreo (GET /api/rastreo: código de compra + últimos 4 dígitos del teléfono) ---------- */
 const rs = $('rs'), rsF = $('rs-f'), rsMsg = $('rs-msg'), rsOut = $('rs-out'), rsGo = $('rs-go');
 function abrirRastreo(ref) {
   rsOut.hidden = true; rsOut.textContent = ''; rsMsg.textContent = ''; rsMsg.className = 'msg'; $('rs-ref').value = ref || ''; $('rs-tel').value = '';
@@ -1244,7 +1244,7 @@ function pintarRastreo(j) {
 rsF.addEventListener('submit', (e) => {
   e.preventDefault(); rsMsg.className = 'msg'; rsOut.hidden = true;
   const ref = $('rs-ref').value.trim().toUpperCase(), tel = $('rs-tel').value.replace(/\D/g, '');
-  if (!/^NX[A-F0-9]{12}$/.test(ref) || tel.length !== 4) { rsMsg.className = 'msg err'; rsMsg.textContent = 'Revisa tu número de pedido (empieza por NX) y los 4 dígitos de tu teléfono.'; return; }
+  if (!/^NX[A-F0-9]{12}$/.test(ref) || tel.length !== 4) { rsMsg.className = 'msg err'; rsMsg.textContent = 'Revisa tu código de compra (empieza por NX) y los 4 dígitos de tu teléfono.'; return; }
   if (local) { rsMsg.textContent = 'Vista previa: el rastreo funciona cuando la página está desplegada en Vercel.'; return; }
   rsGo.disabled = true; rsMsg.textContent = 'Consultando…';
   fetch(CONFIG.API_RASTREO + '?ref=' + encodeURIComponent(ref) + '&tel=' + tel, { headers: { Accept: 'application/json' } })
