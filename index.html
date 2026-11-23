@@ -306,7 +306,64 @@ dialog.fi .fg{display:block}
 .tl small{display:block;color:var(--muted);font-size:12px}
 .top nav a.opt{display:inline}
 @media (max-width:900px){.top nav a.opt{display:none}}
+
+/* ===== Unificación v1.2: animaciones, banner, nav móvil, reseñas, recién llegados ===== */
+:root{--ease:cubic-bezier(.22,.61,.36,1);--dur:.5s}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
+.banner{max-width:1200px;margin:56px auto;padding:0 20px}
+.banner-c{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(115deg,#ED7F61 0%,#D96B4D 55%,#C85A3E 100%);color:#fff;padding:40px 44px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px}
+.banner-c::before{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none}
+.banner-c h2{margin:0 0 8px;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.15}
+.banner-c p{margin:0;font-size:16px;max-width:48ch}
+.banner-c .b-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--coral-press);font-weight:800;font-size:16px;padding:14px 26px;border-radius:999px;text-decoration:none;transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.banner-c .b-cta:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.2)}
+.banner-c .b-cta svg{width:20px;height:20px}
+@media (max-width:700px){.banner-c{grid-template-columns:1fr;padding:30px 24px;text-align:center}.banner-c .b-cta{justify-self:center}}
+.hero-new{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
+.hero-new .hn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#fff}
+.hero-new .hn:hover{background:rgba(255,255,255,.28)}.hero-new .hn:focus-visible{outline:3px solid #fff}
+.hero-new .hn .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);flex:none}
+.hero-new .hn-t{color:#fff;font-size:13px;font-weight:700;opacity:.9;width:100%}
+.tag.new-tag{background:#3DA76A}
+.mnav{display:none}
+@media (max-width:900px){
+  body{padding-bottom:62px}
+  .mnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--hdr);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);justify-content:space-around;align-items:center;padding:max(4px,env(safe-area-inset-bottom,0px)) 0}
+  .mnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;font-size:10.5px;font-weight:600;color:var(--muted);text-decoration:none}
+  .mnav a:hover,.mnav a:focus-visible{color:var(--head)}.mnav a.active{color:var(--coral)}
+  .mnav svg{width:22px;height:22px}
+  .ai-fab{bottom:max(72px,calc(env(safe-area-inset-bottom,0px) + 64px))}
+  .ai-p{bottom:max(140px,calc(env(safe-area-inset-bottom,0px) + 132px))}
+}
+.resenas{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
+.resenas h4{margin:0 0 12px;font-size:16px;font-weight:700;color:var(--head)}
+.res-sum{font-size:13.5px;color:var(--muted);margin:0 0 10px}
+.res-list{display:grid;gap:12px;margin-bottom:18px}
+.res-item{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.res-item .res-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.res-item .res-n{font-weight:700;font-size:14px}
+.res-item .res-t{font-size:13.5px;line-height:1.5;margin:4px 0 0}
+.res-stars{display:inline-flex;gap:2px;font-size:15px;line-height:1}.res-stars .s-on{color:var(--coral)}.res-stars .s-off{color:var(--line)}
+.res-form{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px}
+.res-form h4{margin:0 0 10px;font-size:15px}
+.res-form .fg{display:block;margin-bottom:12px}.res-form label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.res-form input[type=text],.res-form textarea{width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink)}
+.res-form textarea{resize:vertical;min-height:80px}
+.star-pick{display:inline-flex;gap:4px;margin-bottom:10px}
+.star-pick button{all:unset;cursor:pointer;font-size:26px;line-height:1;color:var(--line);transition:color .12s,transform .12s}
+.star-pick button:hover,.star-pick button.on{color:var(--coral)}.star-pick button:hover{transform:scale(1.12)}.star-pick button:focus-visible{outline:3px solid var(--coral);border-radius:4px}
+.res-msg{font-size:13.5px;min-height:1.4em;margin-top:8px;color:var(--muted)}.res-msg.ok{color:#2E7D32;font-weight:600}.res-msg.err{color:#C0392B;font-weight:600}
+.fi-cmp{display:flex;gap:8px;margin-top:12px}.fi-cmp .btn{flex:1;text-align:center}
+.neg{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:13px}
+.neg li::before{content:"✕ ";color:var(--coral-press);font-weight:800}
+.cmp-cat{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.cmp-cat button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:999px;padding:9px 18px;font-size:14px;font-weight:600;color:var(--ink)}
+.cmp-cat button:hover{border-color:var(--head)}.cmp-cat button[aria-pressed="true"]{background:var(--head);color:#fff;border-color:var(--head)}
+.cmp-cat button:focus-visible{outline:3px solid var(--coral)}.cmp-cat button svg{width:20px;height:20px}
 </style>
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
 <aside class="pwa" id="pwa" hidden role="region" aria-label="Instalar la app de Nexovia">
@@ -327,7 +384,7 @@ dialog.fi .fg{display:block}
 <img src="assets/isotipo.png" alt="" width="60" height="50">
 <span class="n"><b>NEXOVIA</b><span>STORE</span></span></a>
 <form class="search" role="search" onsubmit="return false">
-<input type="search" placeholder="Busca cargadores, zapatos, morrales…" aria-label="Buscar productos">
+<input type="search" placeholder="Busca productos…" aria-label="Buscar productos">
 <button type="submit" aria-label="Buscar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
 <div class="icons">
 <a href="#cuenta" aria-label="Mi cuenta"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.2-6.5 8-6.5s7 2 8 6.5"/></svg></a>
@@ -344,31 +401,38 @@ dialog.fi .fg{display:block}
 <section class="hero" id="pago-contra-entrega" aria-labelledby="h1"><div class="hero-card">
 <div><h1 id="h1">¡Envíos a toda Venezuela!<span class="cod-line">Pago Contra Entrega</span></h1>
 <p class="lead">Elige tu producto, haz tu pedido y paga cuando lo recibas en tu casa. Sin pagar por adelantado.</p>
-<div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div></div>
-<figure class="hero-img"><img src="assets/hero-cargador.jpg" alt="Cargador rápido de 65 W con múltiples puertos USB-C y USB-A sobre una mesa" width="832" height="323"><figcaption>Cargador de 65 W con múltiples puertos</figcaption></figure>
+<div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div>
+<div class="hero-new" id="hero-new"></div></div>
+<figure class="hero-img"><img src="assets/hero-lampara.jpg" alt="Lámpara atrapazancudos con luz violeta en dos modelos: Modelo 1 enchufable y Modelo 2 recargable con pila" width="1100" height="451"><figcaption>Lámpara atrapazancudos: enchufable o recargable</figcaption></figure>
 </div></section>
 
-<section class="trust" aria-label="Por qué comprar en Nexovia Store">
+<section class="trust reveal" aria-label="Por qué comprar en Nexovia Store">
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9.5v.01M18 14.5v.01"/></svg></span><div><h3>Pagas al recibir</h3><p>Entregas el dinero cuando el producto llega a tus manos.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9h-11zM13.5 9.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></svg></span><div><h3>Envíos a toda Venezuela</h3><p>Despachamos a todo el país con entrega a domicilio.</p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta. <a href="#rastreo" data-rastreo style="color:var(--head);font-weight:700;text-decoration:underline">Consultar ahora</a></p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.4 5.6 4.3 0 1.2-1.1 2-2.9 2-1.4 0-2.5-.6-3-1.7M12 6v1.7M12 16.3V18"/></svg></span><div><h3>Precios en USD y Bs</h3><p>Ve el precio en dólares o en bolívares, como te convenga.</p></div></article>
 </section>
 <nav class="cats" id="cats" aria-label="Categorías"></nav>
-<section class="wk" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
+<section class="wk reveal" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
 
-<section class="cat" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
+<section class="cat reveal" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
 <p>Elige el tuyo y págalo cuando te llegue, o paga por adelantado. Precios en dólares y bolívares.</p>
 <p class="tasa-nota" id="tasa-nota" hidden></p>
 <div class="grid" id="grid" aria-live="polite"></div></section>
 
-<section class="cmpx" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
-<p>Elige hasta 3 productos (también puedes marcar “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
+<p>Comparamos productos de la misma categoría. Elige hasta 3 (o marca “Comparar” en cada tarjeta) y mira lo importante lado a lado.</p>
+<div class="cmp-cat" id="cmp-cat" role="group" aria-label="Categoría a comparar"></div>
 <div class="cmp-sel" id="cmp-sel"></div>
 <div class="cmp-w"><table class="cmp-t" id="cmp-t"></table></div>
 <p id="cmp-msg" role="status" aria-live="polite" style="margin:10px 0 0;font-size:13px;color:var(--muted)"></p></section>
 
-<section class="how" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
+<section class="banner reveal" aria-label="Promoción contra entrega">
+<div class="banner-c"><div><h2>¿No quieres pagar por adelantado?</h2>
+<p>Pide hoy tu gadget y paga solo cuando lo tengas en tus manos. Sin riesgo, sin pagar antes.</p></div>
+<a class="b-cta" href="#productos">Ver productos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></section>
+
+<section class="how reveal" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
 <ol><li><h3>Elige tu producto</h3><p>Agrégalo al carrito y revisa el total en dólares o bolívares.</p></li>
 <li><h3>Haz tu pedido</h3><p>Déjanos tu nombre, teléfono y dirección de entrega. No necesitas pagar todavía.</p></li>
 <li><h3>Recibe y paga</h3><p>Cuando el mensajero llegue con tu pedido, pagas el monto acordado.</p></li></ol></section>
@@ -399,6 +463,13 @@ dialog.fi .fg{display:block}
 <div class="ft-b"><div><span>© 2026 Nexovia Store. Todos los derechos reservados.</span>
 <nav aria-label="Legal"><a href="#">Términos y condiciones</a><a href="#">Política de privacidad</a></nav></div></div>
 </footer>
+
+<nav class="mnav" aria-label="Navegación inferior">
+<a href="#pago-contra-entrega" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 3l9 9M5 10v10h14V10"/></svg>Inicio</a>
+<a href="#productos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Productos</a>
+<a href="#comparador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"/></svg>Comparar</a>
+<a href="#rastreo" data-rastreo><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Rastrear</a>
+</nav>
 
 <dialog class="co fi" id="fi" aria-labelledby="fi-t">
 <div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
@@ -463,7 +534,7 @@ dialog.fi .fg{display:block}
 'use strict';
 /* ===== CONFIGURACIÓN (lo único que debes editar aquí) ===== */
 const CONFIG = {
-  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente',
+  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente', API_RESENAS: '/api/resenas',
   API_STOCK: '/api/stock', API_RASTREO: '/api/rastreo',
   WHATSAPP: '', // tu número en formato internacional sin + ni espacios, ej. 584121234567. Vacío = sin botón de WhatsApp
   /* Datos para el Pago Directo Anticipado. Completa SOLO los métodos que aceptes: los que queden vacíos no se ofrecen.
@@ -511,7 +582,7 @@ const precios = (p) => '<div class="prices"><span class="p-usd">' + usd(p.usd) +
 const media = (p) => (p.imagen && /^(assets\/|https:\/\/)/.test(p.imagen)) ? '<img src="' + esc(p.imagen) + '" alt="' + esc(p.titulo) + '" loading="lazy">' : (ICONS[p.icono] || '');
 const ahorro = (p) => p.usd_antes ? Math.round((1 - p.usd / p.usd_antes) * 100) : 0;
 const lis = (a) => a.map((b) => '<li>' + esc(b) + '</li>').join('');
-const etiqueta = (p) => p.etiqueta || (p.usd_antes ? 'Oferta −' + ahorro(p) + ' %' : '');
+const etiqueta = (p) => p.etiqueta || (p.nuevo ? 'Nuevo' : '') || (p.usd_antes ? 'Oferta −' + ahorro(p) + ' %' : '');
 
 function pintarCats() {
   const hay = (id) => productos.some((p) => p.categoria === id);
@@ -537,27 +608,44 @@ function pintarSemana() {
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + precios(p) +
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></div>';
 }
+let cmpCat = null, cmpListo = false;
 function pintarCmp() {
+  /* Solo se comparan productos de la MISMA categoría. Sin ninguna categoría con 2+ productos, la sección se oculta. */
+  const cs = $('comparador'), cats = categorias.filter((c) => productos.filter((p) => p.categoria === c.id).length >= 2);
+  if (cs) cs.hidden = !cats.length; if (!cats.length) return;
+  if (!cats.some((c) => c.id === cmpCat)) cmpCat = cats[0].id;
+  const enCat = productos.filter((p) => p.categoria === cmpCat);
+  cmp = cmp.filter((sku) => enCat.some((p) => p.sku === sku));
+  if (!cmpListo) { cmpListo = true; if (cmp.length < 2) cmp = enCat.slice(0, 3).map((p) => p.sku); }
+  $('cmp-cat').innerHTML = cats.map((c) => '<button type="button" data-cmpcat="' + esc(c.id) + '" aria-pressed="' + (c.id === cmpCat) + '">' + (ICONS[c.icono] || '') + esc(c.nombre) + '</button>').join('');
   const sel = $('cmp-sel');
   sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
-    productos.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
+    enCat.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
   const l = cmp.map(prod).filter(Boolean), t = $('cmp-t');
-  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos para compararlos.</td></tr></tbody>'; return; }
+  if (l.length < 2) { t.innerHTML = '<tbody><tr><td style="padding:22px">Elige al menos 2 productos de esta categoría para compararlos.</td></tr></tbody>'; return; }
   const keys = []; l.forEach((p) => Object.keys(p.specs || {}).forEach((k) => { if (!keys.includes(k)) keys.push(k); }));
   const minimo = Math.min.apply(null, l.map((p) => p.usd));
   t.innerHTML = '<thead><tr><th scope="col"></th>' + l.map((p) => '<th scope="col"><div class="mini">' + media(p) + '</div><span class="ct">' + esc(p.titulo) + '</span><button class="btn sm" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></th>').join('') + '</tr></thead><tbody>' +
     '<tr><th scope="row">Precio</th>' + l.map((p) => '<td class="' + (p.usd === minimo ? 'best' : '') + '">' + usd(p.usd) + '<br><span style="color:var(--muted);font-weight:500">' + bs(p.usd) + '</span>' + (p.usd === minimo ? '<br>Más económico' : '') + '</td>').join('') + '</tr>' +
     keys.map((k) => '<tr><th scope="row">' + esc(k) + '</th>' + l.map((p) => '<td>' + esc((p.specs || {})[k] || '—') + '</td>').join('') + '</tr>').join('') +
     '<tr><th scope="row">Ventajas</th>' + l.map((p) => '<td><ul class="ben">' + lis(p.beneficios) + '</ul></td>').join('') + '</tr>' +
+    (l.some((p) => (p.desventajas || []).length) ? '<tr><th scope="row">Desventajas</th>' + l.map((p) => '<td>' + ((p.desventajas || []).length ? '<ul class="neg">' + lis(p.desventajas) + '</ul>' : '—') + '</td>').join('') + '</tr>' : '') +
+    (l.some((p) => p.por_que_conviene) ? '<tr><th scope="row">¿Por qué conviene?</th>' + l.map((p) => '<td>' + esc(p.por_que_conviene || '—') + '</td>').join('') + '</tr>' : '') +
+    (l.some((p) => p.beneficio_practico) ? '<tr><th scope="row">En tu día a día</th>' + l.map((p) => '<td>' + esc(p.beneficio_practico || '—') + '</td>').join('') + '</tr>' : '') +
     '<tr><th scope="row">¿Por qué comprarlo?</th>' + l.map((p) => '<td>' + esc(p.por_que) + '</td>').join('') + '</tr></tbody>';
 }
 function fichaP(sku) {
   const p = prod(sku); if (!p) return;
   $('fi-b').innerHTML = '<div class="fi-g"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' +
+    (p.por_que_conviene ? '<p class="why" style="margin-left:0"><b>¿Por qué conviene?</b> ' + esc(p.por_que_conviene) + '</p>' : '') +
+    (p.beneficio_practico ? '<p class="why" style="margin-left:0"><b>En tu día a día:</b> ' + esc(p.beneficio_practico) + '</p>' : '') +
+    ((p.desventajas || []).length ? '<p class="why" style="margin-left:0"><b>Desventajas honestas</b></p><ul class="neg">' + lis(p.desventajas) + '</ul>' : '') +
     '<table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' + precios(p) +
-    '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div></div></div>';
-  aplicarStock(); $('fi').showModal();
+    '<p class="cod-mini" style="margin-left:0">Pago Contra Entrega o pago anticipado</p><div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div>' +
+    '<div class="fi-cmp"><button class="btn alt sm" type="button" data-cmpficha="' + esc(p.sku) + '">Comparar con otros</button></div>' +
+    '<div class="resenas" id="resenas-box"></div></div></div>';
+  aplicarStock(); $('fi').showModal(); cargarResenas(p.sku);
 }
 /* ---------- Stock real (GET /api/stock). Si no se pudo verificar, NO se afirma nada ---------- */
 const stk = (sku) => stock[sku] || null;
@@ -599,7 +687,7 @@ function prepararVariantes() {
   const d = document.createElement('div'); d.id = 'vsel'; d.className = 'vsel';
   const lab = document.createElement('label'); lab.htmlFor = 'variante'; lab.textContent = 'Elige tu opción';
   const sel = document.createElement('select'); sel.id = 'variante'; sel.name = 'variante'; sel.required = true; sel.add(new Option('Selecciona…', ''));
-  (s.variantes || []).forEach((v) => { const o = new Option((v.nombre || 'Opción ' + v.id) + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
+  (s.variantes || []).forEach((v) => { const o = new Option(((cur.p.variantes_nombres || {})[v.nombre] || v.nombre || 'Opción ' + v.id) + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
   sel.addEventListener('change', () => { cur.qty = Math.min(cur.qty, maxQty()); total(); });
   d.append(lab, sel); form.insertBefore(d, form.firstChild);
   if (!(s.variantes || []).length) { sel.disabled = true; sel.required = false; go.disabled = true; msg.className = 'msg err'; msg.textContent = 'No pudimos cargar las opciones de este producto. Inténtalo de nuevo en un momento.'; }
@@ -610,21 +698,71 @@ function notaTasa() {
   else if (!tasa) { n.textContent = 'Mostramos los precios en USD. El equivalente en Bs se confirma al hacer tu pedido.'; n.hidden = false; }
   else n.hidden = true;
 }
-function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); aplicarStock(); }
+function pintarNuevos() {
+  const box = $('hero-new'), n = productos.filter((p) => p.nuevo); if (!box) return;
+  box.innerHTML = n.length ? '<span class="hn-t">¡Recién llegados!</span>' + n.map((p) => '<button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button>').join('') : '';
+}
+function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); pintarNuevos(); aplicarStock(); }
+
+/* ---------- Reseñas REALES (GET/POST /api/resenas). Nunca se inventan: solo las aprobadas por ti. ---------- */
+let resSku = null;
+const estrellasHTML = (n) => { let h = ''; for (let i = 1; i <= 5; i++) h += '<span class="' + (i <= n ? 's-on' : 's-off') + '">★</span>'; return '<span class="res-stars" role="img" aria-label="' + n + ' de 5 estrellas">' + h + '</span>'; };
+function formResena(sku) {
+  return '<form class="res-form" data-sku="' + esc(sku) + '" novalidate><h4>Deja tu reseña</h4><div class="star-pick" role="group" aria-label="Calificación">' +
+    [1, 2, 3, 4, 5].map((n) => '<button type="button" data-star="' + n + '" aria-label="' + n + ' estrellas">★</button>').join('') + '</div>' +
+    '<div class="fg"><label>Tu nombre<input type="text" name="nombre" maxlength="30" placeholder="Ej. María G." autocomplete="given-name"></label></div>' +
+    '<div class="fg"><label>Tu reseña (20 a 600 letras, sin enlaces)<textarea name="texto" maxlength="600" placeholder="Cuéntanos cómo te fue con este producto…"></textarea></label></div>' +
+    '<div class="hp" aria-hidden="true"><label>No llenar<input name="web" tabindex="-1" autocomplete="off"></label></div>' +
+    '<input type="hidden" name="estrellas" value="0"><button class="btn" type="submit">Enviar reseña</button><p class="res-msg" role="status" aria-live="polite"></p></form>';
+}
+function cargarResenas(sku) {
+  resSku = sku; const box = $('resenas-box'); if (!box) return;
+  const cab = '<h4>Reseñas de clientes</h4>';
+  if (local) { box.innerHTML = cab + '<p class="res-sum">Vista previa: las reseñas funcionan al desplegar en Vercel.</p>'; return; }
+  box.innerHTML = cab + '<p class="res-sum">Cargando reseñas…</p>';
+  getJSON(CONFIG.API_RESENAS + '?sku=' + encodeURIComponent(sku)).then((j) => {
+    if (resSku !== sku) return;
+    const d = j.data || [], r = j.resumen || {};
+    box.innerHTML = cab + (d.length ? '<p class="res-sum">' + (r.promedio ? '★ ' + fmt(r.promedio) + ' · ' : '') + d.length + (d.length === 1 ? ' reseña' : ' reseñas') + '</p><div class="res-list">' +
+      d.map((x) => '<div class="res-item"><div class="res-h"><span class="res-n">' + esc(x.nombre) + '</span>' + estrellasHTML(x.estrellas) + '</div><p class="res-t">' + esc(x.texto) + '</p></div>').join('') + '</div>'
+      : '<p class="res-sum">Aún no hay reseñas. ¡Sé el primero en dejar la tuya!</p>') + (j.disponible === false ? '' : formResena(sku));
+  }).catch(() => { if (resSku === sku) box.innerHTML = cab + '<p class="res-sum">No se pudieron cargar las reseñas.</p>'; });
+}
+document.addEventListener('click', (e) => {
+  const sb = e.target.closest('.star-pick button'); if (!sb) return;
+  const n = Number(sb.dataset.star); sb.closest('.star-pick').querySelectorAll('button').forEach((b) => b.classList.toggle('on', Number(b.dataset.star) <= n));
+  sb.closest('form').elements.estrellas.value = n;
+});
+document.addEventListener('submit', (e) => {
+  const f = e.target.closest('.res-form'); if (!f) return; e.preventDefault();
+  const rm = f.querySelector('.res-msg'), nombre = f.elements.nombre.value.trim(), texto = f.elements.texto.value.trim(), est = Number(f.elements.estrellas.value);
+  const err = (t) => { rm.className = 'res-msg err'; rm.textContent = t; };
+  if (!est) return err('Elige de 1 a 5 estrellas.');
+  if (nombre.length < 2) return err('Escribe tu nombre.');
+  if (texto.length < 20) return err('Cuéntanos un poco más (mínimo 20 letras).');
+  const btn = f.querySelector('button[type=submit]'); btn.disabled = true; rm.className = 'res-msg'; rm.textContent = 'Enviando…';
+  fetch(CONFIG.API_RESENAS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ producto_sku: f.dataset.sku, nombre, texto, estrellas: est, web: f.elements.web.value }) })
+    .then((r) => r.json().catch(() => ({})).then((j) => ({ ok: r.ok, j })))
+    .then((x) => { if (!x.ok) throw x.j; rm.className = 'res-msg ok'; rm.textContent = x.j.message || '¡Gracias! Tu reseña se publicará cuando la revisemos.'; f.reset(); f.querySelectorAll('.star-pick button').forEach((b) => b.classList.remove('on')); })
+    .catch((er) => err((er && er.message) || 'No se pudo enviar tu reseña. Inténtalo de nuevo.'))
+    .finally(() => { btn.disabled = false; });
+});
 grid.innerHTML = '<p>Cargando productos…</p>';
-getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = productos.slice(0, 3).map((p) => p.sku); pintarTodo(); notaTasa(); cargarStock(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
+getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = []; pintarTodo(); notaTasa(); cargarStock(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
   .catch(() => { grid.innerHTML = '<p>No pudimos cargar los productos. Recarga la página.</p>'; });
 document.addEventListener('click', (e) => {
-  const b = e.target.closest('[data-buy],[data-ficha],[data-cat]'); if (!b) return;
+  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha],[data-cmpcat]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
   else if (b.dataset.ficha) fichaP(b.dataset.ficha);
+  else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
+  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
   else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); aplicarStock(); }
 });
 document.addEventListener('change', (e) => {
   const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
   if (c) {
     const sku = c.dataset.cmp;
-    if (c.checked) { if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
+    if (c.checked) { const pc = prod(sku); if (pc && pc.categoria !== cmpCat) { cmpCat = pc.categoria; cmp = []; } if (cmp.length >= 3) { c.checked = false; $('cmp-msg').textContent = 'Ya tienes 3 productos en el comparador. Cambia uno en la lista de arriba.'; return; } cmp.push(sku); }
     else cmp = cmp.filter((x) => x !== sku);
     $('cmp-msg').textContent = ''; pintarCmp(); aplicarStock();
   } else if (s) {
@@ -804,6 +942,14 @@ window.addEventListener('appinstalled', descartar);
 if (movil) setTimeout(mostrarPWA, 2500);
 $('pwa-ok').onclick = async () => { if (evInst) { evInst.prompt(); try { await evInst.userChoice; } catch (e) {} evInst = null; descartar(); } else $('pwa-guia').hidden = !$('pwa-guia').hidden; };
 $('pwa-x').onclick = descartar;
+/* ---------- Revelado suave al hacer scroll ---------- */
+const reveal = () => {
+  const els = document.querySelectorAll('.reveal:not(.in)');
+  if (!('IntersectionObserver' in window)) { els.forEach((el) => el.classList.add('in')); return; }
+  const io = new IntersectionObserver((en) => en.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach((el) => io.observe(el));
+};
+reveal();
 })();
 </script>
 </body>
