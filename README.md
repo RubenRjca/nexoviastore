@@ -32,7 +32,7 @@ api/asistente.js      Asistente de ventas con IA (opcional)
 - **`index.html` → `CONFIG.PAGOS`**: escribe los datos de Pago Móvil, Zelle, Ávila Pay y transferencia que aceptes.
   Los métodos sin datos no se ofrecen. Sin ninguno, "Pago Directo Anticipado" aparece como "Próximamente".
 - **`CONFIG.WHATSAPP`** (botón del asistente) y los enlaces de Facebook, TikTok y WhatsApp del footer (`TODO`).
-- **Dominio**: cambia `www.nexovia.store` por el tuyo en `canonical` y `og:*` del `<head>`.
+- **Dominio**: hoy `canonical` y `og:*` apuntan a `https://nexoviastore-kappa.vercel.app/`. Si compras un dominio propio, cámbialo en el `<head>` de `index.html`.
 - Páginas legales (términos, privacidad, devoluciones) y el carrito/cuenta/favoritos del header (hoy solo visuales).
 
 ## Cómo funciona la seguridad
@@ -50,3 +50,12 @@ Al aprobarlo, DroPanas debita tu wallet: mantén saldo disponible.
 ## Asistente de ventas
 Botón flotante con respuestas rápidas gratuitas. Con `ANTHROPIC_API_KEY`, el texto libre lo responde un asistente de IA (`api/asistente.js`) que solo conoce los datos de la tienda;
 cada mensaje se factura a tu cuenta de Anthropic. Para usar otro bot (p. ej. LucidBot), cambia `CONFIG.API_ASISTENTE`.
+
+## Actualizaciones recientes
+- **Privacidad:** `vercel.json` redirige `/data`, `/lib`, `/scripts`, `/tests`, `/docs` y `/supabase` (y archivos internos como `README.md`) al inicio, así el costo y los IDs de DroPanas de `data/catalogo.json` no se sirven públicamente. La API pública (`/api/productos`) nunca devuelve `costo_usd`, `producto_id` ni `bodega_origen_id`.
+- **Variantes:** el catálogo puede traer `variantes` con etiquetas por ID de variante de DroPanas (`nombre`, `detalle`, `alias`). Si DroPanas devuelve "No detallado" se ignora.
+- **Ficha:** primero resumen; botón "¿Por qué debes comprarlo?" abre la ficha completa (`descripcion_larga`, `como_funciona`, `specs`, `aviso`).
+- **Comparador:** solo por categoría, en su sección (no en las tarjetas).
+- **Webhook de DroPanas:** `POST /api/webhook` (variable `DROPANAS_WEBHOOK_SECRET`). Ver `.env.example`.
+- **Pedido de prueba:** ver `docs/PEDIDO-DE-PRUEBA.md`.
+- **Pendientes de conectar:** carrito multi-producto, cuenta de usuario y favoritos (iconos ocultos), páginas legales, redes (Facebook/TikTok/WhatsApp) y reseñas (requiere Upstash).

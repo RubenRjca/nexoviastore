@@ -255,6 +255,12 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('referencia ajena (no NX…) no se guarda; incidente deja ALERTA; método GET 405', async () => { reset(); conAlmacen(); await llamarWh(evt({ datos: { pedido: { numero_externo: 'LUCID-1', estado: 'X' } } }), { delivery: 'del-0002' }); eq([...kv.keys()].filter((k) => k.startsWith('nx:wh:NX')).length, 0); const n = logs.length; await llamarWh({ evento: 'incident.created', datos: { orden_id: 9, novedad_id: 3, tipo: 'no_entregado' } }, { delivery: 'del-0003' }); si(logs.length > n, 'debe alertar la novedad'); eq((await llamarWh(evt(), { method: 'GET' })).s, 405); });
   delete process.env.DROPANAS_WEBHOOK_SECRET;
 
+  out('\n== Privacidad del costo, variantes y cobertura ==');
+  await t('la API pública no expone costo_usd ni IDs de DroPanas', async () => { const txt = JSON.stringify(catalogo.publico(100)); si(!/costo_usd|producto_id|bodega_origen_id/.test(txt), 'campo interno expuesto'); });
+  await t('vercel.json bloquea /data, /lib y archivos internos (el costo no se sirve como estático)', async () => { const v = require(path.join(root, 'vercel.json')); const re = (v.redirects || []).map((r) => r.source); si(re.some((x) => x.includes('data') && x.includes('lib')), 'falta redirect de /data y /lib'); });
+  await t('variantes: "No detallado" nunca llega como nombre', async () => { reset(); ruta(/inventario/, inv([fila(202, 3, { id: 42 })])); ruta(/productos\/202$/, { s: 200, j: { data: { tipo_producto: 'variable', variantes: [{ id: 42, color: 'No detallado', size: 'No detallado', cantidad: 3 }, { id: 43, nombre: 'Echufable' }] } } }); const i = (await call(hStock, { query: { skus: 'smartwatch-fit' } })).j.items['smartwatch-fit']; eq(i.variantes.map((v) => v.nombre), [null, 'Echufable']); });
+  await t('la lámpara trae etiquetas para las variantes 1950 y 1951', async () => { const l = catalogo.publico(100).find((p) => p.sku === 'lampara-atrapazancudos'); si(l && l.variantes && l.variantes['1950'] && l.variantes['1951'] && l.variantes['1950'].nombre !== l.variantes['1951'].nombre, 'faltan variantes'); });
+
   console.error = origErr;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);
   process.exit(mal ? 1 : 0);
