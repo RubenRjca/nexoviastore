@@ -343,6 +343,12 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('mis-pedidos: devuelve el contacto SOLO al dueño (para el botón de WhatsApp) y nunca el de otro usuario', async () => {
     reset(); conAlmacen(); await usr.guardarPedido({ ...regs(REFX, 'g-1'), contacto: { nombre: 'Ana Pérez', telefono: '04141234567', estado: 'Miranda', ciudad: 'Los Teques', direccion: 'Calle 1 casa 2' } }); await usr.guardarPedido({ ...regs(REFY, 'g-2'), contacto: { nombre: 'Otro', telefono: '04120000000' } });
     const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.j.pedidos.length, r.j.pedidos[0].contacto.ciudad], [1, 'Los Teques']); si(!JSON.stringify(r.j).includes('04120000000'), 'no debe filtrar contacto ajeno'); });
+  await t('seguimiento: estados de DroPanas → entregado / en camino / cancelado / devolución (historial por categorías)', async () => {
+    const { etapa } = require(path.join(root, 'lib/seguimiento.js'));
+    eq([etapa('Entregado'), etapa('En camino'), etapa('Cancelado por el cliente'), etapa('Devolución en proceso'), etapa('Novedad en entrega'), etapa('Pedido anulado'), etapa('En preparación')], ['entregado', 'en_camino', 'cancelado', 'devolucion', 'novedad', 'cancelado', 'preparando']); });
+  await t('mis-pedidos: incluye sku y variante_id para «Volver a pedir»', async () => {
+    reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, 'g-1'));
+    const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.j.pedidos[0].sku, r.j.pedidos[0].variante_id], ['lampara-atrapazancudos', 1951]); });
   await t('mis-pedidos: con la orden en DroPanas muestra estado real y guía', async () => {
     reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, 'g-1'));
     ruta(/ordenes\/ext:/, { s: 200, j: { data: { id: 88, estado_aprobacion: 'no_aplica', cliente: { telefono: '04125885888' } } } }); ruta(/ordenes\/88\/tracking/, { s: 200, j: { data: { numero_guia: 'DP88', status_actual: 'En reparto', historial: [] } } });

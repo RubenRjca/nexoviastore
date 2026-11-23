@@ -2,7 +2,7 @@
 
 ## Qué hace
 - Inicio de sesión con Google (sin contraseñas). Sesión en cookie firmada `nx_sesion` (30 días).
-- «Mis pedidos»: código NX destacado, estado automático ligado a la cuenta; el rastreo manual (NX + 4 dígitos) sigue disponible.
+- «Historial de compras»: código NX destacado, estado automático ligado a la cuenta; el rastreo manual (NX + 4 dígitos) sigue disponible.
 - **Precio final único**: el cliente ve y paga solo el `precio_venta_usd` del catálogo (envío incluido, sin desglose). Ese mismo precio se envía a DroPanas. El flete cotizado se usa solo en el servidor para el margen y nunca se muestra ni se devuelve al navegador.
 - Alerta en logs `MARGEN_BAJO` si la ganancia estimada (precio final − costo − envío cotizado − comisión) < `MARGEN_MIN_USD` (no bloquea la venta). Lámpara a US$ 29: ganancia ≈ 9,01 (envío 4,50) a 6,61 (envío 6,90).
 - Variantes estrictas (1950 y 1951) y log `ORDEN_CREADA` con la variante enviada.
@@ -27,8 +27,8 @@
 Tras cambiar variables, haz **Redeploy**.
 
 ## Cómo activar la cuenta obligatoria
-1. Entra desde tu celular en Chrome/Safari, toca **Ingresar** y verifica que Google te deja entrar y que ves «Mis pedidos».
-2. Haz un pedido de prueba y comprueba que aparece en «Mis pedidos».
+1. Entra desde tu celular en Chrome/Safari, toca **Ingresar** y verifica que Google te deja entrar y que ves «Historial de compras».
+2. Haz un pedido de prueba y comprueba que aparece en «Historial de compras».
 3. Pon `REQUIERE_CUENTA=1` en Vercel y redeploy.
 
 Dentro de Instagram, TikTok o WhatsApp Google bloquea el inicio de sesión: la tienda detecta esos navegadores y pide abrir el enlace en Chrome o Safari.

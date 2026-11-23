@@ -8,7 +8,7 @@ const { recordar, limitar } = require('../lib/cache');
 const { cargar, armar, TEXTO } = require('../lib/seguimiento');
 
 const PEDIDO_ESTADO = (o, e) => ({
-  referencia: o.ref, creado: o.creado, titulo: o.titulo, variante: o.variante_nombre || null, cantidad: o.cantidad,
+  referencia: o.ref, creado: o.creado, sku: o.sku || null, variante_id: o.variante_id || null, titulo: o.titulo, variante: o.variante_nombre || null, cantidad: o.cantidad,
   total_usd: o.total_usd, modo: o.modo, contacto: o.contacto || null,
   estado: e.estado, mensaje: e.mensaje, estado_texto: e.estado_texto || null, numero_guia: e.numero_guia || null, fecha_entrega: e.fecha_entrega || null, historial: e.historial || [],
 });
