@@ -163,9 +163,9 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 .msg{margin:12px 0 0;font-size:14px;min-height:1.4em}.msg.err{color:#C0392B;font-weight:600}
 .demo{background:rgba(44,93,118,.12);border-radius:8px;padding:8px 12px;font-size:12.5px;margin-bottom:14px}
 .co .btn.go{width:100%;font-size:16px;padding:15px}.co .btn:disabled{opacity:.6;cursor:wait}
-.cta{position:relative;height:44px;min-width:44px;padding:0 10px;display:inline-flex;align-items:center;gap:8px;border-radius:22px;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
-.cta:hover{background:var(--cream)}.cta[hidden]{display:none}.cta img{width:30px;height:30px;border-radius:50%;object-fit:cover}
-@media (max-width:520px){.cta .tx{display:none}}
+.acct{position:relative;height:44px;min-width:44px;padding:0 10px;display:inline-flex;align-items:center;gap:8px;border-radius:22px;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.acct:hover{background:var(--cream)}.acct[hidden]{display:none}.acct img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+@media (max-width:520px){.acct .tx{display:none}}
 .env{margin:10px 0 0;padding:10px 12px;background:var(--cream);border-radius:10px;font-size:14px}.env[hidden]{display:none}
 .env div{display:flex;justify-content:space-between;gap:10px}.env .t{font-weight:700;border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
 .lg-box{text-align:center}.lg-box #g-btn{display:flex;justify-content:center;margin:14px 0;min-height:44px}
@@ -389,6 +389,56 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 .aviso{margin:14px 0 0;padding:10px 12px;border-left:4px solid var(--coral);background:var(--cream);font-size:13px;color:var(--muted)}
 .vdet{display:block;margin-top:6px;font-size:12.5px;color:var(--muted);min-height:1.2em}
 #pwa-top{font-weight:700}
+
+/* ===== Modal de inicio de sesión ===== */
+dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
+.lg .lg-x{position:absolute;top:10px;right:10px;color:var(--muted);z-index:2}.lg .lg-x:hover{background:var(--cream)}
+.lg-hd{text-align:center;padding:30px 24px 18px;background:linear-gradient(180deg,rgba(237,127,97,.12),transparent)}
+.lg-hd img{display:block;margin:0 auto 6px;height:auto}
+.lg-br{display:block;font-size:13px;letter-spacing:.18em;color:var(--head);margin-bottom:14px}.lg-br b{font-weight:800}
+.lg-hd h2{margin:0;font-size:22px;line-height:1.2;font-weight:800;color:var(--head)}
+.lg-hd p{margin:8px auto 0;max-width:32ch;font-size:14px;color:var(--muted)}
+.lg-bd{padding:4px 24px 24px}
+.lg-ben{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:10px}
+.lg-ben li{display:flex;gap:12px;align-items:flex-start;font-size:13px;line-height:1.35;color:var(--muted)}
+.lg-ben b{display:block;color:var(--ink);font-size:14px;margin-bottom:1px}
+.lg-ben .ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(237,127,97,.14);color:var(--coral-press)}
+.g-btn{display:flex;justify-content:center;align-items:center;min-height:48px;margin:6px 0 4px}
+.g-btn>div{filter:drop-shadow(0 6px 14px rgba(26,115,232,.35));border-radius:99px}
+.g-sk{display:block;width:100%;max-width:300px;height:44px;border-radius:99px;background:linear-gradient(90deg,var(--line),var(--cream),var(--line));background-size:200% 100%;animation:gsk 1.2s linear infinite}
+@keyframes gsk{to{background-position:-200% 0}}@media (prefers-reduced-motion:reduce){.g-sk{animation:none}}
+.g-btn[hidden],.aviso-iab[hidden]{display:none}
+.aviso-iab{background:#FFF4E5;border:1px solid #F0C27A;color:#5B3A00;border-radius:12px;padding:14px;font-size:14px;line-height:1.45;margin:0 0 14px;text-align:left}
+.aviso-iab .btn{display:block;width:100%;margin-top:10px;background:#fff;color:#5B3A00;border-color:#C98A1B;padding:12px}
+.lg .msg{text-align:center;min-height:0;margin:8px 0 0}
+.lg-ft{display:flex;align-items:center;justify-content:center;gap:6px;margin:14px 0 0;font-size:12px;color:var(--muted)}
+
+/* ===== Mis pedidos / confirmación ===== */
+.ped .row{align-items:center}.ped .st{white-space:nowrap}
+.ped .cod{text-align:center;font-size:clamp(17px,5.2vw,22px)}
+.ped .cod-w{display:flex;gap:8px;align-items:stretch}.ped .cod-w .cod{flex:1;margin:6px 0}.ped .cod-w .cp{margin:6px 0;align-self:stretch}
+.mp-ft{display:grid;gap:8px;margin-top:14px}.mp-ft .btn{width:100%;text-align:center;padding:13px}
+.ok-bt{display:grid;gap:10px;margin-top:6px}.ok-bt .btn{width:100%;text-align:center}
+.btn.wa svg{flex:none}.btn.wa{text-align:center;line-height:1.25}
+
+/* ===== Móvil (≤520px): ventanas tipo hoja inferior, botones cómodos y sin textos apretados ===== */
+@media (max-width:520px){
+  .btn{flex:none}.cta{flex-direction:column;gap:10px}.cta .btn{width:100%;text-align:center}
+  .hero-card{padding:24px 18px}
+  dialog.co{width:100%;max-width:100%;margin:auto 0 0;max-height:94dvh;border-radius:20px 20px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  dialog.co.fi.full{width:100%}
+  .co-h{padding:14px 18px}.co-b{padding:18px}
+  .x{width:44px;height:44px}
+  input,select,textarea{font-size:16px}  /* evita el zoom automático de iOS al enfocar */
+  .btn.go,.co .btn.go{min-height:52px}
+  .okbox{padding:26px 18px}
+  .okbox .n{font-size:clamp(17px,5.4vw,22px);max-width:100%;overflow-wrap:anywhere}
+  .ped{padding:12px}
+  .lg-hd{padding:26px 20px 14px}.lg-bd{padding:2px 20px 20px}
+  .top .wrap{padding:6px 14px}
+  .hdr .wrap{gap:12px}
+}
+@media (max-width:360px){.lg-hd h2{font-size:20px}.ped .row{font-size:13px}}
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -415,7 +465,7 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <input type="search" placeholder="Busca productos…" aria-label="Buscar productos">
 <button type="submit" aria-label="Buscar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
 <div class="icons">
-<button class="cta" type="button" id="btn-cuenta" hidden aria-label="Mi cuenta"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span class="tx" id="cta-t">Ingresar</span></button>
+<button class="acct" type="button" id="btn-cuenta" hidden aria-label="Mi cuenta"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span class="tx" id="cta-t">Ingresar</span></button>
 </div></div></header>
 
 <div class="nav"><div class="wrap"><ul>
@@ -501,17 +551,27 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
 <div class="co-b" id="fi-b"></div></dialog>
 
-<dialog class="co" id="lg" aria-labelledby="lg-t">
-<div class="co-h"><h2 id="lg-t">Ingresa a tu cuenta</h2><button class="x" type="button" id="lg-x" aria-label="Cerrar">×</button></div>
-<div class="co-b lg-box"><p style="margin:0;color:var(--muted);font-size:14px">Con tu cuenta de Google guardamos tus pedidos y su rastreo en un solo lugar. No guardamos contraseñas.</p>
-<div class="aviso-iab" id="lg-iab" hidden><b>Ábrelo en Chrome o Safari.</b> Google no permite iniciar sesión dentro de Instagram, TikTok o WhatsApp.<br><button class="btn alt" type="button" id="lg-copy" style="margin-top:8px">Copiar enlace</button></div>
-<div id="g-btn"></div><p class="msg" id="lg-msg" role="status" aria-live="polite"></p></div></dialog>
+<dialog class="co lg" id="lg" aria-labelledby="lg-t">
+<button class="x lg-x" type="button" id="lg-x" aria-label="Cerrar">×</button>
+<div class="lg-hd"><img src="assets/isotipo.png" alt="" width="64" height="53"><span class="lg-br"><b>NEXOVIA</b> STORE</span>
+<h2 id="lg-t">¡Qué bueno verte por aquí!</h2><p>Entra con Google en un toque y compra más rápido, con tu pedido siempre a la mano.</p></div>
+<div class="lg-bd">
+<ul class="lg-ben">
+<li><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span><b>Tu código NX siempre guardado</b>Encuéntralo en «Mis pedidos» cuando quieras.</span></li>
+<li><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span><span><b>Seguimiento automático</b>Ves el avance de tu pedido sin buscar códigos.</span></li>
+<li><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></span><span><b>Tus datos listos</b>La próxima compra se llena sola, en segundos.</span></li>
+</ul>
+<div class="aviso-iab" id="lg-iab" hidden><b>Ábrelo en Chrome o Safari.</b> Google no permite iniciar sesión dentro del navegador de Instagram, TikTok o WhatsApp. Toca el botón, pega el enlace en Chrome o Safari y entra desde ahí.<button class="btn alt" type="button" id="lg-copy">Copiar enlace</button></div>
+<div id="g-btn" class="g-btn"><span class="g-sk" aria-hidden="true"></span></div>
+<p class="msg" id="lg-msg" role="status" aria-live="polite"></p>
+<p class="lg-ft"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sin contraseñas. Solo usamos tu nombre y correo.</p>
+</div></dialog>
 
 <dialog class="co" id="mp" aria-labelledby="mp-t">
 <div class="co-h"><h2 id="mp-t">Mis pedidos</h2><button class="x" type="button" id="mp-x" aria-label="Cerrar">×</button></div>
 <div class="co-b"><p id="mp-u" style="margin:0 0 12px;font-size:14px;color:var(--muted)"></p>
 <div id="mp-l"></div><p class="msg" id="mp-msg" role="status" aria-live="polite"></p>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn alt" type="button" id="mp-man">Rastrear con número de pedido</button><button class="btn alt" type="button" id="mp-out">Cerrar sesión</button></div></div></dialog>
+<div class="mp-ft"><button class="btn alt" type="button" id="mp-man">Rastrear con número de pedido</button><button class="btn alt" type="button" id="mp-out">Cerrar sesión</button></div></div></dialog>
 
 <dialog class="co" id="rs" aria-labelledby="rs-t">
 <div class="co-h"><h2 id="rs-t">Rastrear mi pedido</h2><button class="x" type="button" id="rs-x" aria-label="Cerrar">×</button></div>
@@ -558,7 +618,7 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <div class="okbox" id="ok" hidden><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#ED7F61" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m7.5 12.5 3 3 6-6.5"/></svg>
 <h3>¡Pedido recibido!</h3><p>Guarda tu número de pedido:</p><span class="n" id="ok-n"></span><p id="ok-t">Pagas al recibirlo.</p>
 <a class="btn wa" id="ok-wa" href="#" target="_blank" rel="noopener" hidden><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.3Z"/></svg>Confirmar mi pedido por WhatsApp</a>
-<p class="wa-n" id="ok-wan" hidden>Envíanos el mensaje para confirmar tu pedido y coordinar la entrega. Es el paso que nos avisa para despacharlo.</p><button class="btn" type="button" id="ok-rs" style="margin-right:8px">Rastrear este pedido</button><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div>
+<p class="wa-n" id="ok-wan" hidden>Envíanos el mensaje para confirmar tu pedido y coordinar la entrega. Es el paso que nos avisa para despacharlo.</p><div class="ok-bt"><button class="btn" type="button" id="ok-rs">Rastrear este pedido</button><button class="btn alt" type="button" id="ok-x">Seguir comprando</button></div></div>
 </dialog>
 
 <div id="ai">
@@ -1005,12 +1065,11 @@ function pedirLogin(despues) {
   $('lg-iab').hidden = !enApp; $('g-btn').hidden = enApp;
   if (!lg.open) lg.showModal();
   if (enApp || gsiOk) return;
-  $('lg-msg').textContent = 'Cargando…';
-  cargarGSI().then(() => {
+    cargarGSI().then(() => {
     google.accounts.id.initialize({ client_id: sesion.cid, callback: entrarGoogle, ux_mode: 'popup', auto_select: false });
-    google.accounts.id.renderButton($('g-btn'), { theme: 'outline', size: 'large', text: 'continue_with', locale: 'es', shape: 'pill', width: 260 });
+    $('g-btn').textContent = ''; google.accounts.id.renderButton($('g-btn'), { theme: 'filled_blue', size: 'large', text: 'continue_with', locale: 'es', shape: 'pill', width: Math.min(300, Math.max(220, (lg.clientWidth || 320) - 56)), logo_alignment: 'left' });
     gsiOk = true; $('lg-msg').textContent = '';
-  }).catch(() => { $('lg-msg').className = 'msg err'; $('lg-msg').textContent = 'No pudimos cargar el acceso con Google. Revisa tu conexión o ábrelo en Chrome o Safari.'; });
+  }).catch(() => { $('g-btn').innerHTML = '<button class="btn alt" type="button" id="g-retry">Reintentar</button>'; $('g-retry').onclick = () => { $('g-btn').innerHTML = '<span class="g-sk"></span>'; pedirLogin(tras); }; $('lg-msg').className = 'msg err'; $('lg-msg').textContent = 'No pudimos cargar el acceso con Google. Revisa tu conexión o ábrelo en Chrome o Safari.'; });
 }
 function entrarGoogle(resp) {
   $('lg-msg').className = 'msg'; $('lg-msg').textContent = 'Ingresando…';
@@ -1045,7 +1104,7 @@ function tarjetaPedido(p) {
   const c = document.createElement('span'); c.className = 'cod'; c.textContent = p.referencia;
   const cp = document.createElement('button'); cp.type = 'button'; cp.className = 'btn alt cp'; cp.textContent = 'Copiar';
   cp.onclick = () => { (navigator.clipboard ? navigator.clipboard.writeText(p.referencia) : Promise.reject()).then(() => { cp.textContent = '¡Copiado!'; }).catch(() => { cp.textContent = p.referencia; }); };
-  const w = document.createElement('div'); w.append(c, cp); d.appendChild(w);
+  const w = document.createElement('div'); w.className = 'cod-w'; w.append(c, cp); d.appendChild(w);
   const r = document.createElement('div'); r.className = 'row'; const a = document.createElement('b'); a.textContent = (p.titulo || '') + (p.variante ? ' · ' + p.variante : '') + (p.cantidad > 1 ? ' ×' + p.cantidad : '');
   const t = document.createElement('span'); t.textContent = usd(Number(p.total_usd) || 0); r.append(a, t); d.appendChild(r);
   const ct = p.contacto || {}, uw = urlWA({ ref: p.referencia, producto: p.titulo || '', variante: p.variante || '', cantidad: p.cantidad || 1, total: p.total_usd, modo: p.modo, nombre: ct.nombre || (sesion.usuario && sesion.usuario.nombre) || '', telefono: ct.telefono || '', estado: ct.estado, ciudad: ct.ciudad, direccion: ct.direccion });
