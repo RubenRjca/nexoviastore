@@ -163,6 +163,18 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 .msg{margin:12px 0 0;font-size:14px;min-height:1.4em}.msg.err{color:#C0392B;font-weight:600}
 .demo{background:rgba(44,93,118,.12);border-radius:8px;padding:8px 12px;font-size:12.5px;margin-bottom:14px}
 .co .btn.go{width:100%;font-size:16px;padding:15px}.co .btn:disabled{opacity:.6;cursor:wait}
+.cta{position:relative;height:44px;min-width:44px;padding:0 10px;display:inline-flex;align-items:center;gap:8px;border-radius:22px;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.cta:hover{background:var(--cream)}.cta[hidden]{display:none}.cta img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+@media (max-width:520px){.cta .tx{display:none}}
+.env{margin:10px 0 0;padding:10px 12px;background:var(--cream);border-radius:10px;font-size:14px}.env[hidden]{display:none}
+.env div{display:flex;justify-content:space-between;gap:10px}.env .t{font-weight:700;border-top:1px solid var(--line);margin-top:4px;padding-top:4px}
+.lg-box{text-align:center}.lg-box #g-btn{display:flex;justify-content:center;margin:14px 0;min-height:44px}
+.aviso-iab{background:#fff4e5;border:1px solid #f0c27a;border-radius:10px;padding:12px;font-size:14px;margin:10px 0;text-align:left}
+.ped{border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}
+.ped .cod{display:block;font-size:22px;font-weight:800;letter-spacing:.04em;color:var(--head);background:var(--cream);border:1px dashed var(--head);border-radius:8px;padding:8px 12px;margin:6px 0;word-break:break-all}
+.ped .row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px}.ped .st{display:inline-block;background:var(--teal);color:#fff;border-radius:99px;padding:2px 10px;font-size:12px;font-weight:700}
+.ped p{margin:6px 0 0;font-size:14px;color:var(--muted)}.ped details{margin-top:8px;font-size:14px}.ped .cp{margin-left:8px;font-size:13px;padding:4px 10px}
+.okbox .n{font-size:22px;letter-spacing:.04em}
 .okbox{text-align:center;padding:34px 22px}.okbox h3{margin:10px 0 6px;font-size:22px;color:var(--head)}
 .okbox .n{display:inline-block;background:var(--cream);border:1px dashed var(--head);border-radius:8px;padding:6px 14px;font-weight:700;margin:10px 0}
 @media (max-width:520px){.fg{grid-template-columns:1fr}.sum{flex-direction:column;align-items:flex-start}.tot{text-align:left}}
@@ -399,6 +411,7 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <input type="search" placeholder="Busca productos…" aria-label="Buscar productos">
 <button type="submit" aria-label="Buscar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
 <div class="icons">
+<button class="cta" type="button" id="btn-cuenta" hidden aria-label="Mi cuenta"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span class="tx" id="cta-t">Ingresar</span></button>
 </div></div></header>
 
 <div class="nav"><div class="wrap"><ul>
@@ -484,6 +497,18 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <div class="co-h"><h2 id="fi-t">Ficha del producto</h2><button class="x" type="button" id="fi-x" aria-label="Cerrar">×</button></div>
 <div class="co-b" id="fi-b"></div></dialog>
 
+<dialog class="co" id="lg" aria-labelledby="lg-t">
+<div class="co-h"><h2 id="lg-t">Ingresa a tu cuenta</h2><button class="x" type="button" id="lg-x" aria-label="Cerrar">×</button></div>
+<div class="co-b lg-box"><p style="margin:0;color:var(--muted);font-size:14px">Con tu cuenta de Google guardamos tus pedidos y su rastreo en un solo lugar. No guardamos contraseñas.</p>
+<div class="aviso-iab" id="lg-iab" hidden><b>Ábrelo en Chrome o Safari.</b> Google no permite iniciar sesión dentro de Instagram, TikTok o WhatsApp.<br><button class="btn alt" type="button" id="lg-copy" style="margin-top:8px">Copiar enlace</button></div>
+<div id="g-btn"></div><p class="msg" id="lg-msg" role="status" aria-live="polite"></p></div></dialog>
+
+<dialog class="co" id="mp" aria-labelledby="mp-t">
+<div class="co-h"><h2 id="mp-t">Mis pedidos</h2><button class="x" type="button" id="mp-x" aria-label="Cerrar">×</button></div>
+<div class="co-b"><p id="mp-u" style="margin:0 0 12px;font-size:14px;color:var(--muted)"></p>
+<div id="mp-l"></div><p class="msg" id="mp-msg" role="status" aria-live="polite"></p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn alt" type="button" id="mp-man">Rastrear con número de pedido</button><button class="btn alt" type="button" id="mp-out">Cerrar sesión</button></div></div></dialog>
+
 <dialog class="co" id="rs" aria-labelledby="rs-t">
 <div class="co-h"><h2 id="rs-t">Rastrear mi pedido</h2><button class="x" type="button" id="rs-x" aria-label="Cerrar">×</button></div>
 <div class="co-b"><p style="margin:0 0 14px;color:var(--muted);font-size:14px">Escribe tu número de pedido y los últimos 4 dígitos del teléfono con el que pediste.</p>
@@ -521,6 +546,7 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 <div class="full"><label for="pmet">Método de pago</label><select id="pmet" name="pago_metodo"></select></div>
 <div class="full pay-data" id="pdata" aria-live="polite"></div>
 <div class="full"><label for="pref">Número de referencia de tu pago</label><input id="pref" name="pago_referencia" maxlength="40" autocomplete="off" placeholder="Ej. 123456 o el código de la transferencia"></div></div></div>
+<div class="env" id="env" hidden aria-live="polite"></div>
 <p class="paynote" id="pnote"></p>
 <button class="btn go" type="submit" id="go">Confirmar pedido</button>
 <p class="msg" id="msg" role="status" aria-live="polite"></p>
@@ -544,7 +570,7 @@ dialog.co.fi.full{width:min(920px,calc(100% - 24px))}
 /* ===== CONFIGURACIÓN (lo único que debes editar aquí) ===== */
 const CONFIG = {
   API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente', API_RESENAS: '/api/resenas',
-  API_STOCK: '/api/stock', API_RASTREO: '/api/rastreo',
+  API_STOCK: '/api/stock', API_RASTREO: '/api/rastreo', API_AUTH: '/api/auth', API_COTIZAR: '/api/cotizar', API_MIS_PEDIDOS: '/api/mis-pedidos',
   WHATSAPP: '', // tu número en formato internacional sin + ni espacios, ej. 584121234567. Vacío = sin botón de WhatsApp
   /* Datos para el Pago Directo Anticipado. Completa SOLO los métodos que aceptes: los que queden vacíos no se ofrecen.
      moneda: 'VES' muestra el monto en Bs (usa la tasa de la tienda); 'USD' lo muestra en dólares. */
@@ -575,7 +601,7 @@ const usd = (n) => 'US$ ' + fmt(n);
 const bs = (n) => (tasa ? 'Bs ' + fmt(n * tasa) : 'Bs: por confirmar');
 const uuid = () => (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
   : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => { const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15; return (c === 'x' ? r : (r & 3 | 8)).toString(16); });
-const getJSON = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+const getJSON = (url) => fetch(url).then((r) => r.json().catch(() => ({})).then((j) => { if (!r.ok) throw Object.assign(new Error(j.message || r.status), j); return j; }));
 
 /* ---------- Selector de moneda ---------- */
 const curBtns = document.querySelectorAll('.cur button');
@@ -818,11 +844,32 @@ const radAnt = $('rad-ant');
 if (!metodos().length) { radAnt.disabled = true; $('ant-sub').textContent = 'Próximamente'; }
 pmet.innerHTML = metodos().map(([k, m]) => '<option value="' + k + '">' + esc(m.nombre) + '</option>').join('');
 
-function total() { const p = cur.p; $('q-n').textContent = cur.qty; $('s-t').textContent = p.titulo; $('s-usd').textContent = usd(p.usd * cur.qty); $('s-ves').textContent = bs(p.usd * cur.qty); datosPago(); }
+const totalUsd = () => cur.p.usd * cur.qty + (cur.envio != null ? cur.envio : 0);
+function total() { const p = cur.p; $('q-n').textContent = cur.qty; $('s-t').textContent = p.titulo; $('s-usd').textContent = usd(totalUsd()); $('s-ves').textContent = bs(totalUsd()) + (cur.envio == null ? ' · más envío' : ''); pintarEnvio(); datosPago(); cotizar(); }
+function pintarEnvio() {
+  const e = $('env'); e.textContent = '';
+  if (cur.envio == null) { e.hidden = !cur.envMsg; if (cur.envMsg) e.textContent = cur.envMsg; return; }
+  const fila = (a, b, c) => { const d = document.createElement('div'); if (c) d.className = c; const x = document.createElement('span'), y = document.createElement('span'); x.textContent = a; y.textContent = b; d.append(x, y); e.appendChild(d); };
+  const sub = cur.p.usd * cur.qty;
+  fila('Producto', usd(sub) + ' · ' + bs(sub)); fila('Envío a tu ciudad', usd(cur.envio) + ' · ' + bs(cur.envio)); fila('Total', usd(sub + cur.envio) + ' · ' + bs(sub + cur.envio), 't');
+  e.hidden = false;
+}
+let cotT = null, cotN = 0;
+function cotizar() {
+  if (!cur || demo || local) return;
+  clearTimeout(cotT);
+  if (!selE.value || !selC.value || selC.disabled) { cur.envio = null; cur.envMsg = ''; pintarEnvio(); return; }
+  const n = ++cotN, c = cur;
+  cotT = setTimeout(() => {
+    getJSON(CONFIG.API_COTIZAR + '?sku=' + encodeURIComponent(c.p.sku) + '&estado=' + encodeURIComponent(selE.value) + '&ciudad=' + encodeURIComponent(selC.value) + '&cantidad=' + c.qty + '&metodo=' + modo())
+      .then((j) => { if (n !== cotN || cur !== c) return; c.envio = Number(j.envio_usd); c.envMsg = ''; $('s-usd').textContent = usd(totalUsd()); $('s-ves').textContent = bs(totalUsd()); pintarEnvio(); datosPago(); })
+      .catch((err) => { if (n !== cotN || cur !== c) return; c.envio = null; c.envMsg = (err && err.message) || 'No pudimos calcular el envío. Inténtalo de nuevo.'; pintarEnvio(); });
+  }, 250);
+}
 function datosPago() {
   const box = $('pdata'); box.textContent = '';
   const m = CONFIG.PAGOS[pmet.value]; if (!m || modo() !== 'anticipado') return;
-  const t = cur.p.usd * cur.qty, enBs = m.moneda === 'VES' && tasa && tasaFuente !== 'respaldo'; // una tasa de respaldo es aproximada: no se usa para dar montos de pago
+  const t = totalUsd(), enBs = m.moneda === 'VES' && tasa && tasaFuente !== 'respaldo'; // una tasa de respaldo es aproximada: no se usa para dar montos de pago
   const a = document.createElement('p'); a.className = 'amt'; a.textContent = 'Monto a pagar: ' + (m.moneda === 'USD' ? usd(t) : enBs ? 'Bs ' + fmt(t * tasa) : usd(t) + ' (equivalente en Bs al cambio del día)'); box.appendChild(a);
   const dl = document.createElement('dl');
   m.datos.filter(([, v]) => v).forEach(([k, v]) => { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd); });
@@ -837,16 +884,17 @@ function refrescar() {
   $('pnote').innerHTML = ant ? '<b>Pago anticipado:</b> pagas ahora con el método que elijas y despachamos en cuanto verifiquemos tu pago.'
                              : '<b>Pago Contra Entrega:</b> no pagas nada ahora. Pagas el monto de arriba al recibir tu pedido.';
   go.textContent = ant ? 'Enviar pedido y referencia de pago' : 'Confirmar pedido';
-  if (cur) datosPago();
+  if (cur) { datosPago(); cotizar(); }
 }
 form.querySelectorAll('input[name="metodo_pago"]').forEach((r) => r.addEventListener('change', refrescar));
 pmet.addEventListener('change', datosPago);
 
 function abrir(sku) {
   if (sinVenta(stk(sku))) return;
-  cur = { p: productos.find((x) => x.sku === sku), qty: 1, oid: uuid(), key: uuid(), sig: '' };
+  if (sesion.requiere && !sesion.usuario && sesion.cid) { pedirLogin(() => abrir(sku)); return; }
+  cur = { p: productos.find((x) => x.sku === sku), qty: 1, oid: uuid(), key: uuid(), sig: '', envio: null, envMsg: '' };
   $('ok').hidden = true; $('co-form-wrap').hidden = false; msg.textContent = ''; msg.className = 'msg'; go.disabled = false;
-  form.elements.metodo_pago.value = 'contra_entrega'; refrescar(); total(); prepararVariantes(); dlg.showModal();
+  form.elements.metodo_pago.value = 'contra_entrega'; refrescar(); total(); prepararVariantes(); prefill(); dlg.showModal();
 }
 $('q-').onclick = () => { if (cur.qty > 1) { cur.qty--; total(); } };
 $('q+').onclick = () => { if (cur.qty < maxQty()) { cur.qty++; total(); } };
@@ -858,7 +906,9 @@ const DEMO_ESTADOS = ['Amazonas','Anzoátegui','Apure','Aragua','Barinas','Bolí
 const fill = (sel, items, ph) => { sel.innerHTML = '<option value="">' + ph + '</option>' + items.map((i) => '<option value="' + esc(i.id) + '">' + esc(i.nombre) + '</option>').join(''); };
 if (local) { demo = true; $('demo').hidden = false; fill(selE, DEMO_ESTADOS.map((n, i) => ({ id: 'demo' + i, nombre: n })), 'Selecciona tu estado'); }
 else getJSON(CONFIG.API_GEO).then((j) => fill(selE, j.data, 'Selecciona tu estado')).catch(() => fill(selE, [], 'No se pudo cargar. Recarga la página.'));
+selC.addEventListener('change', () => { cur.envio = null; cur.envMsg = ''; total(); });
 selE.addEventListener('change', () => {
+  if (cur) { cur.envio = null; cur.envMsg = ''; pintarEnvio(); }
   selC.disabled = true; if (!selE.value) { fill(selC, [], 'Elige un estado'); return; }
   if (demo) { fill(selC, [{ id: 'demo', nombre: 'Ciudad de ejemplo' }], 'Selecciona tu ciudad'); selC.disabled = false; return; }
   fill(selC, [], 'Cargando…');
@@ -880,6 +930,8 @@ form.addEventListener('submit', (e) => {
     nota_cliente: (f.get('nota') || '').trim() };
   if (ant) { body.pago_metodo = f.get('pago_metodo'); body.pago_referencia = f.get('pago_referencia').trim(); }
   if (cur.variable) body.variante_id = Number(f.get('variante')); // el servidor valida que pertenezca al producto
+  if (!demo && cur.envio == null) { msg.className = 'msg err'; msg.textContent = cur.envMsg || 'Espera a que calculemos el envío a tu ciudad.'; return; }
+  if (!demo) body.total_esperado_usd = Math.round(totalUsd() * 100) / 100;
   if (demo) { console.log('Pedido (vista previa local, no enviado):', body); msg.textContent = 'Vista previa: el pedido no se envía hasta desplegar en Vercel con tu llave. Revisa la consola para ver el formato.'; return; }
   const sig = JSON.stringify(body); if (cur.sig !== sig) { cur.sig = sig; cur.key = uuid(); } // datos distintos = llave nueva; mismos datos = reintento seguro
   go.disabled = true; msg.textContent = 'Enviando tu pedido…';
@@ -887,12 +939,102 @@ form.addEventListener('submit', (e) => {
     .then((r) => r.json().catch(() => ({})).then((j) => ({ ok: r.ok, j })))
     .then((x) => {
       if (!x.ok) throw x.j;
+      if (x.j.referencia) { sesion.mis_pedidos = true; }
       $('co-form-wrap').hidden = true; $('ok').hidden = false; $('ok-n').textContent = x.j.referencia || '';
-      $('ok-t').textContent = x.j.estado === 'en_cola' ? (x.j.message || 'Tu pedido quedó en cola por mantenimiento y se procesará automáticamente.') : ant ? 'Recibimos tu pedido y tu referencia de pago. Verificaremos el pago antes de despachar.' : 'No pagas nada ahora: pagas al recibirlo.';
-      form.reset(); fill(selC, [], 'Elige un estado'); selC.disabled = true; refrescar();
+      $('ok-t').textContent = (sesion.usuario ? 'Siempre lo verás en «Mis pedidos». ' : '') + (x.j.estado === 'en_cola' ? (x.j.message || 'Tu pedido quedó en cola por mantenimiento y se procesará automáticamente.') : ant ? 'Recibimos tu pedido y tu referencia de pago. Verificaremos el pago antes de despachar.' : 'No pagas nada ahora: pagas al recibirlo.');
+      form.reset(); prefill(); fill(selC, [], 'Elige un estado'); selC.disabled = true; refrescar();
     })
-    .catch((err) => { go.disabled = false; msg.className = 'msg err'; if (err && /SIN_STOCK|VARIANTE/.test(err.code || '')) cargarStock(); msg.textContent = (err && err.message) || 'No pudimos enviar tu pedido. Revisa tus datos e inténtalo de nuevo.'; });
+    .catch((err) => { go.disabled = false; msg.className = 'msg err'; if (err && err.code === 'LOGIN_REQUERIDO') { pedirLogin(() => form.requestSubmit()); msg.textContent = 'Ingresa con Google para confirmar tu pedido.'; return; }
+      if (err && err.code === 'PRECIO_CAMBIO') { cur.envio = Number(err.envio_usd); total(); msg.textContent = 'El envío cambió. Revisa el nuevo total y confirma otra vez.'; return; }
+      if (err && /SIN_STOCK|VARIANTE/.test(err.code || '')) cargarStock(); msg.textContent = (err && err.message) || 'No pudimos enviar tu pedido. Revisa tus datos e inténtalo de nuevo.'; });
 });
+
+/* ---------- Cuenta (Google) y Mis pedidos ----------
+   /api/auth?accion=yo dice si hay sesión y si la tienda exige cuenta (REQUIERE_CUENTA). Sin GOOGLE_CLIENT_ID el botón no aparece y la compra sigue libre. */
+const sesion = { usuario: null, perfil: null, requiere: false, cid: '', mis_pedidos: false };
+const lg = $('lg'), mp = $('mp'), btnC = $('btn-cuenta');
+const enApp = /Instagram|FBAN|FBAV|FB_IAB|TikTok|BytedanceWebview|musical_ly|Snapchat|Twitter|LinkedInApp|Line\//i.test(navigator.userAgent);
+let tras = null, gsiOk = false;
+function pintarCuenta() {
+  if (!sesion.cid) { btnC.hidden = true; return; }
+  btnC.hidden = false; const u = sesion.usuario; btnC.textContent = '';
+  if (u && u.foto) { const im = document.createElement('img'); im.src = u.foto; im.alt = ''; im.referrerPolicy = 'no-referrer'; btnC.appendChild(im); }
+  else btnC.insertAdjacentHTML('beforeend', '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>');
+  const t = document.createElement('span'); t.className = 'tx'; t.textContent = u ? 'Mis pedidos' : 'Ingresar'; btnC.appendChild(t);
+}
+function prefill() {
+  const u = sesion.usuario, pf = sesion.perfil || {}; if (!u) return;
+  const set = (id, v) => { const el = $(id); if (el && v && !el.value) el.value = v; };
+  set('nombre', pf.nombre || u.nombres || u.nombre); set('apellido', pf.apellido || u.apellidos); set('telefono', pf.telefono);
+}
+function aplicarYo(j) {
+  sesion.usuario = j.usuario || null; sesion.perfil = j.perfil || null; sesion.requiere = !!j.requiere_cuenta; sesion.cid = j.google_client_id || ''; pintarCuenta();
+}
+if (!local) getJSON(CONFIG.API_AUTH + '?accion=yo').then(aplicarYo).catch(() => {});
+function cargarGSI() {
+  return new Promise((ok, ko) => {
+    if (window.google && google.accounts && google.accounts.id) return ok();
+    const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.onload = ok; s.onerror = ko; document.head.appendChild(s);
+  });
+}
+function pedirLogin(despues) {
+  tras = despues || null; $('lg-msg').textContent = ''; $('lg-msg').className = 'msg';
+  $('lg-iab').hidden = !enApp; $('g-btn').hidden = enApp;
+  if (!lg.open) lg.showModal();
+  if (enApp || gsiOk) return;
+  $('lg-msg').textContent = 'Cargando…';
+  cargarGSI().then(() => {
+    google.accounts.id.initialize({ client_id: sesion.cid, callback: entrarGoogle, ux_mode: 'popup', auto_select: false });
+    google.accounts.id.renderButton($('g-btn'), { theme: 'outline', size: 'large', text: 'continue_with', locale: 'es', shape: 'pill', width: 260 });
+    gsiOk = true; $('lg-msg').textContent = '';
+  }).catch(() => { $('lg-msg').className = 'msg err'; $('lg-msg').textContent = 'No pudimos cargar el acceso con Google. Revisa tu conexión o ábrelo en Chrome o Safari.'; });
+}
+function entrarGoogle(resp) {
+  $('lg-msg').className = 'msg'; $('lg-msg').textContent = 'Ingresando…';
+  fetch(CONFIG.API_AUTH + '?accion=google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credential: resp.credential }) })
+    .then((r) => r.json().catch(() => ({})).then((j) => ({ ok: r.ok, j })))
+    .then((x) => { if (!x.ok) throw x.j; return getJSON(CONFIG.API_AUTH + '?accion=yo'); })
+    .then((j) => { aplicarYo(j); lg.close(); prefill(); const f = tras; tras = null; if (f) f(); })
+    .catch((err) => { $('lg-msg').className = 'msg err'; $('lg-msg').textContent = (err && err.message) || 'No pudimos iniciar sesión. Inténtalo de nuevo.'; });
+}
+$('lg-x').onclick = () => lg.close(); lg.addEventListener('click', (e) => { if (e.target === lg) lg.close(); });
+$('lg-copy').onclick = () => { const b = $('lg-copy'); (navigator.clipboard ? navigator.clipboard.writeText(location.href) : Promise.reject()).then(() => { b.textContent = '¡Enlace copiado! Pégalo en Chrome o Safari'; }).catch(() => { b.textContent = location.href; }); };
+btnC.onclick = () => (sesion.usuario ? abrirMisPedidos() : pedirLogin());
+$('mp-x').onclick = () => mp.close(); mp.addEventListener('click', (e) => { if (e.target === mp) mp.close(); });
+$('mp-man').onclick = () => { mp.close(); abrirRastreo(); };
+$('mp-out').onclick = () => { fetch(CONFIG.API_AUTH + '?accion=salir', { method: 'POST' }).finally(() => { sesion.usuario = null; sesion.perfil = null; pintarCuenta(); mp.close(); }); };
+function abrirMisPedidos(ref) {
+  const L = $('mp-l'), M = $('mp-msg'); L.textContent = ''; M.className = 'msg'; M.textContent = 'Cargando tus pedidos…';
+  $('mp-u').textContent = sesion.usuario ? 'Sesión: ' + (sesion.usuario.email || sesion.usuario.nombre) : '';
+  if (!mp.open) mp.showModal();
+  getJSON(CONFIG.API_MIS_PEDIDOS).then((j) => {
+    M.textContent = '';
+    if (j.disponible === false) { M.textContent = 'El historial de pedidos aún no está activo. Puedes rastrear con tu número de pedido.'; return; }
+    if (!(j.pedidos || []).length) { M.textContent = 'Todavía no tienes pedidos en esta cuenta.'; return; }
+    j.pedidos.forEach((p) => L.appendChild(tarjetaPedido(p)));
+  }).catch((err) => { M.className = 'msg err'; M.textContent = (err && err.code === 'LOGIN_REQUERIDO') ? 'Tu sesión expiró. Vuelve a ingresar.' : ((err && err.message) || 'No pudimos cargar tus pedidos.'); });
+}
+function tarjetaPedido(p) {
+  const d = document.createElement('div'); d.className = 'ped';
+  const top = document.createElement('div'); top.className = 'row';
+  const f = document.createElement('span'); f.textContent = fechaTxt(p.creado);
+  const st = document.createElement('span'); st.className = 'st'; st.textContent = p.estado_texto || p.estado || 'En proceso'; top.append(f, st); d.appendChild(top);
+  const c = document.createElement('span'); c.className = 'cod'; c.textContent = p.referencia;
+  const cp = document.createElement('button'); cp.type = 'button'; cp.className = 'btn alt cp'; cp.textContent = 'Copiar';
+  cp.onclick = () => { (navigator.clipboard ? navigator.clipboard.writeText(p.referencia) : Promise.reject()).then(() => { cp.textContent = '¡Copiado!'; }).catch(() => { cp.textContent = p.referencia; }); };
+  const w = document.createElement('div'); w.append(c, cp); d.appendChild(w);
+  const r = document.createElement('div'); r.className = 'row'; const a = document.createElement('b'); a.textContent = (p.titulo || '') + (p.variante ? ' · ' + p.variante : '') + (p.cantidad > 1 ? ' ×' + p.cantidad : '');
+  const t = document.createElement('span'); t.textContent = usd(Number(p.total_usd) || 0); r.append(a, t); d.appendChild(r);
+  if (p.mensaje) { const m = document.createElement('p'); m.textContent = p.mensaje; d.appendChild(m); }
+  if (p.numero_guia) { const m = document.createElement('p'); m.textContent = 'Guía: ' + p.numero_guia; d.appendChild(m); }
+  if ((p.historial || []).length) {
+    const det = document.createElement('details'), sm = document.createElement('summary'); sm.textContent = 'Ver historial'; det.appendChild(sm);
+    const ol = document.createElement('ol'); ol.className = 'tl';
+    p.historial.slice().reverse().forEach((x) => { const li = document.createElement('li'), b = document.createElement('b'); b.textContent = x.estado || ''; li.appendChild(b); if (x.detalle) li.appendChild(document.createTextNode(' — ' + x.detalle)); ol.appendChild(li); });
+    det.appendChild(ol); d.appendChild(det);
+  }
+  return d;
+}
 
 /* ---------- Asistente de ventas (widget flotante) ----------
    Chips con respuestas fijas (sin costo). El texto libre va a CONFIG.API_ASISTENTE (api/asistente.js, opcional).

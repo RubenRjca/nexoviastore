@@ -15,3 +15,8 @@
 5. Aprueba o cancela el pedido en DroPanas. Prueba el rastreo en el sitio (referencia + últimos 4 dígitos del teléfono).
 6. Revisa DroPanas → API REST → Logs (respuestas 2xx) y los logs de Vercel (sin ALERTA).
 7. Comparte el enlace por WhatsApp: debe verse la imagen "Ahora puedes comprar contra entrega" (WhatsApp guarda caché; usa el depurador de Facebook para refrescar).
+
+## Con cuentas (ver docs/CUENTAS.md)
+- El total incluye el envío cotizado (producto + envío). Comprueba que coincide con el valor del pedido en DroPanas.
+- Verifica la variante en DroPanas y la línea `ORDEN_CREADA` en los logs de Vercel.
+- El pedido debe aparecer en «Mis pedidos» (estado «pendiente de confirmación» hasta que DroPanas lo confirme).

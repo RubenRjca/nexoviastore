@@ -11,7 +11,10 @@
 const crypto = require('crypto');
 const { obtener, configurado, precioVigente } = require('../lib/catalogo');
 const { llamar } = require('../lib/cliente');
-const { cotizarRuta } = require('../lib/cotizacion');
+const { cotizarRuta, elegirOpcion } = require('../lib/cotizacion');
+const { leer: leerSesion } = require('../lib/sesion');
+const usuarios = require('../lib/usuarios');
+const precio = require('../lib/precio');
 const { clasificar, alertar } = require('../lib/errores');
 const { puedeComprar } = require('../lib/stock');
 const respaldo = require('../lib/respaldo');
@@ -47,6 +50,9 @@ module.exports = async (req, res) => {
   if (b.web) return res.status(200).json({ ok: true }); // campo trampa anti-bots
   const ip = String(req.headers['x-vercel-forwarded-for'] || req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   if (limitado(ip)) return fail(res, 429, 'Demasiados intentos. Espera unos minutos.');
+  // Cuentas: con REQUIERE_CUENTA=1 solo compran personas con sesión de Google. Apagado (por defecto) = compra libre.
+  const ses = leerSesion(req);
+  if (process.env.REQUIERE_CUENTA === '1' && !ses) return fail(res, 401, 'Inicia sesión con Google para hacer tu compra.', 'LOGIN_REQUERIDO');
 
   // ---- Validación de entrada ----
   const item = obtener(b.sku);
@@ -74,6 +80,14 @@ module.exports = async (req, res) => {
   if (!configurado(item)) return fail(res, 503, 'Este producto no está disponible por ahora.');
   const varianteId = b.variante_id === undefined || b.variante_id === null ? null : Number(b.variante_id);
   if (varianteId !== null && (!Number.isInteger(varianteId) || varianteId < 1)) return fail(res, 400, 'Opción inválida.');
+  // Variantes estrictas: si el catálogo define los modelos de este producto, el pedido DEBE traer uno de ellos
+  // (así DroPanas nunca despacha la variante por defecto "Principal" ni un modelo que no vendemos).
+  const permitidas = item.variantes && typeof item.variantes === 'object' ? Object.keys(item.variantes) : [];
+  if (permitidas.length) {
+    if (varianteId === null) return fail(res, 400, 'Elige tu modelo antes de comprar.', 'VARIANTE_REQUERIDA');
+    if (!permitidas.includes(String(varianteId))) return fail(res, 400, 'Ese modelo no está disponible.', 'VARIANTE_INVALIDA');
+  }
+  const varNombre = permitidas.length && varianteId !== null ? item.variantes[String(varianteId)].nombre : null;
 
   const tipoPago = anticipado ? 'sin_recaudo' : 'con_recaudo';
   const modo = anticipado ? 'anticipado' : 'contra_entrega';
@@ -100,10 +114,20 @@ module.exports = async (req, res) => {
       if (cot.clas.retryAfter) res.setHeader('Retry-After', String(cot.clas.retryAfter));
       return fail(res, cot.clas.http === 404 ? 503 : cot.clas.http, cot.clas.message, cot.clas.code);
     }
-    const opcion = cot.v.find((o) => o.shipping_type_id === SHIPPING_TYPE_ID && o.tipo_entrega === 'domicilio' && o.disponible !== false && (anticipado || o.soporta_recaudo !== false));
+    const opcion = elegirOpcion(cot.v, anticipado, SHIPPING_TYPE_ID);
     if (!opcion) return fail(res, 422, anticipado
       ? 'Por ahora no tenemos entrega a domicilio en tu ciudad.'
       : 'En tu ciudad no está disponible el Pago Contra Entrega. Prueba con Pago Directo Anticipado.', 'SIN_COBERTURA');
+
+    // ---- Precio (Opción A): producto + envío cotizado. Lo calcula el servidor; el navegador solo muestra y confirma. ----
+    const envio = Number(opcion.precio_usd);
+    if (!Number.isFinite(envio) || envio < 0) return fail(res, 503, 'No pudimos calcular el envío. Inténtalo de nuevo en un momento.', 'ENVIO_NO_DISPONIBLE');
+    const calc = precio.calcular(precioVigente(item), qty, envio);
+    if (b.total_esperado_usd !== undefined && Math.abs(Number(b.total_esperado_usd) - calc.total) > 0.02)
+      return res.status(409).json({ code: 'PRECIO_CAMBIO', message: 'El costo de envío cambió. Revisa el nuevo total y confirma de nuevo.', total_usd: calc.total, envio_usd: calc.envio });
+    const gan = precio.margen(calc, item.costo_usd, qty);
+    if (gan < precio.MARGEN_MIN()) console.error(JSON.stringify({ nivel: 'ALERTA', code: 'MARGEN_BAJO', ref, sku: b.sku, ganancia_usd: gan, minimo_usd: precio.MARGEN_MIN(), envio_usd: calc.envio, total_usd: calc.total, cantidad: qty,
+      que_hacer: 'La ganancia estimada de este pedido está bajo tu mínimo. Revisa precio de venta o costo de envío.' }));
 
     // ---- Variante y stock reales (lib/stock.js). Solo bloquea con evidencia; la palabra final la tiene DroPanas ----
     const pc = await puedeComprar(item, qty, varianteId);
@@ -117,7 +141,7 @@ module.exports = async (req, res) => {
       external_reference: ref,
       cliente: { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim() },
       direccion: { state_id: d.state_id, city_id: d.city_id, direccion, ...(txt(d.referencia, 120) ? { referencia: txt(d.referencia, 120) } : {}) },
-      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: precioVigente(item), ...(varianteId ? { variante_id: varianteId } : {}) }],
+      productos: [{ producto_id: item.producto_id, cantidad: qty, precio_venta_usd: calc.unit, ...(varianteId ? { variante_id: varianteId } : {}) }],
       bodega_origen_id: item.bodega_origen_id,
       tipo_entrega: 'domicilio',
       shipping_type_id: SHIPPING_TYPE_ID,
@@ -130,13 +154,29 @@ module.exports = async (req, res) => {
 
     const r = await llamar('/ordenes', { method: 'POST', body: payload, headers: { 'Idempotency-Key': idem } });
     const clas = clasificar(r);
-    if (clas.tipo === 'ok') return res.status(200).json({ ok: true, estado: 'creado', referencia: ref, modo });
-    if (clas.tipo === 'duplicado') return res.status(200).json({ ok: true, estado: 'creado', referencia: ref, modo, duplicado: true });
+    // Registro propio del pedido (cuenta + rastreo de respaldo). Si el almacén falla, el pedido sigue: nunca se pierde una venta por esto.
+    const guardar = async (estado) => {
+      try {
+        const dpId = r.j && r.j.data && (r.j.data.id || r.j.data.orden_id) || null;
+        await usuarios.guardarPedido({ ref, sub: ses ? ses.sub : null, creado: new Date().toISOString(), sku: b.sku, titulo: item.titulo, variante_id: varianteId, variante_nombre: varNombre,
+          cantidad: qty, subtotal_usd: calc.subtotal, envio_usd: calc.envio, total_usd: calc.total, modo, estado, orden_id: dpId, tel4: tel.slice(-4), state_id: d.state_id, city_id: d.city_id });
+        if (ses) await usuarios.guardarPerfil(ses.sub, { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim(), direccion, referencia: txt(d.referencia, 120) });
+      } catch (e) { console.error(JSON.stringify({ nivel: 'ALERTA', code: 'PEDIDO_NO_GUARDADO', ref, que_hacer: 'El pedido SÍ se creó en DroPanas; falló el registro en el almacén (Mis pedidos).' })); }
+    };
+    const resumen = { subtotal_usd: calc.subtotal, envio_usd: calc.envio, total_usd: calc.total };
+    if (clas.tipo === 'ok' || clas.tipo === 'duplicado') {
+      // Diagnóstico de variantes SIN datos personales: qué ID enviamos y qué devolvió DroPanas por cada línea.
+      const lineas = ((r.j && r.j.data && r.j.data.productos) || []).map((x) => ({ producto_id: x.producto_id, variante_id: x.variante_id !== undefined ? x.variante_id : null, variante: x.variante || x.variante_nombre || null }));
+      console.log(JSON.stringify({ nivel: 'INFO', code: 'ORDEN_CREADA', ref, sku: b.sku, variante_enviada: varianteId, dropanas: lineas, total_usd: calc.total, envio_usd: calc.envio, ganancia_usd: gan }));
+      await guardar('creado');
+      return res.status(200).json({ ok: true, estado: 'creado', referencia: ref, modo, ...(clas.tipo === 'duplicado' ? { duplicado: true } : {}), ...resumen });
+    }
     if (clas.tipo === 'en_cola') {
       // 202: aceptado, NO se reenvía. Se guarda el solicitud_id para poder consultarlo en /api/rastreo.
       const sid = r.j && r.j.data && r.j.data.solicitud_id;
       await respaldo.registrar({ ...ctx, tipo: 'en_cola', http: 202, code: clas.code, solicitud_id: sid });
-      return res.status(202).json({ ok: true, estado: 'en_cola', referencia: ref, modo, message: clas.message });
+      await guardar('en_cola');
+      return res.status(202).json({ ok: true, estado: 'en_cola', referencia: ref, modo, message: clas.message, ...resumen });
     }
     // Error de red / timeout: el pedido pudo haberse creado. El reintento con la MISMA Idempotency-Key lo resuelve sin duplicar.
     return rechazar(clas, clas.tipo === 'red' ? 'error_red' : 'rechazo');
