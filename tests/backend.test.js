@@ -3,6 +3,8 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = path.join(__dirname, '..');
 process.env.DROPANAS_API_KEY = 'test_sk_simulada';
+// Las pruebas usan 2 productos de ejemplo que en producción están en borrador: aquí se publican solo en memoria.
+require(path.join(root, 'data/catalogo.json')).productos.forEach((p) => { if (['cargador-65w', 'smartwatch-fit'].includes(p.sku)) p.estado = 'publicado'; });
 const catalogo = require(path.join(root, 'lib/catalogo'));
 const cache = require(path.join(root, 'lib/cache'));
 const cliente = require(path.join(root, 'lib/cliente'));

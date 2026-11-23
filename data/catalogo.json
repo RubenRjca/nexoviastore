@@ -34,7 +34,7 @@
   "productos": [
     {
       "sku": "cargador-65w",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": true,
       "categoria": "carga",
       "icono": "charger",
@@ -63,7 +63,7 @@
     },
     {
       "sku": "smartwatch-fit",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": false,
       "categoria": "wearables",
       "icono": "watch",
@@ -91,7 +91,7 @@
     },
     {
       "sku": "audifonos-tws",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": false,
       "categoria": "audio",
       "icono": "buds",
@@ -119,7 +119,7 @@
     },
     {
       "sku": "power-bank-20k",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": false,
       "categoria": "energia",
       "icono": "bank",
@@ -147,7 +147,7 @@
     },
     {
       "sku": "cable-usbc-100w",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": false,
       "categoria": "cables",
       "icono": "cable",
@@ -175,7 +175,7 @@
     },
     {
       "sku": "parlante-bt",
-      "estado": "publicado",
+      "estado": "borrador",
       "semana": false,
       "categoria": "audio",
       "icono": "speaker",
@@ -202,7 +202,7 @@
     },
     {
       "sku": "lampara-atrapazancudos",
-      "estado": "borrador",
+      "estado": "publicado",
       "semana": false,
       "nuevo": true,
       "categoria": "hogar",
@@ -228,7 +228,12 @@
       "precio_oferta_usd": null,
       "costo_usd": 14.99,
       "producto_id": 21692,
-      "bodega_origen_id": 1
+      "bodega_origen_id": 1,
+      "variantes_nombres": {
+        "Echufable": "Enchufable (funciona conectado)",
+        "Enchufable": "Enchufable (funciona conectado)",
+        "Recargable": "Recargable (sin cable)"
+      }
     }
   ]
 }

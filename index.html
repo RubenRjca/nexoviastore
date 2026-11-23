@@ -604,6 +604,7 @@ function pintarSemana() {
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></div>';
 }
 function pintarCmp() {
+  const cs = $('comparador'); if (cs) cs.hidden = productos.length < 2; // con un solo producto no hay nada que comparar
   const sel = $('cmp-sel');
   sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
     productos.map((p) => '<option value="' + esc(p.sku) + '"' + (cmp[i] === p.sku ? ' selected' : '') + '>' + esc(p.titulo) + '</option>').join('') + '</select>').join('');
@@ -673,7 +674,7 @@ function prepararVariantes() {
   const d = document.createElement('div'); d.id = 'vsel'; d.className = 'vsel';
   const lab = document.createElement('label'); lab.htmlFor = 'variante'; lab.textContent = 'Elige tu opción';
   const sel = document.createElement('select'); sel.id = 'variante'; sel.name = 'variante'; sel.required = true; sel.add(new Option('Selecciona…', ''));
-  (s.variantes || []).forEach((v) => { const o = new Option((v.nombre || 'Opción ' + v.id) + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
+  (s.variantes || []).forEach((v) => { const o = new Option(((cur.p.variantes_nombres || {})[v.nombre] || v.nombre || 'Opción ' + v.id) + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
   sel.addEventListener('change', () => { cur.qty = Math.min(cur.qty, maxQty()); total(); });
   d.append(lab, sel); form.insertBefore(d, form.firstChild);
   if (!(s.variantes || []).length) { sel.disabled = true; sel.required = false; go.disabled = true; msg.className = 'msg err'; msg.textContent = 'No pudimos cargar las opciones de este producto. Inténtalo de nuevo en un momento.'; }
