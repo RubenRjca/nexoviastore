@@ -228,7 +228,7 @@
       "precio_oferta_usd": null,
       "costo_usd": 14.99,
       "producto_id": 21692,
-      "bodega_origen_id": null
+      "bodega_origen_id": 1
     }
   ]
 }
