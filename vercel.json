@@ -39,5 +39,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(data|lib|scripts|tests|docs|supabase)/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/(package.json|package-lock.json|SKILL.md|README.md|.env.example|vercel.json)",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }

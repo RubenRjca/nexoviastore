@@ -210,30 +210,66 @@
       "etiqueta": "",
       "imagen": "assets/lampara-atrapazancudos.jpg",
       "titulo": "Lámpara Atrapazancudos con Luz Violeta",
-      "descripcion": "Lámpara con luz violeta y ventilador de succión que atrae a los insectos hacia un depósito inferior. Elige el modelo enchufable (USB) o el recargable sin cable.",
-      "por_que": "Un formato compacto y sin químicos para dejar en tu mesa, repisa o mesa de noche, con luz suave que también sirve de luz nocturna.",
+      "descripcion": "Lámpara con luz violeta y ventilador de succión que atrae a los mosquitos hacia un depósito inferior, sin humo ni químicos. Disponible en modelo enchufable (USB) o recargable con pila.",
+      "por_que": "Los mosquitos arruinan el descanso y pueden transmitir enfermedades. Esta lámpara te ayuda a reducirlos dentro del ambiente donde duermes, trabajas o descansas, de forma silenciosa y sin aerosoles.",
       "beneficios": [
-        "Luz violeta y ventilador de succión",
-        "Depósito inferior translúcido",
-        "Modelo enchufable o recargable",
-        "Se coloca en mesa, repisa o superficie plana"
+        "Luz violeta que atrae a los mosquitos",
+        "Ventilador de succión que los dirige al depósito",
+        "Depósito inferior translúcido para ver y vaciar fácil",
+        "Sin humo ni aerosoles",
+        "Modelo enchufable o recargable (sin cable)"
       ],
       "specs": {
-        "Tipo": "Lámpara atrapainsectos",
+        "Tipo": "Lámpara atrapamosquitos",
+        "Luz": "Violeta (tipo UV)",
+        "Mecanismo": "Ventilador de succión + depósito inferior",
         "Modelos": "Enchufable (USB) o con pila recargable",
         "Alto": "23,5 cm",
-        "Diámetro": "12,5 cm"
+        "Ancho x largo": "12,5 x 12,5 cm",
+        "Colocación": "Superficie plana y seca, con las aberturas libres"
       },
       "precio_venta_usd": 23.0,
       "precio_oferta_usd": null,
       "costo_usd": 14.99,
       "producto_id": 21692,
       "bodega_origen_id": 1,
-      "variantes_nombres": {
-        "Echufable": "Enchufable (funciona conectado)",
-        "Enchufable": "Enchufable (funciona conectado)",
-        "Recargable": "Recargable (sin cable)"
-      }
+      "variantes": {
+        "1950": {
+          "alias": [
+            "enchufable",
+            "echufable"
+          ],
+          "nombre": "Modelo 1 · Enchufable (USB)",
+          "detalle": "Funciona conectado por USB mientras la usas. Ideal para dejarla fija cerca de un tomacorriente."
+        },
+        "1951": {
+          "alias": [
+            "recargable"
+          ],
+          "nombre": "Modelo 2 · Recargable con pila",
+          "detalle": "Funciona con pila recargable: cárgala y úsala sin cable, con botón de encendido en la parte superior."
+        }
+      },
+      "descripcion_larga": [
+        "Los mosquitos no solo molestan: sus picaduras interrumpen el sueño y, en Venezuela y otras zonas tropicales, algunas especies transmiten enfermedades como el dengue, el zika o el chikungunya. Reducir la cantidad de mosquitos dentro del hogar es una de las medidas que ayudan a proteger a tu familia y a dormir mejor.",
+        "Esta lámpara atrapazancudos combina dos mecanismos: una luz violeta (cercana a la ultravioleta), que atrae a muchos insectos voladores, y un ventilador de succión que los arrastra hacia la abertura y los deja en un depósito inferior translúcido. No usa humo, vapores ni aerosoles.",
+        "Su formato cilíndrico (12,5 cm de diámetro y 23,5 cm de alto) cabe en una mesa auxiliar, una repisa o una mesa de noche, y la luz violeta suave funciona además como luz nocturna ambiental."
+      ],
+      "como_funciona": [
+        {
+          "t": "1. La luz violeta atrae",
+          "d": "Muchos insectos voladores, entre ellos los mosquitos, se sienten atraídos por la luz violeta/ultravioleta en la oscuridad."
+        },
+        {
+          "t": "2. El ventilador succiona",
+          "d": "Al acercarse a la abertura, el ventilador crea una corriente de aire que los arrastra hacia dentro."
+        },
+        {
+          "t": "3. El depósito los retiene",
+          "d": "Los insectos quedan en el depósito inferior translúcido. Para vaciarlo, apaga o desconecta la lámpara, retira el depósito y límpialo antes del siguiente uso."
+        }
+      ],
+      "aviso": "Ayuda a reducir mosquitos en el ambiente, pero no sustituye las medidas de prevención: elimina el agua estancada, usa repelente y mosquiteros cuando sea necesario. Su efecto depende del lugar y de la cantidad de insectos."
     }
   ]
 }

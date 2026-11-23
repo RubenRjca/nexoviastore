@@ -30,3 +30,9 @@ Cada producto agregado o editado debe incluir estructura completa para alta conv
   - **Comparador de Productos** interactivo (contrastando precio, ventajas y uso).
   - Cuadrícula de productos con apertura de ficha detallada (descripción, por qué comprarlo, ventajas, reseñas y botón de compra).
   - Carrito lateral con opción de cantidad y descuento por llevar 2+ unidades.
+
+## Notas vigentes
+- Cobertura: se comunica como "envíos a domicilio en Venezuela (según cobertura)"; la cobertura real la define `/api/geo` (cobertura_domicilio de DroPanas) y la cotización de envío.
+- Pago anticipado solo se ofrece si hay datos de cobro en `CONFIG.PAGOS`; si no, la tienda muestra solo Pago Contra Entrega.
+- No hay carrito multi-producto: el flujo es "Comprar ahora" por producto.
+- `costo_usd`, `producto_id` y `bodega_origen_id` nunca van al navegador.
