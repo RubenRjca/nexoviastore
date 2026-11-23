@@ -28,7 +28,7 @@ global.fetch = async (url, opt = {}) => {
   if (u.host === 'kv.test') { // Upstash simulado
     if (kvFalla) return mk(500, {});
     const res = JSON.parse(opt.body).map(([c, ...a]) => {
-      if (c === 'SET') { kv.set(a[0], a[1]); return { result: 'OK' }; }
+      if (c === 'SET') { if (a.includes('NX') && kv.has(a[0])) return { result: null }; kv.set(a[0], a[1]); return { result: 'OK' }; }
       if (c === 'GET') return { result: kv.get(a[0]) || null };
       if (c === 'MGET') return { result: a.map((k) => kv.get(k) || null) };
       if (c === 'LPUSH') { L(a[0]).unshift(a[1]); return { result: L(a[0]).length }; }
@@ -235,6 +235,23 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     const ip = { 'x-vercel-forwarded-for': '9.9.9.9' }; const r = []; for (let i = 0; i < 4; i++) r.push((await call(hRes, { method: 'POST', body: rv(), headers: ip })).s); eq(r, [202, 202, 202, 429]);
     eq((await call(hRes, { method: 'POST', body: rv(), headers: { origin: 'https://evil.com' } })).s, 403); eq((await call(hRes, { query: { sku: '../x' } })).s, 404); eq((await call(hRes, { method: 'DELETE' })).s, 405);
   });
+
+  out('\n== /api/webhook: firma HMAC, duplicados y estado del pedido ==');
+  const hWh = require(path.join(root, 'api/webhook.js'));
+  const SEC = 'whsec_prueba';
+  const evt = (o = {}) => ({ evento: 'order.status_changed', timestamp: '2026-11-22T10:00:00-04:00', sandbox: false, cuenta: { id: 1 }, datos: { orden_id: 5, pedido: { numero_externo: 'NX1A2B3C4D5E6F', estado: 'En reparto', transportadora: 'Tealca', numero_guia: '123' } }, ...o });
+  const llamarWh = async (body, { secreto = SEC, firma, delivery = 'del-0001', method = 'POST' } = {}) => {
+    const raw = Buffer.from(typeof body === 'string' ? body : JSON.stringify(body)); const o = { h: {} };
+    const res = { setHeader(k, v) { o.h[k.toLowerCase()] = v; }, status(s) { o.s = s; return this; }, json(j) { o.j = j; return this; } };
+    await hWh({ method, rawBody: raw, headers: { host: 'tienda.test', 'x-dropanas-signature': firma !== undefined ? firma : crypto.createHmac('sha256', secreto).update(raw).digest('hex'), 'x-dropanas-delivery': delivery } }, res); return o;
+  };
+  await t('sin DROPANAS_WEBHOOK_SECRET: 503 (nunca acepta sin firma)', async () => { reset(); conAlmacen(); delete process.env.DROPANAS_WEBHOOK_SECRET; eq((await llamarWh(evt())).s, 503); });
+  process.env.DROPANAS_WEBHOOK_SECRET = SEC;
+  await t('firma inválida o ausente: 401 y no se guarda nada', async () => { reset(); conAlmacen(); eq((await llamarWh(evt(), { firma: 'abc' })).s, 401); eq((await llamarWh(evt(), { secreto: 'otro' })).s, 401); eq([...kv.keys()].filter((k) => k.startsWith('nx:wh:')).length, 0); });
+  await t('firma válida: guarda el último estado por referencia NX…', async () => { reset(); conAlmacen(); const r = await llamarWh(evt()); eq(r.s, 200); const rec = JSON.parse(kv.get('nx:wh:NX1A2B3C4D5E6F')); eq([rec.estado, rec.transportadora, rec.guia], ['En reparto', 'Tealca', '123']); });
+  await t('entrega repetida (mismo X-DroPanas-Delivery): duplicado, no reprocesa', async () => { reset(); conAlmacen(); await llamarWh(evt()); const r = await llamarWh(evt()); eq([r.s, r.j.duplicado], [200, true]); });
+  await t('referencia ajena (no NX…) no se guarda; incidente deja ALERTA; método GET 405', async () => { reset(); conAlmacen(); await llamarWh(evt({ datos: { pedido: { numero_externo: 'LUCID-1', estado: 'X' } } }), { delivery: 'del-0002' }); eq([...kv.keys()].filter((k) => k.startsWith('nx:wh:NX')).length, 0); const n = logs.length; await llamarWh({ evento: 'incident.created', datos: { orden_id: 9, novedad_id: 3, tipo: 'no_entregado' } }, { delivery: 'del-0003' }); si(logs.length > n, 'debe alertar la novedad'); eq((await llamarWh(evt(), { method: 'GET' })).s, 405); });
+  delete process.env.DROPANAS_WEBHOOK_SECRET;
 
   console.error = origErr;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);
