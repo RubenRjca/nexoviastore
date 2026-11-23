@@ -213,6 +213,10 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     await t('con sesión: el pedido se guarda por usuario (Mis pedidos) con tel4 y variante, y el perfil queda para autollenar', async () => {
       base(); post({ s: 201, j: { data: { id: 55 } } }); process.env.REQUIERE_CUENTA = '1'; const r = await pedir(cuerpo(), { cookie: cookie('g-9') }); delete process.env.REQUIERE_CUENTA; eq(r.s, 200);
       const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq([rec.sub, rec.tel4, rec.total_usd, rec.orden_id], ['g-9', '4567', 21.9, 55]); si(zsets.get('nx:uo:g-9').has(r.j.referencia), 'falta en la lista del usuario'); si(JSON.parse(kv.get('nx:u:g-9')).perfil.telefono, 'falta el perfil'); });
+    await t('WhatsApp: el pedido guarda los datos de contacto y entrega para reenviar la confirmación desde Mis pedidos', async () => {
+      base(); post({ s: 201, j: { data: { id: 56 } } }); const r = await pedir(cuerpo({ entrega: { estado: 'Distrito Capital', ciudad: 'Caracas' } }), { cookie: cookie('g-9') }); eq(r.s, 200);
+      const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq([rec.contacto.estado, rec.contacto.ciudad], ['Distrito Capital', 'Caracas']); si(rec.contacto.nombre && rec.contacto.telefono && rec.contacto.direccion, 'falta contacto');
+      si(!JSON.stringify(r.j).includes(rec.contacto.telefono), 'la respuesta no debe devolver el teléfono'); });
     await t('compra sin cuenta (modo libre) igual deja registro por referencia, sin usuario', async () => { base(); post({ s: 201, j: { data: {} } }); const r = await pedir(cuerpo()); const rec = JSON.parse(kv.get('nx:o:' + r.j.referencia)); eq(rec.sub, null); });
     await t('si el almacén falla, el pedido igual se crea y queda ALERTA PEDIDO_NO_GUARDADO', async () => { base(); post({ s: 201, j: { data: {} } }); kvFalla = true; const r = await pedir(cuerpo()); eq(r.s, 200); si(logs.some((l) => /PEDIDO_NO_GUARDADO/.test(l)), 'falta alerta'); });
     await t('variantes estrictas: lámpara sin variante → 400; modelo ajeno → 400; 1950/1951 pasan esa validación', async () => {
@@ -231,6 +235,9 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   const hProd = require(path.join(root, 'api/productos.js'));
   const limpiarEnv = () => { delete process.env.TASA_BS; delete process.env.TASA_BS_RESPALDO; };
   await t('sin ninguna tasa: solo USD (tasa y fuente nulas) y NINGUNA reseña sembrada en el catálogo', async () => { reset(); limpiarEnv(); ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [null, null]); si(r.j.productos.every((p) => Array.isArray(p.resenas) && p.resenas.length === 0), 'resenas debe ir vacío'); });
+  await t('WHATSAPP_TIENDA: /api/productos lo expone solo con dígitos; sin variable → null (el front usa su número por defecto)', async () => {
+    reset(); limpiarEnv(); ruta(/productos\/101$/, detSimple); eq((await call(hProd, {})).j.whatsapp, null);
+    reset(); limpiarEnv(); process.env.WHATSAPP_TIENDA = '+58 424-5474761'; ruta(/productos\/101$/, detSimple); const r = await call(hProd, {}); delete process.env.WHATSAPP_TIENDA; eq(r.j.whatsapp, '584245474761'); });
   await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
   await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, { s: 200, j: { data: { id: 101, tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
   await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });
@@ -333,6 +340,9 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     await usr.guardarPedido(regs(REFX, 'g-1')); await usr.guardarPedido(regs(REFY, 'g-2'));
     const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.s, r.j.pedidos.length, r.j.pedidos[0].referencia, r.j.pedidos[0].estado], [200, 1, REFX, 'pendiente_confirmacion']);
     eq([r.j.pedidos[0].variante, r.j.pedidos[0].total_usd], ['Modelo 2 · Recargable con pila', 29.9]); si(!JSON.stringify(r.j).includes('tel4'), 'no debe exponer tel4'); });
+  await t('mis-pedidos: devuelve el contacto SOLO al dueño (para el botón de WhatsApp) y nunca el de otro usuario', async () => {
+    reset(); conAlmacen(); await usr.guardarPedido({ ...regs(REFX, 'g-1'), contacto: { nombre: 'Ana Pérez', telefono: '04141234567', estado: 'Miranda', ciudad: 'Los Teques', direccion: 'Calle 1 casa 2' } }); await usr.guardarPedido({ ...regs(REFY, 'g-2'), contacto: { nombre: 'Otro', telefono: '04120000000' } });
+    const r = await call(hMp, { headers: { cookie: 'nx_sesion=' + ses.firmar({ sub: 'g-1' }) } }); eq([r.j.pedidos.length, r.j.pedidos[0].contacto.ciudad], [1, 'Los Teques']); si(!JSON.stringify(r.j).includes('04120000000'), 'no debe filtrar contacto ajeno'); });
   await t('mis-pedidos: con la orden en DroPanas muestra estado real y guía', async () => {
     reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, 'g-1'));
     ruta(/ordenes\/ext:/, { s: 200, j: { data: { id: 88, estado_aprobacion: 'no_aplica', cliente: { telefono: '04125885888' } } } }); ruta(/ordenes\/88\/tracking/, { s: 200, j: { data: { numero_guia: 'DP88', status_actual: 'En reparto', historial: [] } } });

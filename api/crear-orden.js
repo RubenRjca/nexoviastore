@@ -159,7 +159,9 @@ module.exports = async (req, res) => {
       try {
         const dpId = r.j && r.j.data && (r.j.data.id || r.j.data.orden_id) || null;
         await usuarios.guardarPedido({ ref, sub: ses ? ses.sub : null, creado: new Date().toISOString(), sku: b.sku, titulo: item.titulo, variante_id: varianteId, variante_nombre: varNombre,
-          cantidad: qty, subtotal_usd: calc.subtotal, envio_usd: calc.envio, total_usd: calc.total, modo, estado, orden_id: dpId, tel4: tel.slice(-4), state_id: d.state_id, city_id: d.city_id });
+          cantidad: qty, subtotal_usd: calc.subtotal, envio_usd: calc.envio, total_usd: calc.total, modo, estado, orden_id: dpId, tel4: tel.slice(-4), state_id: d.state_id, city_id: d.city_id,
+          // Datos de contacto para reenviar la confirmación por WhatsApp desde «Mis pedidos» (solo los ve el dueño de la cuenta).
+          contacto: { nombre: (c.nombre.trim() + ' ' + c.apellido.trim()).slice(0, 100), telefono: String(c.telefono).trim(), estado: txt(b.entrega && b.entrega.estado, 60), ciudad: txt(b.entrega && b.entrega.ciudad, 60), direccion } });
         if (ses) await usuarios.guardarPerfil(ses.sub, { nombre: c.nombre.trim(), apellido: c.apellido.trim(), telefono: String(c.telefono).trim(), direccion, referencia: txt(d.referencia, 120) });
       } catch (e) { console.error(JSON.stringify({ nivel: 'ALERTA', code: 'PEDIDO_NO_GUARDADO', ref, que_hacer: 'El pedido SÍ se creó en DroPanas; falló el registro en el almacén (Mis pedidos).' })); }
     };
