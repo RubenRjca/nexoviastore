@@ -1,6 +1,6 @@
 'use strict';
 // GET /api/cotizar?sku=…&estado=ID&ciudad=ID&cantidad=1&metodo=contra_entrega|anticipado
-// Devuelve lo que pagará el cliente (Opción A): producto + envío cotizado por DroPanas. El precio final lo vuelve a calcular crear-orden.
+// Comprueba cobertura de entrega y devuelve el precio final único (envío incluido). El flete cotizado NO se expone al navegador.
 const { obtener, configurado, precioVigente } = require('../lib/catalogo');
 const { cotizarRuta, elegirOpcion } = require('../lib/cotizacion');
 const { alertar } = require('../lib/errores');
@@ -26,5 +26,5 @@ module.exports = async (req, res) => {
   const envio = Number(op.precio_usd);
   if (!Number.isFinite(envio) || envio < 0) return res.status(503).json({ code: 'ENVIO_NO_DISPONIBLE', message: 'No pudimos calcular el envío. Inténtalo de nuevo en un momento.' });
   const c = precio.calcular(precioVigente(item), qty, envio);
-  return res.status(200).json({ ok: true, subtotal_usd: c.subtotal, envio_usd: c.envio, total_usd: c.total, tiempo: op.tiempo_estimado || null });
+  return res.status(200).json({ ok: true, total_usd: c.total, tiempo: op.tiempo_estimado || null });
 };

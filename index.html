@@ -844,16 +844,9 @@ const radAnt = $('rad-ant');
 if (!metodos().length) { radAnt.disabled = true; $('ant-sub').textContent = 'Próximamente'; }
 pmet.innerHTML = metodos().map(([k, m]) => '<option value="' + k + '">' + esc(m.nombre) + '</option>').join('');
 
-const totalUsd = () => cur.p.usd * cur.qty + (cur.envio != null ? cur.envio : 0);
-function total() { const p = cur.p; $('q-n').textContent = cur.qty; $('s-t').textContent = p.titulo; $('s-usd').textContent = usd(totalUsd()); $('s-ves').textContent = bs(totalUsd()) + (cur.envio == null ? ' · más envío' : ''); pintarEnvio(); datosPago(); cotizar(); }
-function pintarEnvio() {
-  const e = $('env'); e.textContent = '';
-  if (cur.envio == null) { e.hidden = !cur.envMsg; if (cur.envMsg) e.textContent = cur.envMsg; return; }
-  const fila = (a, b, c) => { const d = document.createElement('div'); if (c) d.className = c; const x = document.createElement('span'), y = document.createElement('span'); x.textContent = a; y.textContent = b; d.append(x, y); e.appendChild(d); };
-  const sub = cur.p.usd * cur.qty;
-  fila('Producto', usd(sub) + ' · ' + bs(sub)); fila('Envío a tu ciudad', usd(cur.envio) + ' · ' + bs(cur.envio)); fila('Total', usd(sub + cur.envio) + ' · ' + bs(sub + cur.envio), 't');
-  e.hidden = false;
-}
+const totalUsd = () => cur.p.usd * cur.qty; // precio final único: envío incluido, sin desglose
+function total() { const p = cur.p; $('q-n').textContent = cur.qty; $('s-t').textContent = p.titulo; $('s-usd').textContent = usd(totalUsd()); $('s-ves').textContent = bs(totalUsd()); pintarEnvio(); datosPago(); cotizar(); }
+function pintarEnvio() { const e = $('env'); e.textContent = cur.envMsg || ''; e.hidden = !cur.envMsg; } // solo avisa si no hay cobertura; nunca muestra costos de envío
 let cotT = null, cotN = 0;
 function cotizar() {
   if (!cur || demo || local) return;
@@ -862,8 +855,8 @@ function cotizar() {
   const n = ++cotN, c = cur;
   cotT = setTimeout(() => {
     getJSON(CONFIG.API_COTIZAR + '?sku=' + encodeURIComponent(c.p.sku) + '&estado=' + encodeURIComponent(selE.value) + '&ciudad=' + encodeURIComponent(selC.value) + '&cantidad=' + c.qty + '&metodo=' + modo())
-      .then((j) => { if (n !== cotN || cur !== c) return; c.envio = Number(j.envio_usd); c.envMsg = ''; $('s-usd').textContent = usd(totalUsd()); $('s-ves').textContent = bs(totalUsd()); pintarEnvio(); datosPago(); })
-      .catch((err) => { if (n !== cotN || cur !== c) return; c.envio = null; c.envMsg = (err && err.message) || 'No pudimos calcular el envío. Inténtalo de nuevo.'; pintarEnvio(); });
+      .then(() => { if (n !== cotN || cur !== c) return; c.envio = 0; c.envMsg = ''; pintarEnvio(); })
+      .catch((err) => { if (n !== cotN || cur !== c) return; c.envio = null; c.envMsg = (err && err.message) || 'No pudimos verificar la entrega a tu ciudad. Inténtalo de nuevo.'; pintarEnvio(); });
   }, 250);
 }
 function datosPago() {
@@ -930,7 +923,7 @@ form.addEventListener('submit', (e) => {
     nota_cliente: (f.get('nota') || '').trim() };
   if (ant) { body.pago_metodo = f.get('pago_metodo'); body.pago_referencia = f.get('pago_referencia').trim(); }
   if (cur.variable) body.variante_id = Number(f.get('variante')); // el servidor valida que pertenezca al producto
-  if (!demo && cur.envio == null) { msg.className = 'msg err'; msg.textContent = cur.envMsg || 'Espera a que calculemos el envío a tu ciudad.'; return; }
+  if (!demo && cur.envio == null) { msg.className = 'msg err'; msg.textContent = cur.envMsg || 'Espera a que verifiquemos la entrega a tu ciudad.'; return; }
   if (!demo) body.total_esperado_usd = Math.round(totalUsd() * 100) / 100;
   if (demo) { console.log('Pedido (vista previa local, no enviado):', body); msg.textContent = 'Vista previa: el pedido no se envía hasta desplegar en Vercel con tu llave. Revisa la consola para ver el formato.'; return; }
   const sig = JSON.stringify(body); if (cur.sig !== sig) { cur.sig = sig; cur.key = uuid(); } // datos distintos = llave nueva; mismos datos = reintento seguro
@@ -945,7 +938,7 @@ form.addEventListener('submit', (e) => {
       form.reset(); prefill(); fill(selC, [], 'Elige un estado'); selC.disabled = true; refrescar();
     })
     .catch((err) => { go.disabled = false; msg.className = 'msg err'; if (err && err.code === 'LOGIN_REQUERIDO') { pedirLogin(() => form.requestSubmit()); msg.textContent = 'Ingresa con Google para confirmar tu pedido.'; return; }
-      if (err && err.code === 'PRECIO_CAMBIO') { cur.envio = Number(err.envio_usd); total(); msg.textContent = 'El envío cambió. Revisa el nuevo total y confirma otra vez.'; return; }
+      if (err && err.code === 'PRECIO_CAMBIO') { msg.textContent = 'El precio cambió. Actualizamos la página para mostrarte el nuevo total.'; setTimeout(() => location.reload(), 2500); return; }
       if (err && /SIN_STOCK|VARIANTE/.test(err.code || '')) cargarStock(); msg.textContent = (err && err.message) || 'No pudimos enviar tu pedido. Revisa tus datos e inténtalo de nuevo.'; });
 });
 

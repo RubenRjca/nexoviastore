@@ -3,8 +3,8 @@
 ## Qué hace
 - Inicio de sesión con Google (sin contraseñas). Sesión en cookie firmada `nx_sesion` (30 días).
 - «Mis pedidos»: código NX destacado, estado automático ligado a la cuenta; el rastreo manual (NX + 4 dígitos) sigue disponible.
-- Opción A: el cliente paga **producto + envío cotizado por DroPanas**. Se envía como `precio_venta_usd`.
-- Alerta en logs `MARGEN_BAJO` si la ganancia estimada < `MARGEN_MIN_USD` (no bloquea la venta).
+- **Precio final único**: el cliente ve y paga solo el `precio_venta_usd` del catálogo (envío incluido, sin desglose). Ese mismo precio se envía a DroPanas. El flete cotizado se usa solo en el servidor para el margen y nunca se muestra ni se devuelve al navegador.
+- Alerta en logs `MARGEN_BAJO` si la ganancia estimada (precio final − costo − envío cotizado − comisión) < `MARGEN_MIN_USD` (no bloquea la venta). Lámpara a US$ 29: ganancia ≈ 9,01 (envío 4,50) a 6,61 (envío 6,90).
 - Variantes estrictas (1950 y 1951) y log `ORDEN_CREADA` con la variante enviada.
 - Respaldo en Upstash de cada pedido; el rastreo funciona aunque DroPanas aún no confirme el pedido.
 

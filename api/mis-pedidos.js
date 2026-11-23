@@ -9,7 +9,7 @@ const { cargar, armar, TEXTO } = require('../lib/seguimiento');
 
 const PEDIDO_ESTADO = (o, e) => ({
   referencia: o.ref, creado: o.creado, titulo: o.titulo, variante: o.variante_nombre || null, cantidad: o.cantidad,
-  subtotal_usd: o.subtotal_usd, envio_usd: o.envio_usd, total_usd: o.total_usd, modo: o.modo,
+  total_usd: o.total_usd, modo: o.modo,
   estado: e.estado, mensaje: e.mensaje, estado_texto: e.estado_texto || null, numero_guia: e.numero_guia || null, fecha_entrega: e.fecha_entrega || null, historial: e.historial || [],
 });
 const PENDIENTE = { estado: 'pendiente_confirmacion', mensaje: TEXTO.pendiente_confirmacion, historial: [] };

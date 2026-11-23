@@ -17,6 +17,6 @@
 7. Comparte el enlace por WhatsApp: debe verse la imagen "Ahora puedes comprar contra entrega" (WhatsApp guarda caché; usa el depurador de Facebook para refrescar).
 
 ## Con cuentas (ver docs/CUENTAS.md)
-- El total incluye el envío cotizado (producto + envío). Comprueba que coincide con el valor del pedido en DroPanas.
+- El cliente ve un solo precio final (US$ 29,00 la lámpara). Comprueba que el pedido en DroPanas muestra ese mismo valor y que en los logs `ORDEN_CREADA` la ganancia es ≥ 5.
 - Verifica la variante en DroPanas y la línea `ORDEN_CREADA` en los logs de Vercel.
 - El pedido debe aparecer en «Mis pedidos» (estado «pendiente de confirmación» hasta que DroPanas lo confirme).
