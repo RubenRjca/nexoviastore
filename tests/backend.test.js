@@ -269,6 +269,35 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     for (const x of [{ s: 429, j: { error: { status: 'RESOURCE_EXHAUSTED' } } }, new Error('red'), { s: 200, j: { candidates: [], promptFeedback: { blockReason: 'SAFETY' } } }]) {
       reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, x); const r = await call(hChat, { method: 'POST', body: M('¿cómo compro?') }); delete process.env.GEMINI_API_KEY;
       eq([r.s, r.j.fuente], [200, 'respaldo']); si(/Comprar ahora/.test(r.j.respuesta), 'respaldo incorrecto'); si(!JSON.stringify(logs).includes('cómo compro'), 'no debe registrar el mensaje del cliente'); } });
+  const urlsGem = () => llamadas.filter((x) => GEM.test(x.clave)).map((x) => x.clave);
+  await t('chat: payload válido para la API REST de Gemini (roles solo user/model, systemInstruction.parts[].text, sin «assistant»/«system» en contents)', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, gOk('ok'));
+    await call(hChat, { method: 'POST', body: { mensajes: [{ role: 'user', content: 'hola' }, { role: 'assistant', content: 'Hola, ¿en qué te ayudo?' }, { role: 'user', content: '¿precio?' }] } }); delete process.env.GEMINI_API_KEY;
+    const b = JSON.parse(llamadas.find((x) => GEM.test(x.clave)).opt.body);
+    eq(b.contents.map((c) => c.role), ['user', 'model', 'user']); si(b.contents.every((c) => Array.isArray(c.parts) && typeof c.parts[0].text === 'string' && Object.keys(c).sort().join() === 'parts,role'), 'contents mal formado');
+    si(Array.isArray(b.systemInstruction.parts) && typeof b.systemInstruction.parts[0].text === 'string' && !('role' in b.systemInstruction), 'systemInstruction mal formado'); si(!('system' in b) && !JSON.stringify(b.contents).includes('"assistant"'), 'no debe haber system/assistant en contents'); });
+  await t('chat: GEMINI_MODEL con espacios, comillas y prefijo «models/» se limpia (sin models/models/); valor inválido → modelo estable por defecto', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, gOk('ok')); process.env.GEMINI_MODEL = '  "models/gemini-2.5-flash-lite " ';
+    await call(hChat, { method: 'POST', body: M('hola') }); eq(urlsGem(), ['POST /v1beta/models/gemini-2.5-flash-lite:generateContent']);
+    reset(); ruta(GEM, gOk('ok')); process.env.GEMINI_MODEL = '¡¡ no vale !!'; await call(hChat, { method: 'POST', body: M('hola') }); eq(urlsGem(), ['POST /v1beta/models/gemini-2.5-flash:generateContent']);
+    reset(); ruta(GEM, gOk('ok')); process.env.GEMINI_MODEL = '   '; await call(hChat, { method: 'POST', body: M('hola') }); eq(urlsGem(), ['POST /v1beta/models/gemini-2.5-flash:generateContent']);
+    delete process.env.GEMINI_MODEL; delete process.env.GEMINI_API_KEY; });
+  await t('chat: modelo obsoleto (404 NOT_FOUND) → prueba el alias estable antes de caer al respaldo', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'k'; process.env.GEMINI_MODEL = 'gemini-1.5-flash-viejo';
+    ruta(GEM, (o, u) => (u.pathname.includes('gemini-1.5-flash-viejo') ? { s: 404, j: { error: { status: 'NOT_FOUND', message: 'models/gemini-1.5-flash-viejo is not found' } } } : gOk('Respuesta con el modelo estable.')));
+    const r = await call(hChat, { method: 'POST', body: M('hola') }); delete process.env.GEMINI_MODEL; delete process.env.GEMINI_API_KEY;
+    eq([r.j.fuente, r.j.respuesta], ['ia', 'Respuesta con el modelo estable.']); eq(urlsGem().map((x) => x.split('/').pop()), ['gemini-1.5-flash-viejo:generateContent', 'gemini-2.5-flash:generateContent']); });
+  await t('chat: 400 por thinkingConfig → reintenta el mismo modelo sin esa opción', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'k';
+    ruta(GEM, (o) => (JSON.parse(o.body).generationConfig.thinkingConfig ? { s: 400, j: { error: { status: 'INVALID_ARGUMENT', message: 'Thinking budget is not supported for this model' } } } : gOk('ok sin thinking')));
+    const r = await call(hChat, { method: 'POST', body: M('hola') }); delete process.env.GEMINI_API_KEY; eq([r.j.fuente, r.j.respuesta, n(GEM)], ['ia', 'ok sin thinking', 2]); });
+  await t('chat: llave inválida (400 API_KEY_INVALID) → una sola llamada, respaldo y causa legible en el log (sin la llave)', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'llave-mala'; ruta(GEM, { s: 400, j: { error: { status: 'INVALID_ARGUMENT', message: 'API key not valid. Please pass a valid API key.', details: [{ reason: 'API_KEY_INVALID' }] } } });
+    const r = await call(hChat, { method: 'POST', body: M('hola') }); delete process.env.GEMINI_API_KEY;
+    eq([r.j.fuente, n(GEM)], ['respaldo', 1]); const lg = JSON.stringify(logs); si(/API_KEY_INVALID/.test(lg) && /CHAT_GEMINI_FALLO/.test(lg) && !lg.includes('llave-mala'), 'el log debe indicar la causa sin exponer la llave'); });
+  await t('chat: la llave se limpia (espacios, saltos de línea, comillas) antes de enviarla', async () => {
+    reset(); process.env.GEMINI_API_KEY = ' "gk-abc"\n'; ruta(GEM, gOk('ok')); await call(hChat, { method: 'POST', body: M('hola') }); delete process.env.GEMINI_API_KEY;
+    eq(llamadas.find((x) => GEM.test(x.clave)).opt.headers['x-goog-api-key'], 'gk-abc'); });
   await t('chat: límites (mensaje 500, historial 6), origen y método', async () => {
     reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, gOk('ok'));
     const hist = []; for (let i = 0; i < 12; i++) hist.push({ role: i % 2 ? 'assistant' : 'user', content: 'x'.repeat(900) }); hist.push({ role: 'user', content: 'y'.repeat(900) });
