@@ -235,10 +235,10 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 .ai-in button{border:0;background:var(--coral);color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
 .ai-wa{display:block;text-align:center;font-size:13px;font-weight:600;padding:0 12px 12px;color:var(--head);background:var(--hdr)}
 .ai-wa[hidden]{display:none}
-.ai-p.lb{display:flex;flex-direction:column;height:auto!important}.ai-p.lb .ai-log,.ai-p.lb .ai-chips,.ai-p.lb .ai-in,.ai-p.lb .ai-wa{display:none}
-.ai-lb{flex:none;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:22px 18px;background:var(--cream);text-align:center}.ai-lb[hidden]{display:none}
-.ai-lb p{margin:0 0 4px;font-size:14px;color:var(--muted)}
-.ai-lb .btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:52px;text-align:center;margin:0;box-shadow:none}
+.ai-lb{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px;background:var(--hdr);border-bottom:1px solid var(--line)}.ai-lb[hidden]{display:none}
+.ai-lb .btn{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:46px;padding:8px 10px;font-size:13px;line-height:1.2;text-align:center;margin:0;box-shadow:none}
+.ai-lb .btn.wa[hidden]{display:none}
+@media (max-width:360px){.ai-lb{grid-template-columns:1fr}}
 @media (max-width:520px){.ai-p{right:10px;left:10px;width:auto;height:min(78dvh,620px);bottom:max(76px,calc(env(safe-area-inset-bottom,0px) + 70px))}}
 @media (max-width:520px){.pm{grid-template-columns:1fr}.ai-fab span{display:none}.ai-fab{padding:15px}}
 @media (prefers-reduced-motion:no-preference){.ai-p{animation:aiin .18s ease-out}@keyframes aiin{from{opacity:0;transform:translateY(8px)}}}
@@ -677,7 +677,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 <button class="ai-fab" id="ai-fab" type="button" aria-expanded="false" aria-controls="ai-panel"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.5-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg><span>¿Necesitas ayuda?</span></button>
 <section class="ai-p" id="ai-panel" role="dialog" aria-label="Asistente de ventas de Nexovia" hidden>
 <header><div><b>Asistente Nexovia</b><small>Respuestas automáticas</small></div><button class="x" id="ai-x" type="button" aria-label="Cerrar asistente">×</button></header>
-<div class="ai-lb" id="ai-lb" hidden><p>Resolvemos tus dudas sobre productos, envíos y pedidos.</p>
+<div class="ai-lb" id="ai-lb">
 <a class="btn ia" id="ai-ia" href="https://panel.lucidbot.co/webchat/?p=1695810" target="_blank" rel="noopener noreferrer">Habla con nuestra IA de Nexovia</a>
 <a class="btn wa" id="ai-wa2" href="#" target="_blank" rel="noopener noreferrer" hidden>Escríbenos por WhatsApp</a></div>
 <div class="ai-log" id="ai-log" role="log" aria-live="polite"></div>
@@ -1265,12 +1265,11 @@ const FAQ = [
 ];
 const say = (t, who) => { const d = document.createElement('div'); d.className = 'm ' + who; d.textContent = t; aiLog.appendChild(d); aiLog.scrollTop = aiLog.scrollHeight; return d; };
 const LB = /^https:\/\/panel\.lucidbot\.co\//.test(CONFIG.LUCIDBOT_URL || '') ? CONFIG.LUCIDBOT_URL : '';
-if (LB) { aiPanel.classList.add('lb'); $('ai-lb').hidden = false; $('ai-ia').href = LB; aiPanel.querySelector('header small').textContent = 'Estamos para ayudarte'; aiPanel.querySelector('header b').textContent = '¿Necesitas ayuda?';
-  const num = String(CONFIG.WHATSAPP_TIENDA || '').replace(/\D/g, ''); if (num) { const w = $('ai-wa2'); w.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Hola Nexovia Store 👋 Necesito ayuda.'); w.hidden = false; } }
+if (LB) $('ai-ia').href = LB; else $('ai-ia').hidden = true;
+{ const num = String(CONFIG.WHATSAPP_TIENDA || '').replace(/\D/g, ''); if (num) { const w = $('ai-wa2'); w.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Hola Nexovia Store 👋 Necesito ayuda.'); w.hidden = false; } if (!LB && !num) $('ai-lb').hidden = true; }
 const abrirAI = (v) => {
   aiPanel.hidden = !v; aiFab.setAttribute('aria-expanded', v);
   if (!v) { aiFab.focus(); return; }
-  if (LB) { $('ai-ia').focus(); return; }
   if (!aiLog.children.length) say('¡Hola! Soy el asistente de Nexovia Store. ¿En qué te ayudo?', 'bot'); aiIn.focus();
 };
 aiFab.onclick = () => abrirAI(aiPanel.hidden); $('ai-x').onclick = () => abrirAI(false);
