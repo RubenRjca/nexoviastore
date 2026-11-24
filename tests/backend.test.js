@@ -32,6 +32,7 @@ global.fetch = async (url, opt = {}) => {
     const res = JSON.parse(opt.body).map(([c, ...a]) => {
       if (c === 'SET') { if (a.includes('NX') && kv.has(a[0])) return { result: null }; kv.set(a[0], a[1]); return { result: 'OK' }; }
       if (c === 'GET') return { result: kv.get(a[0]) || null };
+      if (c === 'DEL') { kv.delete(a[0]); return { result: 1 }; }
       if (c === 'MGET') return { result: a.map((k) => kv.get(k) || null) };
       if (c === 'LPUSH') { L(a[0]).unshift(a[1]); return { result: L(a[0]).length }; }
       if (c === 'LTRIM') return { result: 'OK' };
@@ -52,7 +53,7 @@ const ruta = (re, r) => rutas.unshift({ re, r });
 const reset = () => { rutas = []; llamadas = []; cache.reiniciar(); cliente.reiniciarPausa(); logs.length = 0; kv.clear(); listas.clear(); zsets.clear(); kvFalla = false; };
 const n = (re) => llamadas.filter((c) => re.test(c.clave)).length;
 const call = async (h, { method = 'GET', query = {}, body, headers = {} } = {}) => {
-  const o = { h: {} }; const res = { setHeader(k, v) { o.h[k.toLowerCase()] = v; }, status(s) { o.s = s; return this; }, json(j) { o.j = j; return this; } };
+  const o = { h: {} }; const res = { setHeader(k, v) { o.h[k.toLowerCase()] = v; }, status(s) { o.s = s; return this; }, json(j) { o.j = j; return this; }, send(b) { o.b = b; return this; } };
   await h({ method, query, body, headers: { 'x-vercel-forwarded-for': '7.7.' + Math.floor(Math.random() * 250) + '.' + Math.floor(Math.random() * 250), host: 'tienda.test', ...headers } }, res); return o;
 };
 const conAlmacen = () => { process.env.KV_REST_API_URL = 'https://kv.test'; process.env.KV_REST_API_TOKEN = 'tok'; };
@@ -399,9 +400,42 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     si(/Max-Age=0/.test((await auth({ method: 'POST', query: { accion: 'salir' } })).h['set-cookie']), 'no borró la cookie');
     delete process.env.GOOGLE_CLIENT_ID; const sin = await auth({ query: { accion: 'yo' } }); eq([sin.j.google_client_id, sin.j.requiere_cuenta], [null, false]); eq((await auth({ method: 'POST', query: { accion: 'google' }, body: { credential: jwt(claims()) } })).s, 503); });
   await t('/api/auth: POST desde otro origen → 403', async () => { reset(); eq((await auth({ method: 'POST', query: { accion: 'salir' }, headers: { origin: 'https://evil.com' } })).s, 403); });
+  out('\n== Perfil: foto, datos y pedido actual ==');
+  const cookieDe = (sub, extra = {}) => 'nx_sesion=' + ses.firmar({ sub, email: sub + '@g.com', nombre: 'Ana Pérez', foto: 'https://lh3.test/foto.jpg', ...extra });
+  const jpg = (n = 600) => Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(n, 7)]);
+  const dataJpg = (b) => 'data:image/jpeg;base64,' + b.toString('base64');
+  await t('foto de perfil: subir JPEG, servirla solo a su dueño con caché privado, «yo» devuelve su URL; quitarla vuelve a la de Google', async () => {
+    reset(); conAlmacen(); process.env.GOOGLE_CLIENT_ID = CID; const ck = cookieDe('g-1');
+    eq((await auth({ method: 'POST', query: { accion: 'foto' }, body: { imagen: dataJpg(jpg()) } })).s, 401);
+    const ok = await auth({ method: 'POST', query: { accion: 'foto' }, body: { imagen: dataJpg(jpg()) }, headers: { cookie: ck } }); eq([ok.s, ok.j.foto_propia, /^\/api\/auth\?accion=foto&v=\d+$/.test(ok.j.foto)], [200, true, true]);
+    const g = await auth({ query: { accion: 'foto' }, headers: { cookie: ck } }); eq([g.s, g.h['content-type'], /private/.test(g.h['cache-control']), g.b.length], [200, 'image/jpeg', true, 604]);
+    eq((await auth({ query: { accion: 'foto' }, headers: { cookie: cookieDe('g-2') } })).s, 404); eq((await auth({ query: { accion: 'foto' } })).s, 401);
+    const y = await auth({ query: { accion: 'yo' }, headers: { cookie: ck } }); eq([y.j.usuario.foto_propia, y.j.usuario.foto === ok.j.foto], [true, true]);
+    const q = await auth({ method: 'POST', query: { accion: 'foto-quitar' }, headers: { cookie: ck } }); eq([q.s, q.j.foto_propia], [200, false]);
+    const y2 = await auth({ query: { accion: 'yo' }, headers: { cookie: ck } }); eq([y2.j.usuario.foto_propia, y2.j.usuario.foto], [false, 'https://lh3.test/foto.jpg']); eq((await auth({ query: { accion: 'foto' }, headers: { cookie: ck } })).s, 404);
+    delete process.env.GOOGLE_CLIENT_ID; });
+  await t('foto de perfil: rechaza PNG/SVG, no-imagen, falsos JPEG y archivos > 120 KB; sin almacén → 503', async () => {
+    reset(); conAlmacen(); const ck = cookieDe('g-1'), mal = async (imagen) => (await auth({ method: 'POST', query: { accion: 'foto' }, body: { imagen }, headers: { cookie: ck } })).s;
+    eq([await mal('data:image/png;base64,' + jpg().toString('base64')), await mal('data:image/svg+xml;base64,PHN2Zz48L3N2Zz4='), await mal('hola'), await mal(dataJpg(Buffer.alloc(900, 1))), await mal(dataJpg(jpg(130 * 1024))), await mal('data:image/jpeg;base64,<script>')], [400, 400, 400, 400, 400, 400]);
+    sinAlmacen(); eq((await auth({ method: 'POST', query: { accion: 'foto' }, body: { imagen: dataJpg(jpg()) }, headers: { cookie: ck } })).s, 503); });
+  await t('datos de entrega: se guardan en el perfil (conservando estado/ciudad/referencia de la última compra) y «yo» los devuelve', async () => {
+    reset(); conAlmacen(); process.env.GOOGLE_CLIENT_ID = CID; const ck = cookieDe('g-1');
+    await usr.guardarPerfil('g-1', { nombre: 'A', apellido: 'B', telefono: '04141112233', direccion: 'Vieja 123', referencia: 'Frente a la plaza', estado_id: 4, ciudad_id: 99 });
+    const r = await auth({ method: 'POST', query: { accion: 'perfil' }, body: { nombre: 'Ana', apellido: 'Pérez', telefono: '0412-1234567', direccion: 'Av. Principal, casa <b>2</b>, Caracas' }, headers: { cookie: ck } });
+    eq([r.s, r.j.perfil.nombre, r.j.perfil.referencia, r.j.perfil.estado_id, r.j.perfil.ciudad_id], [200, 'Ana', 'Frente a la plaza', 4, 99]); si(!/[<>]/.test(r.j.perfil.direccion), 'debe limpiar < >');
+    eq((await auth({ query: { accion: 'yo' }, headers: { cookie: ck } })).j.perfil.direccion.includes('Av. Principal'), true);
+    const mal = async (b) => (await auth({ method: 'POST', query: { accion: 'perfil' }, body: b, headers: { cookie: ck } })).s;
+    eq([await mal({ nombre: 'A', apellido: 'B' }), await mal({ nombre: 'Ana', apellido: 'Pérez', telefono: 'abc' }), await mal({ nombre: 'Ana', apellido: 'Pérez', direccion: 'corta' })], [400, 400, 400]);
+    eq((await auth({ method: 'POST', query: { accion: 'perfil' }, body: { nombre: 'Ana', apellido: 'Pérez' } })).s, 401); delete process.env.GOOGLE_CLIENT_ID; });
   out('\n== Mis pedidos y rastreo de respaldo ==');
   const REFX = 'NX' + 'A'.repeat(12), REFY = 'NX' + 'B'.repeat(12);
   const regs = (ref, sub, tel4 = '5888') => ({ ref, sub, creado: new Date().toISOString(), sku: 'lampara-atrapazancudos', titulo: 'Lámpara', variante_id: 1951, variante_nombre: 'Modelo 2 · Recargable con pila', cantidad: 1, subtotal_usd: 23, envio_usd: 6.9, total_usd: 29.9, modo: 'contra_entrega', estado: 'creado', orden_id: null, tel4 });
+  await t('mis-pedidos: ?activo=1 trae solo los 3 últimos y cada paso del historial lleva su etapa (para el termómetro)', async () => {
+    reset(); conAlmacen(); for (let i = 0; i < 5; i++) await usr.guardarPedido({ ...regs('NX' + String(i).repeat(12), 'g-1'), creado: new Date(Date.now() - (5 - i) * 1000).toISOString() });
+    const ck = cookieDe('g-1'); eq([(await call(hMp, { headers: { cookie: ck } })).j.pedidos.length, (await call(hMp, { query: { activo: '1' }, headers: { cookie: ck } })).j.pedidos.length], [5, 3]);
+    reset(); conAlmacen(); await usr.guardarPedido(regs(REFX, 'g-1'));
+    ruta(/ordenes\/ext:/, { s: 200, j: { data: { id: 88, estado_aprobacion: 'no_aplica', cliente: { telefono: '04125885888' } } } }); ruta(/ordenes\/88\/tracking/, { s: 200, j: { data: { numero_guia: 'DP88', status_actual: 'En camino', historial: [{ status: 'Recibido', created_at: '2026-11-24T10:00:00Z' }, { status: 'En camino', created_at: '2026-11-24T12:00:00Z' }] } } });
+    const r = await call(hMp, { headers: { cookie: ck } }); const h = r.j.pedidos[0].historial; si(h.length === 2 && h.every((x) => typeof x.etapa === 'string' && x.fecha), 'el historial debe traer etapa y fecha'); });
   await t('mis-pedidos: sin sesión 401; con sesión solo ve los SUYOS; DroPanas sin la orden → "pendiente de confirmación" con su código NX', async () => {
     reset(); conAlmacen(); eq((await call(hMp, {})).s, 401);
     await usr.guardarPedido(regs(REFX, 'g-1')); await usr.guardarPedido(regs(REFY, 'g-2'));
