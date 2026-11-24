@@ -252,6 +252,30 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     const fs = require('fs'), idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
     const m = idx.match(/<a[^>]*id="ai-ia"[^>]*>([^<]*)<\/a>/); si(m && /href="https:\/\/panel\.lucidbot\.co\/webchat\/\?p=1695810"/.test(m[0]) && /target="_blank"/.test(m[0]) && /rel="noopener noreferrer"/.test(m[0]) && m[1] === 'Habla con nuestra IA de Nexovia', 'falta el botón de la IA con su enlace');
     si(!/<iframe[^>]*lucidbot|id="ai-fr"/.test(idx), 'no debe quedar el iframe de LucidBot'); si(!/data-cur="VES"/.test(idx) && !/class="cur"/.test(idx), 'no debe quedar el selector USD/Bs'); });
+  const hChat = require(path.join(root, 'api/chat.js')), GEM = /generateContent$/, M = (c) => ({ mensajes: [{ role: 'user', content: c }] });
+  const gOk = (txt) => ({ s: 200, j: { candidates: [{ content: { parts: [{ text: txt }] } }] } });
+  await t('chat: con GEMINI_API_KEY responde con IA (temp. 0,3, llave en cabecera, sistema con precio y reglas) y no expone la llave', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'gk-secreta'; ruta(GEM, gOk('Cuesta US$ 29,00 con envío incluido.'));
+    const r = await call(hChat, { method: 'POST', body: M('¿cuánto cuesta?') }); delete process.env.GEMINI_API_KEY;
+    eq([r.s, r.j.fuente, r.j.respuesta], [200, 'ia', 'Cuesta US$ 29,00 con envío incluido.']); si(!JSON.stringify(r.j).includes('gk-secreta'), 'no debe devolver la llave');
+    const c = llamadas.find((x) => GEM.test(x.clave)), b = JSON.parse(c.opt.body), sis = b.systemInstruction.parts[0].text;
+    eq([c.opt.headers['x-goog-api-key'], b.generationConfig.temperature, c.clave.includes('gemini-2.5-flash')], ['gk-secreta', 0.3, true]);
+    si(/US\$ 29,00/.test(sis) && /584245474761|424-5474761/.test(sis) && /NUNCA inventes/.test(sis) && /23,5 cm/.test(sis) && !/dropanas/i.test(sis), 'el sistema no trae los datos oficiales o nombra al proveedor'); });
+  await t('chat: sin GEMINI_API_KEY → respuestas locales de respaldo (200, sin llamar a Gemini)', async () => {
+    reset(); delete process.env.GEMINI_API_KEY;
+    const r = await call(hChat, { method: 'POST', body: M('¿Cuál es la autonomía de la batería?') }); eq([r.s, r.j.fuente], [200, 'respaldo']); si(/WhatsApp/.test(r.j.respuesta) && /confirmado/.test(r.j.respuesta), 'no debe inventar la autonomía'); eq(n(GEM), 0);
+    eq((await call(hChat, { method: 'POST', body: M('precio?') })).j.respuesta.includes('US$ 29,00'), true); });
+  await t('chat: error de cuota / red / respuesta vacía de Gemini → respaldo sin romper el chat', async () => {
+    for (const x of [{ s: 429, j: { error: { status: 'RESOURCE_EXHAUSTED' } } }, new Error('red'), { s: 200, j: { candidates: [], promptFeedback: { blockReason: 'SAFETY' } } }]) {
+      reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, x); const r = await call(hChat, { method: 'POST', body: M('¿cómo compro?') }); delete process.env.GEMINI_API_KEY;
+      eq([r.s, r.j.fuente], [200, 'respaldo']); si(/Comprar ahora/.test(r.j.respuesta), 'respaldo incorrecto'); si(!JSON.stringify(logs).includes('cómo compro'), 'no debe registrar el mensaje del cliente'); } });
+  await t('chat: límites (mensaje 500, historial 6), origen y método', async () => {
+    reset(); process.env.GEMINI_API_KEY = 'k'; ruta(GEM, gOk('ok'));
+    const hist = []; for (let i = 0; i < 12; i++) hist.push({ role: i % 2 ? 'assistant' : 'user', content: 'x'.repeat(900) }); hist.push({ role: 'user', content: 'y'.repeat(900) });
+    await call(hChat, { method: 'POST', body: { mensajes: hist } }); const b = JSON.parse(llamadas.find((x) => GEM.test(x.clave)).opt.body); delete process.env.GEMINI_API_KEY;
+    si(b.contents.length <= 6 && b.contents.every((c) => c.parts[0].text.length <= 500) && b.contents[0].role === 'user' && b.contents[b.contents.length - 1].role === 'user', 'límites no aplicados');
+    eq((await call(hChat, { method: 'POST', body: { mensajes: [] } })).s, 400); eq((await call(hChat, { method: 'GET' })).s, 405);
+    eq((await call(hChat, { method: 'POST', body: M('hola'), headers: { origin: 'https://otro.com' } })).s, 403); });
   await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
   await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, { s: 200, j: { data: { id: 101, tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
   await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });

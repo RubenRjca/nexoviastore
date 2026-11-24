@@ -16,7 +16,7 @@ lib/dropanas.js       Cliente de la API (cotizar envío, stock, tasa) con caché
 api/crear-orden.js    Crea el pedido: valida, protege la llave, idempotencia, cobertura y stock
 api/productos.js      Catálogo público + tasa Bs
 api/geo.js            Estados y ciudades con cobertura (IDs de DroPanas)
-api/asistente.js      Asistente de ventas con IA (opcional)
+api/chat.js           Chat de ayuda con Gemini (opcional; con respaldo local)
 ```
 
 ## Despliegue
@@ -48,7 +48,7 @@ hasta que verifiques el pago (el método y la referencia van en la nota del pedi
 Al aprobarlo, DroPanas debita tu wallet: mantén saldo disponible.
 
 ## Asistente de ventas
-Botón flotante con respuestas rápidas gratuitas. Con `ANTHROPIC_API_KEY`, el texto libre lo responde un asistente de IA (`api/asistente.js`) que solo conoce los datos de la tienda;
+Botón flotante con respuestas rápidas gratuitas. Con `GEMINI_API_KEY`, el texto libre lo responde un asistente de IA (`api/chat.js`) que solo conoce los datos de la tienda;
 cada mensaje se factura a tu cuenta de Anthropic. Para usar otro bot (p. ej. LucidBot), cambia `CONFIG.API_ASISTENTE`.
 
 ## Actualizaciones recientes
