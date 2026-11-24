@@ -2,7 +2,7 @@
 // Service worker de Nexovia Store. Objetivo: que la app abra rápido y muestre una página amable sin conexión.
 // REGLAS: NUNCA toca /api/* (pedidos, stock, rastreo, reseñas siempre van directo a la red), ni peticiones que no sean GET,
 // ni otros dominios, ni /data/ /lib/ /scripts/ /docs/. Para cambiar lo que se guarda, sube VERSION.
-const VERSION = 'nx-v1';
+const VERSION = 'nx-v2';
 const SHELL = `${VERSION}-shell`, ASSETS = `${VERSION}-assets`;
 const PRECACHE = ['/offline.html', '/assets/isotipo.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'];
 const NUNCA = /^\/(api|data|lib|scripts|docs|tests|propuestas|_vercel)\//;
@@ -19,7 +19,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET' || url.origin !== self.location.origin || NUNCA.test(url.pathname)) return; // el navegador lo resuelve solo
 
   if (req.mode === 'navigate') { // páginas: red primero; si no hay conexión, la última versión guardada o la página sin conexión
-    e.respondWith(fetch(req).then((r) => { const copia = r.clone(); caches.open(SHELL).then((c) => c.put('/', copia)); return r; })
+    e.respondWith(fetch(req).then((r) => { if (url.pathname === '/' && r.ok) { const copia = r.clone(); caches.open(SHELL).then((c) => c.put('/', copia)); } return r; }) // solo la portada se guarda como respaldo sin conexión (las páginas legales no)
       .catch(() => caches.match('/').then((c) => c || caches.match('/offline.html'))));
     return;
   }

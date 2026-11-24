@@ -456,6 +456,23 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 .acts-p{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.acts-p .btn{padding:11px 16px;font-size:14px;margin:0;flex:1 1 auto;text-align:center;justify-content:center}
 .ayuda{display:inline-block;margin-top:10px;font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:6px 0}
 @media (max-width:520px){.acts-p .btn{flex:1 1 100%}}
+
+/* ===== Tarjetas limpias, galería de modelos, legales ===== */
+.card h3{min-height:2.7em;margin:12px 4px 6px}
+.card .prices{margin:2px 4px 6px}
+.vchip{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;margin:0 4px 12px;padding:4px 10px;border-radius:99px;background:rgba(44,93,118,.10);color:var(--head);font-size:12px;font-weight:600}
+.vchip::before{content:"✓";font-weight:800;color:#2E9E57}
+.card .acts{display:grid;gap:6px;margin-top:auto}.card .acts .btn{width:100%}
+.btn-link{font:inherit;font-size:14px;font-weight:600;color:var(--head);background:none;border:0;padding:10px;min-height:44px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.vthumbs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.vt{font:inherit;display:flex;flex-direction:column;gap:6px;align-items:center;padding:6px;border-radius:12px;border:2px solid var(--line);background:var(--field);color:var(--ink);cursor:pointer;font-size:12px;font-weight:600;line-height:1.25;text-align:center}
+.vt img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px}.vt[aria-pressed="true"]{border-color:var(--coral)}
+.vprev{display:flex;gap:12px;align-items:center;margin-top:8px}.vprev img{border-radius:8px;object-fit:cover;flex:none}.vprev img[hidden]{display:none}
+.carac{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.carac li{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0;display:flex;flex-direction:column;gap:4px;font-size:14px}.carac b{color:var(--head)}.carac span{color:var(--muted);font-size:13px}
+@media (max-width:520px){.carac{grid-template-columns:1fr}}
+.ft-leg{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
+.lg-ley{margin:8px 0 0;text-align:center;font-size:11px;color:var(--muted)}.lg-ley a{color:inherit;text-decoration:underline}
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -544,7 +561,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 <li><a href="#como-funciona">Cómo comprar</a></li><li><a href="#rastreo" data-rastreo>Rastrear mi pedido</a></li><li><a href="#contacto">Preguntas frecuentes</a></li><li><a href="#contacto">Contáctanos</a></li></ul></div>
 <div><h3>Envíos y devoluciones</h3>
 <p>Despachamos a domicilio en las ciudades con cobertura. Al elegir tu estado y ciudad en el pedido verás si llegamos a tu zona.</p>
-<ul class="l"><li><a href="#como-funciona">Cómo funciona el Pago Contra Entrega</a></li></ul></div>
+<ul class="l"><li><a href="#como-funciona">Cómo funciona el Pago Contra Entrega</a></li><li><a href="legal/garantia.html">Garantía, cambios y devoluciones</a></li></ul></div>
 <div><h3>Síguenos</h3><p>Novedades y ofertas en nuestras redes.</p>
 <div class="soc">
 <!-- TODO: reemplaza cada # por el enlace real de tu perfil -->
@@ -554,6 +571,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 <a hidden href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-4.2A8.3 8.3 0 1 1 8.3 19z"/><path d="M9 8.8c0 3 2.2 5.4 5.6 6.2l1-1.4-2-1-.8.7c-1-.4-1.9-1.3-2.3-2.3l.7-.8-1-2z"/></svg></a>
 </div></div></div>
 <div class="ft-b"><div><span>© 2026 Nexovia Store. Todos los derechos reservados.</span>
+<nav class="ft-leg" aria-label="Información legal"><a href="legal/terminos.html">Términos y Condiciones</a><a href="legal/privacidad.html">Política de Privacidad</a><a href="legal/garantia.html">Garantía y devoluciones</a></nav>
 </div></div>
 </footer>
 
@@ -582,6 +600,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 <div id="g-btn" class="g-btn"><span class="g-sk" aria-hidden="true"></span></div>
 <p class="msg" id="lg-msg" role="status" aria-live="polite"></p>
 <p class="lg-ft"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sin contraseñas. Solo usamos tu nombre y correo.</p>
+<p class="lg-ley">Al continuar aceptas los <a href="legal/terminos.html" target="_blank" rel="noopener">Términos</a> y la <a href="legal/privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a>.</p>
 </div></dialog>
 
 <dialog class="co" id="mp" aria-labelledby="mp-t">
@@ -697,6 +716,7 @@ setCur(saved); curBtns.forEach((b) => b.addEventListener('click', () => setCur(b
 const grid = $('grid');
 let categorias = [], filtro = 'todos', cmp = [], consulta = '';
 const ANT_ON = Object.values(CONFIG.PAGOS).some((m) => m.datos.some(([, v]) => v)); // pago anticipado solo se ofrece si hay datos de cobro configurados
+const CHIP_TXT = 'Pago contra entrega'; // etiqueta breve de valor en las tarjetas
 const PAGO_TXT = ANT_ON ? 'Pago Contra Entrega o pago anticipado' : 'Pago Contra Entrega';
 const prod = (sku) => productos.find((p) => p.sku === sku);
 const precios = (p) => '<div class="prices"><span class="p-usd">' + usd(p.usd) + (p.usd_antes ? '<s>' + usd(p.usd_antes) + '</s>' : '') + '</span><span class="p-ves">' + bs(p.usd) + (p.usd_antes ? '<s>' + bs(p.usd_antes) + '</s>' : '') + '</span></div>';
@@ -714,10 +734,8 @@ function pintarGrid() {
   const q = consulta.trim().toLowerCase(), l = productos.filter((p) => (filtro === 'todos' || p.categoria === filtro) && (!q || (p.titulo + ' ' + p.descripcion).toLowerCase().includes(q)));
   grid.innerHTML = l.length ? l.map((p) =>
     '<article class="card"><div class="img">' + (etiqueta(p) ? '<span class="tag">' + esc(etiqueta(p)) + '</span>' : '') + media(p) + '</div>' +
-    '<h3>' + esc(p.titulo) + '</h3><p class="desc">' + esc(p.descripcion) + '</p>' +
-    '<p class="why"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben">' + lis(p.beneficios.slice(0, 3)) + '</ul>' +
-    precios(p) + '<p class="cod-mini">' + PAGO_TXT + '</p>' +
-    '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></article>').join('')
+    '<h3>' + esc(p.titulo) + '</h3>' + precios(p) + '<p class="vchip">' + esc(CHIP_TXT) + '</p>' +
+    '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn-link" type="button" data-ficha="' + esc(p.sku) + '">Ver ficha</button></div></article>').join('')
     : '<p>No encontramos productos con esa búsqueda o categoría.</p>';
 }
 function pintarSemana() {
@@ -736,7 +754,7 @@ function varInfo(p, v) {
   const m = (p && p.variantes) || {}, n = norm(v.nombre);
   const porAlias = n && Object.values(m).find((e) => (e.alias || []).some((a) => norm(a) === n));
   const e = porAlias || m[String(v.id)];
-  return { nombre: (e && e.nombre) || v.nombre || 'Opción ' + v.id, detalle: (e && e.detalle) || '' };
+  return { nombre: (e && e.nombre) || v.nombre || 'Opción ' + v.id, detalle: (e && e.detalle) || '', imagen: (e && e.imagen && /^assets\//.test(e.imagen)) ? e.imagen : '' };
 }
 function pintarCmp() {
   /* Solo se comparan productos de la MISMA categoría. Sin ninguna categoría con 2+ productos, la sección se oculta. */
@@ -763,13 +781,19 @@ function pintarCmp() {
     (l.some((p) => p.beneficio_practico) ? '<tr><th scope="row">En tu día a día</th>' + l.map((p) => '<td>' + esc(p.beneficio_practico || '—') + '</td>').join('') + '</tr>' : '') +
     '<tr><th scope="row">¿Por qué comprarlo?</th>' + l.map((p) => '<td>' + esc(p.por_que) + '</td>').join('') + '</tr></tbody>';
 }
+const modelos = (p) => Object.values(p.variantes || {}).filter((e) => e.imagen && /^assets\//.test(e.imagen));
+const galeria = (p) => { // miniaturas de cada modelo: al tocar una, la foto grande cambia
+  const m = modelos(p); if (m.length < 2) return '';
+  return '<div class="vthumbs" role="group" aria-label="Ver cada modelo">' + m.map((e, i) => '<button type="button" class="vt" data-vimg="' + esc(e.imagen) + '" aria-pressed="' + (i === 0) + '"><img src="' + esc(e.imagen) + '" alt="" loading="lazy"><span>' + esc(e.nombre) + '</span></button>').join('') + '</div>';
+};
+const fotoFicha = (p) => { const m = modelos(p); return '<div class="img fi-img">' + ((m.length > 1 || !p.imagen) ? media({ ...p, imagen: (m[0] || {}).imagen || p.imagen }) : media(p)) + '</div>' + galeria(p); };
 function fichaP(sku, completa) {
   const p = prod(sku); if (!p) return;
   const dlg = $('fi'); dlg.classList.toggle('full', !!completa);
   const pagos = '<ul class="pay"><li><b>Pago Contra Entrega:</b> pagas cuando recibes tu pedido.</li>' + (ANT_ON ? '<li><b>Pago Directo Anticipado:</b> pagas ahora (' + esc(metodos().map(([, m]) => m.nombre).join(', ')) + ') y despachamos al verificar tu pago.</li>' : '') + '</ul>';
   const buy = '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div>';
   if (!completa) {
-    $('fi-b').innerHTML = '<div class="fi-g"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
+    $('fi-b').innerHTML = '<div class="fi-g"><div>' + fotoFicha(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
       '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p>' + precios(p) + '<ul class="ben" style="margin-left:0">' + lis(p.beneficios.slice(0, 4)) + '</ul>' +
       '<p class="cod-mini" style="margin-left:0">' + PAGO_TXT + '</p>' + buy +
       '<div class="fi-cmp"><button class="btn alt" type="button" data-fullficha="' + esc(p.sku) + '">¿Por qué debes comprarlo? Ver detalles completos</button></div></div></div>';
@@ -777,11 +801,12 @@ function fichaP(sku, completa) {
     const parr = (p.descripcion_larga || [p.por_que]).map((t) => '<p>' + esc(t) + '</p>').join('');
     const como = (p.como_funciona || []).length ? '<h4>Cómo funciona</h4><ol class="como">' + p.como_funciona.map((s) => '<li><b>' + esc(s.t) + '</b><span>' + esc(s.d) + '</span></li>').join('') + '</ol>' : '';
     const vars = p.variantes && Object.keys(p.variantes).length ? '<h4>Modelos disponibles</h4><ul class="pay">' + Object.values(p.variantes).map((e) => '<li><b>' + esc(e.nombre) + ':</b> ' + esc(e.detalle) + '</li>').join('') + '</ul>' : '';
+    const carac = (p.caracteristicas || []).length ? '<h4>Características del producto</h4><ul class="carac">' + p.caracteristicas.map((c) => '<li><b>' + esc(c.t) + '</b><span>' + esc(c.d) + '</span></li>').join('') + '</ul>' : '';
     $('fi-b').innerHTML = '<button class="btn alt sm" type="button" data-backficha="' + esc(p.sku) + '">← Volver al resumen</button>' +
-      '<div class="fi-g" style="margin-top:12px"><div class="img">' + media(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') + precios(p) +
+      '<div class="fi-g" style="margin-top:12px"><div>' + fotoFicha(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') + precios(p) +
       '<h4>Opciones de pago</h4>' + pagos + '<div class="cta-box"><b>Aquí puedes comprar ahora</b>' + buy + '</div></div></div>' +
       '<h4>¿Por qué debes comprarlo?</h4><div class="largo">' + parr + '</div>' + como +
-      '<h4>Beneficios</h4><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + vars +
+      '<h4>Beneficios</h4><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + carac + vars +
       ((p.desventajas || []).length ? '<h4>A tener en cuenta</h4><ul class="neg">' + lis(p.desventajas) + '</ul>' : '') +
       '<h4>Ficha técnica</h4><table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' +
       (p.aviso ? '<p class="aviso">' + esc(p.aviso) + '</p>' : '') +
@@ -790,6 +815,11 @@ function fichaP(sku, completa) {
   }
   aplicarStock(); if (!dlg.open) dlg.showModal(); dlg.scrollTop = 0; if (completa) cargarResenas(p.sku);
 }
+document.addEventListener('click', (e) => {
+  const b = e.target.closest && e.target.closest('[data-vimg]'); if (!b) return;
+  const box = b.closest('.fi-g') || document, im = box.querySelector('.fi-img img'); if (im) { im.src = b.dataset.vimg; im.alt = (b.textContent || '').trim(); }
+  b.parentNode.querySelectorAll('[data-vimg]').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+});
 /* ---------- Stock real (GET /api/stock). Si no se pudo verificar, NO se afirma nada ---------- */
 const stk = (sku) => stock[sku] || null;
 const sinVenta = (s) => !!s && (s.estado === 'agotado' || s.estado === 'no_configurado');
@@ -832,8 +862,9 @@ function prepararVariantes() {
   const sel = document.createElement('select'); sel.id = 'variante'; sel.name = 'variante'; sel.required = true; sel.add(new Option('Selecciona…', ''));
   (s.variantes || []).forEach((v) => { const o = new Option(varInfo(cur.p, v).nombre + (v.estado === 'agotado' ? ' (agotado)' : ''), v.id); o.disabled = v.estado === 'agotado'; sel.add(o); });
   const det = document.createElement('small'); det.className = 'vdet'; det.id = 'vdet'; det.setAttribute('aria-live', 'polite');
-  sel.addEventListener('change', () => { cur.qty = Math.min(cur.qty, maxQty()); const v = (s.variantes || []).find((x) => x.id === Number(sel.value)); det.textContent = v ? varInfo(cur.p, v).detalle : ''; total(); });
-  d.append(lab, sel, det); form.insertBefore(d, form.firstChild);
+  const prev = document.createElement('div'); prev.className = 'vprev'; prev.hidden = true; const pim = document.createElement('img'); pim.alt = ''; pim.width = 72; pim.height = 90; prev.append(pim, det);
+  sel.addEventListener('change', () => { cur.qty = Math.min(cur.qty, maxQty()); const v = (s.variantes || []).find((x) => x.id === Number(sel.value)), vi = v ? varInfo(cur.p, v) : null; det.textContent = vi ? vi.detalle : ''; if (vi && vi.imagen) pim.src = vi.imagen; pim.hidden = !(vi && vi.imagen); prev.hidden = !(vi && (vi.detalle || vi.imagen)); total(); });
+  d.append(lab, sel, prev); form.insertBefore(d, form.firstChild);
   if (!(s.variantes || []).length) { sel.disabled = true; sel.required = false; go.disabled = true; msg.className = 'msg err'; msg.textContent = 'No pudimos cargar las opciones de este producto. Inténtalo de nuevo en un momento.'; }
 }
 function notaTasa() {
