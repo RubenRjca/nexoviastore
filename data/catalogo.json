@@ -215,7 +215,8 @@
       "beneficios": [
         "Luz violeta biomimética que atrae a los mosquitos",
         "Ventilador de succión que los dirige al depósito",
-        "Diseño silencioso, ideal para dormir",
+        "Diseño silencioso, ideal para dormir toda la noche",
+        "Función de luz nocturna",
         "Depósito inferior desmontable para vaciar fácil",
         "Control 100 % físico, sin humo ni aerosoles",
         "Carga USB: modelo enchufable o recargable con pila"
@@ -223,13 +224,13 @@
       "specs": {
         "Tipo": "Lámpara atrapamosquitos",
         "Luz": "Violeta (tipo UV)",
-        "Mecanismo": "Ventilador de succión + depósito inferior",
+        "Mecanismo": "Ventilador motorizado de alta succión + depósito inferior",
         "Control": "100 % físico (botón de encendido)",
         "Modelos": "Enchufable (USB) o con pila recargable",
         "Medidas de la caja": "23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo",
         "Colocación": "Superficie plana y seca, con las aberturas libres",
         "Energía": "USB (enchufable) o pila recargable (puerto USB-C visible en la tapa)",
-        "Depósito": "Inferior, desmontable, para vaciar los insectos"
+        "Depósito": "Inferior, transparente y desmontable, para vaciar los insectos"
       },
       "precio_venta_usd": 29.0,
       "precio_oferta_usd": null,
@@ -258,7 +259,7 @@
       "descripcion_larga": [
         "Los mosquitos no solo molestan: sus picaduras interrumpen el sueño y, en Venezuela y otras zonas tropicales, algunas especies transmiten enfermedades como el dengue, el zika o el chikungunya. Reducir la cantidad de mosquitos dentro del hogar es una de las medidas que ayudan a proteger a tu familia y a dormir mejor.",
         "Esta lámpara atrapazancudos combina dos mecanismos: una luz violeta (cercana a la ultravioleta), que atrae a muchos insectos voladores, y un ventilador de succión que los arrastra hacia la abertura y los deja en un depósito inferior translúcido. No usa humo, vapores ni aerosoles.",
-        "Su formato cilíndrico (12,5 cm de diámetro y 23,5 cm de alto) cabe en una mesa auxiliar, una repisa o una mesa de noche, y la luz violeta suave funciona además como luz nocturna ambiental."
+        "Su formato compacto (la caja mide 23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo) se adapta a una mesa auxiliar, una repisa o una mesa de noche, y además incluye función de luz nocturna."
       ],
       "como_funciona": [
         {
@@ -278,27 +279,31 @@
       "caracteristicas": [
         {
           "t": "Control 100 % físico",
-          "d": "Control físico de mosquitos, sin humo, aerosoles ni químicos."
+          "d": "Control físico de mosquitos, sin químicos, humo ni aerosoles."
         },
         {
           "t": "Luz violeta biomimética",
           "d": "Su luz violeta imita señales que atraen a los mosquitos hacia la lámpara."
         },
         {
-          "t": "Ventilador de succión",
-          "d": "Un ventilador de succión de alto desempeño los dirige hacia el depósito."
+          "t": "Ventilador motorizado de alta succión",
+          "d": "Su ventilador motorizado de alta succión los dirige hacia el depósito."
         },
         {
           "t": "Diseño silencioso",
-          "d": "Funciona en silencio, pensada para dormir tranquilo toda la noche."
+          "d": "Funciona en silencio, pensada para dormir toda la noche."
+        },
+        {
+          "t": "Función de luz nocturna",
+          "d": "Además de atraer mosquitos, sirve como luz nocturna suave."
         },
         {
           "t": "Carga USB",
-          "d": "Se alimenta por USB. El modelo recargable tiene puerto USB-C visible en la tapa."
+          "d": "Se alimenta por USB. El modelo recargable tiene puerto USB-C en la tapa superior."
         },
         {
           "t": "Depósito inferior desmontable",
-          "d": "Lo retiras para vaciar los insectos de forma fácil."
+          "d": "Es transparente y lo retiras para vaciar los insectos de forma fácil."
         }
       ]
     }

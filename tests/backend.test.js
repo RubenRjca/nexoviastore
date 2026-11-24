@@ -241,13 +241,17 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('ficha de la lámpara: medidas de la caja, características confirmadas e imágenes de ambos modelos (sin inventar peso ni autonomía)', async () => {
     const fs = require('fs'), cat = JSON.parse(fs.readFileSync(path.join(root, 'data/catalogo.json'), 'utf8')), l = cat.productos.find((x) => x.sku === 'lampara-atrapazancudos');
     eq(l.specs['Medidas de la caja'], '23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo');
-    si((l.caracteristicas || []).length === 6, 'faltan características'); si(!/peso|autonom|horas/i.test(Object.keys(l.specs).join(' ')), 'no debe inventar peso ni autonomía');
+    si((l.caracteristicas || []).length === 7 && l.caracteristicas.some((c) => /luz nocturna/i.test(c.t)), 'faltan características'); si(!/peso|autonom|horas/i.test(Object.keys(l.specs).join(' ')), 'no debe inventar peso ni autonomía');
     for (const id of ['1950', '1951']) si(l.variantes[id].imagen && fs.existsSync(path.join(root, l.variantes[id].imagen)), 'falta la imagen del modelo ' + id);
-    const pub = require(path.join(root, 'lib/catalogo.js')).publico(null).find((x) => x.sku === 'lampara-atrapazancudos'); si(pub.caracteristicas && pub.caracteristicas.length === 6, 'publico no expone caracteristicas'); });
+    const pub = require(path.join(root, 'lib/catalogo.js')).publico(null).find((x) => x.sku === 'lampara-atrapazancudos'); si(pub.caracteristicas && pub.caracteristicas.length === 7, 'publico no expone caracteristicas'); });
   await t('páginas legales propias: existen, se enlazan entre sí y no copian ni nombran a DroPanas', async () => {
     const fs = require('fs');
     for (const n of ['terminos', 'privacidad', 'garantia']) { const h = fs.readFileSync(path.join(root, 'legal', n + '.html'), 'utf8'); si(/Nexovia Store/.test(h) && /terminos\.html/.test(h) && /privacidad\.html/.test(h) && /garantia\.html/.test(h), n + ': falta navegación'); si(!/dropanas/i.test(h), n + ': no debe nombrar a DroPanas'); }
     const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8'); si(/legal\/terminos\.html/.test(idx) && /legal\/privacidad\.html/.test(idx) && /legal\/garantia\.html/.test(idx), 'el pie de página debe enlazar las tres páginas'); });
+  await t('chat LucidBot: URL oficial en la tienda y permitida en la CSP (frame-src); sin selector de moneda (dólar siempre principal)', async () => {
+    const fs = require('fs'), idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8'), vj = fs.readFileSync(path.join(root, 'vercel.json'), 'utf8');
+    si(idx.includes("https://panel.lucidbot.co/webchat/?p=1695810"), 'falta la URL del WebChat'); si(/frame-src[^;]*https:\/\/panel\.lucidbot\.co/.test(vj), 'la CSP no permite el iframe de LucidBot');
+    si(!/data-cur="VES"/.test(idx) && !/class="cur"/.test(idx), 'no debe quedar el selector USD/Bs'); });
   await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
   await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, { s: 200, j: { data: { id: 101, tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
   await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });
