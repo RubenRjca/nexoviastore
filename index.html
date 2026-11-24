@@ -690,7 +690,7 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 'use strict';
 /* ===== CONFIGURACIÓN (lo único que debes editar aquí) ===== */
 const CONFIG = {
-  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/asistente', API_RESENAS: '/api/resenas',
+  API_PRODUCTOS: '/api/productos', API_GEO: '/api/geo', API_ORDEN: '/api/crear-orden', API_ASISTENTE: '/api/chat', API_RESENAS: '/api/resenas',
   API_STOCK: '/api/stock', API_RASTREO: '/api/rastreo', API_AUTH: '/api/auth', API_COTIZAR: '/api/cotizar', API_MIS_PEDIDOS: '/api/mis-pedidos',
   LUCIDBOT_URL: 'https://panel.lucidbot.co/webchat/?p=1695810', // WebChat de LucidBot: LucidBot no permite mostrarse en iframe, así que se abre en pestaña nueva desde «¿Necesitas ayuda?». Vacío = asistente local con respuestas fijas.
   WHATSAPP_TIENDA: '584245474761', // WhatsApp que recibe la confirmación de cada pedido (internacional, sin + ni espacios). También se puede fijar con la variable WHATSAPP_TIENDA en Vercel, que tiene prioridad.
@@ -1283,9 +1283,9 @@ $('ai-chips').addEventListener('click', (e) => {
 });
 $('ai-f').addEventListener('submit', (e) => {
   e.preventDefault(); const t = aiIn.value.trim(); if (!t) return; aiIn.value = ''; say(t, 'me'); hist.push({ role: 'user', content: t });
-  const w = say('Escribiendo…', 'bot'); const caer = () => { w.textContent = 'Ahora mismo no puedo responder eso.' + (wa ? ' Escríbenos por WhatsApp y te atendemos.' : ' Inténtalo de nuevo en un momento.'); };
+  const w = say('Escribiendo…', 'bot'); const caer = () => { w.textContent = 'Ahora mismo no puedo responder eso. Usa el botón de WhatsApp de arriba y te atendemos, o inténtalo de nuevo en un momento.'; };
   if (local) { w.textContent = 'Vista previa: el asistente responde cuando la página está desplegada en Vercel.'; return; }
-  fetch(CONFIG.API_ASISTENTE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mensajes: hist.slice(-8) }) })
+  fetch(CONFIG.API_ASISTENTE, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mensajes: hist.slice(-6) }) })
     .then((r) => r.json().then((j) => ({ ok: r.ok, j }))).then((x) => { if (!x.ok || !x.j.respuesta) throw 0; w.textContent = x.j.respuesta; hist.push({ role: 'assistant', content: x.j.respuesta }); }).catch(caer);
 });
 
