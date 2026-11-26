@@ -85,6 +85,12 @@ function validar() {
     if (p.costo_usd != null && venta < p.costo_usd * 1.15) (pub ? err : av).push(`${n}: el precio (US$ ${venta}) deja menos de 15 % sobre el costo (US$ ${p.costo_usd}); revisa tu margen y el flete.`);
     if (p.imagen && !/^(assets\/|https:\/\/)/.test(p.imagen)) err.push(`${n}: imagen debe empezar por assets/ o https://.`);
     if (p.imagen && p.imagen.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', p.imagen))) err.push(`${n}: no existe el archivo ${p.imagen}.`);
+    if (Array.isArray(p.imagenes)) {
+      p.imagenes.forEach((im, idx) => {
+        if (!/^(assets\/|https:\/\/)/.test(im || '')) err.push(`${n} imagenes[${idx}]: debe empezar por assets/ o https://.`);
+        else if (im.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', im))) err.push(`${n} imagenes[${idx}]: no existe el archivo ${im}.`);
+      });
+    }
     if (p.variantes && typeof p.variantes === 'object') {
       Object.entries(p.variantes).forEach(([vid, v]) => {
         if (!v || !v.nombre) err.push(`${n} variante ${vid}: falta nombre.`);

@@ -962,9 +962,11 @@ function imagenesFicha(p) {
   push(p.imagen, p.titulo);
   return out;
 }
-const galeria = (p) => { // miniaturas de cada modelo: al tocar una, la foto grande cambia
-  const m = modelos(p); if (m.length < 2) return '';
-  return '<div class="vthumbs" role="group" aria-label="Ver cada modelo">' + m.map((e, i) => '<button type="button" class="vt" data-vimg="' + esc(e.imagen) + '" aria-pressed="' + (i === 0) + '"><img src="' + esc(e.imagen) + '" alt="" loading="lazy"><span>' + esc(e.nombre) + '</span></button>').join('') + '</div>';
+const galeria = (p) => { // miniaturas de cada modelo o galería de imágenes del producto: al tocar una, la foto grande cambia
+  const m = modelos(p);
+  if (m.length >= 2) return '<div class="vthumbs" role="group" aria-label="Ver cada modelo">' + m.map((e, i) => '<button type="button" class="vt" data-vimg="' + esc(e.imagen) + '" aria-pressed="' + (i === 0) + '"><img src="' + esc(e.imagen) + '" alt="" loading="lazy"><span>' + esc(e.nombre) + '</span></button>').join('') + '</div>';
+  const imgs = imagenesFicha(p); if (imgs.length < 2) return '';
+  return '<div class="vthumbs" role="group" aria-label="Galería de imágenes">' + imgs.map((x, i) => '<button type="button" class="vt" data-vimg="' + esc(x.src) + '" aria-pressed="' + (i === 0) + '"><img src="' + esc(x.src) + '" alt="" loading="lazy"><span>' + (i === 0 ? 'Vista principal' : 'Vista ' + (i + 1)) + '</span></button>').join('') + '</div>';
 };
 const fotoFicha = (p) => {
   const m = modelos(p), imgs = imagenesFicha(p);
