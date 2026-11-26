@@ -29,7 +29,8 @@ module.exports = async (req, res) => {
   const ip = String(req.headers['x-vercel-forwarded-for'] || req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'x';
   if (limitar('stock:' + ip, 60, 60 * 1000)) { res.setHeader('Retry-After', '30'); return res.status(429).json({ message: 'Demasiadas consultas. Espera un momento.' }); }
 
-  const q = req.query.skus !== undefined ? req.query.skus : req.query.sku;
+  const qry = req.query || {};
+  const q = qry.skus !== undefined ? qry.skus : qry.sku;
   const pedidos = q === undefined ? lista().slice(0, 12).map((p) => p.sku) : [...new Set(String(q).split(',').map((s) => s.trim()).filter(Boolean))];
   if (!pedidos.length || pedidos.length > 12) return res.status(400).json({ message: 'Pide entre 1 y 12 productos.' });
   if (pedidos.some((s) => !SKU_OK.test(s))) return res.status(400).json({ message: 'Producto inválido.' });
@@ -42,6 +43,6 @@ module.exports = async (req, res) => {
 
   const resto = pausaRestanteMs();
   if (resto > 0) res.setHeader('Retry-After', String(Math.ceil(resto / 1000)));
-  res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=60'); // el CDN de Vercel absorbe el tráfico repetido
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=30, stale-while-revalidate=60'); // el CDN de Vercel absorbe el tráfico repetido; el navegador siempre revalida
   return res.status(200).json({ ok: true, items, actualizado: new Date().toISOString() });
 };

@@ -42,12 +42,13 @@ module.exports = async (req, res) => {
       const [r] = await pipeline([['SET', marca, '1', 'EX', 86400, 'NX']]);
       if (r.result !== 'OK') return res.status(200).json({ ok: true, duplicado: true });
       marcada = true;
-      const ref = REF_OK.test(String(ped.numero_externo || '')) ? ped.numero_externo : null;
+      const rawRef = String(ped.numero_externo || d.external_reference || '').trim().toUpperCase();
+      const ref = REF_OK.test(rawRef) ? rawRef : null;
       if (ref && String(ev.evento || '').startsWith('order.')) {
         const rec = { evento: ev.evento, estado: ped.estado || d.status_nuevo || null, transportadora: ped.transportadora || null, guia: ped.numero_guia || null, at: ev.timestamp || new Date().toISOString(), sandbox: !!ev.sandbox };
         const [previo] = await pipeline([['GET', 'nx:wh:' + ref]]); let viejo = null; try { viejo = previo && previo.result ? JSON.parse(previo.result) : null; } catch (e) { /* registro dañado: se reemplaza */ }
         const tNuevo = Date.parse(rec.at), tViejo = viejo ? Date.parse(viejo.at) : NaN;
-        if (!(tNuevo < tViejo)) await pipeline([['SET', 'nx:wh:' + ref, JSON.stringify(rec), 'EX', 30 * 86400]]); // un evento atrasado nunca pisa uno más reciente
+        if (!viejo || !Number.isFinite(tViejo) || (Number.isFinite(tNuevo) && tNuevo >= tViejo)) await pipeline([['SET', 'nx:wh:' + ref, JSON.stringify(rec), 'EX', 30 * 86400]]); // un evento atrasado nunca pisa uno más reciente
       }
     }
   } catch (e) {

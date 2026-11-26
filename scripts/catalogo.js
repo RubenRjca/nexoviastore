@@ -85,6 +85,15 @@ function validar() {
     if (p.costo_usd != null && venta < p.costo_usd * 1.15) (pub ? err : av).push(`${n}: el precio (US$ ${venta}) deja menos de 15 % sobre el costo (US$ ${p.costo_usd}); revisa tu margen y el flete.`);
     if (p.imagen && !/^(assets\/|https:\/\/)/.test(p.imagen)) err.push(`${n}: imagen debe empezar por assets/ o https://.`);
     if (p.imagen && p.imagen.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', p.imagen))) err.push(`${n}: no existe el archivo ${p.imagen}.`);
+    if (p.variantes && typeof p.variantes === 'object') {
+      Object.entries(p.variantes).forEach(([vid, v]) => {
+        if (!v || !v.nombre) err.push(`${n} variante ${vid}: falta nombre.`);
+        if (v && v.imagen) {
+          if (!/^(assets\/|https:\/\/)/.test(v.imagen)) err.push(`${n} variante ${vid}: imagen debe empezar por assets/ o https://.`);
+          else if (v.imagen.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', v.imagen))) err.push(`${n} variante ${vid}: no existe el archivo ${v.imagen}.`);
+        }
+      });
+    }
     if (!pub) return;
     if (p.tipo_producto === 'variable') err.push(`${n}: producto variable (talla/color) no soportado todavía.`);
     if (!p.titulo || !p.descripcion || !p.por_que) err.push(`${n}: falta título, descripcion o por_que.`);
