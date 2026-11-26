@@ -50,6 +50,7 @@ Dentro de Instagram, TikTok o WhatsApp Google bloquea el inicio de sesión: la t
 ## Cómo añadir y validar productos nuevos
 1. Agrega el producto en `data/catalogo.json` inicialmente con `"estado": "borrador"` (manualmente o con `DROPANAS_API_KEY=… node scripts/catalogo.js agregar <producto_id> --bodega <id>`).
 2. Completa solo datos **verificados** (sin inventar peso, autonomía ni especificaciones no confirmadas): `sku`, `titulo`, `descripcion`, `por_que`, `beneficios` (mín. 3), `specs`, `imagen` en `assets/`, `precio_venta_usd`, `costo_usd`, `producto_id`, `bodega_origen_id` y `variantes` (si aplica, con sus imágenes en `assets/`).
-3. Cambia `"estado"` a `"publicado"` cuando esté listo y ejecuta antes de abrir PR:
+3. **Regla de «Recién llegado»:** al publicar un producto nuevo (incluso varios el mismo día), quita `"nuevo": true` (pon `"nuevo": false`) del producto anterior que lo tenía y déjalo únicamente en el producto más reciente.
+4. Cambia `"estado"` a `"publicado"` cuando esté listo y ejecuta antes de abrir PR:
    - `npm run validar` (o `npm run validar:produccion` para exigir IDs reales)
    - `node tests/backend.test.js` (deben pasar las 131 pruebas sin regresiones).

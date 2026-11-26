@@ -209,7 +209,7 @@
       "sku": "lampara-atrapazancudos",
       "estado": "publicado",
       "semana": false,
-      "nuevo": true,
+      "nuevo": false,
       "categoria": "hogar",
       "icono": "todos",
       "etiqueta": "",
@@ -319,7 +319,7 @@
       "nuevo": true,
       "categoria": "tecnologia",
       "icono": "bank",
-      "etiqueta": "Nuevo",
+      "etiqueta": "",
       "imagen": "assets/mini-ups-10400.jpg",
       "imagenes": [
         "assets/mini-ups-10400.jpg",

@@ -1211,7 +1211,7 @@ lbStage.addEventListener('touchend', (e) => {
 function abrirEnlace() { const q = new URLSearchParams(location.search).get('p'); if (q && prod(q)) fichaP(q, false); } // enlace compartido → abre la ficha
 function pintarNuevos() {
   const box = $('hero-new'), n = productos.filter((p) => p.nuevo); if (!box) return;
-  box.innerHTML = n.length ? '<span class="hn-t">¡Recién llegados!</span>' + n.map((p) => '<span class="hn-w"><button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button><button type="button" class="hn-sh" data-share="' + esc(p.sku) + '" aria-label="Compartir ' + esc(p.titulo) + '">' + ICO_SH + ' Compartir</button></span>').join('') : '';
+  box.innerHTML = n.length ? '<span class="hn-t">' + (n.length === 1 ? '¡Recién llegado!' : '¡Recién llegados!') + '</span>' + n.map((p) => '<span class="hn-w"><button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button><button type="button" class="hn-sh" data-share="' + esc(p.sku) + '" aria-label="Compartir ' + esc(p.titulo) + '">' + ICO_SH + ' Compartir</button></span>').join('') : '';
 }
 function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); pintarNuevos(); aplicarStock(); }
 

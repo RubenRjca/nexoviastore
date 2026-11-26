@@ -108,6 +108,7 @@ function validar() {
     if (!Number.isInteger(p.producto_id) || !Number.isInteger(p.bodega_origen_id)) (estricto ? err : av).push(`${n}: falta producto_id o bodega_origen_id (no se podrá comprar).`);
   });
   if (d.productos.filter((p) => p.estado === 'publicado' && p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
+  if (d.productos.filter((p) => p.estado === 'publicado' && p.nuevo).length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
   av.forEach((m) => console.log('⚠ ' + m)); err.forEach((m) => console.error('✖ ' + m));
   console.log(`\n${d.productos.length} productos revisados: ${err.length} errores, ${av.length} avisos.`);
   process.exit(err.length ? 1 : 0);
