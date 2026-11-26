@@ -106,7 +106,7 @@ svg{display:block}
 .btn:hover{background:var(--coral-press);border-color:var(--coral-press)}
 .btn.alt{background:transparent;color:var(--head);border-color:var(--head)}
 .btn.alt:hover{background:var(--head);color:var(--hdr)}
-.hero-img{margin:0}.hero-img img{display:block;width:100%;height:auto;border-radius:14px}
+.hero-img{margin:0}.hero-img .img-btn{display:block;border-radius:14px;overflow:hidden;background:transparent}.hero-img .img-btn:not([data-ficha]),.hero-img .img-btn[data-ficha=""]{cursor:default}.hero-img img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 54%;border-radius:14px}
 .hero-img figcaption{margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
 .trust{max-width:1200px;margin:20px auto 0;padding:0 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .trust article{background:var(--hdr);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;gap:14px;align-items:flex-start}
@@ -640,7 +640,7 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 <p class="lead">Elige tu producto, haz tu pedido y paga cuando lo recibas en tu casa. Sin pagar por adelantado.</p>
 <div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div>
 <div class="hero-new" id="hero-new"></div></div>
-<figure class="hero-img"><img src="assets/hero-lampara.jpg" alt="Lámpara atrapazancudos con luz violeta en dos modelos: Modelo 1 enchufable y Modelo 2 recargable con pila" width="1100" height="451"><figcaption>Lámpara atrapazancudos: enchufable o recargable</figcaption></figure>
+<figure class="hero-img" id="hero-fig"><button type="button" class="img-btn" id="hero-btn" data-ficha="mini-ups-10400" aria-label="Ver ficha de Mini UPS 10.400 mAh para Router WiFi y Módem"><img id="hero-im" src="assets/mini-ups-10400.jpg" alt="Mini UPS 10.400 mAh para Router WiFi y Módem con salidas 5V, 9V, 12V, PoE 15V/24V y puerto USB" width="1024" height="1024"></button><figcaption id="hero-cap">Recién llegado: Mini UPS 10.400 mAh para Router WiFi y Módem</figcaption></figure>
 </div></section>
 
 <section class="trust reveal" aria-label="Por qué comprar en Nexovia Store">
@@ -1210,8 +1210,19 @@ lbStage.addEventListener('touchend', (e) => {
 }, { passive: true });
 function abrirEnlace() { const q = new URLSearchParams(location.search).get('p'); if (q && prod(q)) fichaP(q, false); } // enlace compartido → abre la ficha
 function pintarNuevos() {
-  const box = $('hero-new'), n = productos.filter((p) => p.nuevo); if (!box) return;
-  box.innerHTML = n.length ? '<span class="hn-t">' + (n.length === 1 ? '¡Recién llegado!' : '¡Recién llegados!') + '</span>' + n.map((p) => '<span class="hn-w"><button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button><button type="button" class="hn-sh" data-share="' + esc(p.sku) + '" aria-label="Compartir ' + esc(p.titulo) + '">' + ICO_SH + ' Compartir</button></span>').join('') : '';
+  const box = $('hero-new'), n = productos.filter((p) => p.nuevo);
+  if (box) box.innerHTML = n.length ? '<span class="hn-t">' + (n.length === 1 ? '¡Recién llegado!' : '¡Recién llegados!') + '</span>' + n.map((p) => '<span class="hn-w"><button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button><button type="button" class="hn-sh" data-share="' + esc(p.sku) + '" aria-label="Compartir ' + esc(p.titulo) + '">' + ICO_SH + ' Compartir</button></span>').join('') : '';
+  const im = $('hero-im'), cap = $('hero-cap'), btn = $('hero-btn'), dest = n[0] || null;
+  if (im) {
+    const src = dest ? ((Array.isArray(dest.imagenes) && dest.imagenes[0]) || (modelos(dest)[0] || {}).imagen || dest.imagen || 'assets/hero-lampara.jpg') : 'assets/hero-lampara.jpg';
+    im.src = src;
+    im.alt = dest ? dest.titulo : 'Nexovia Store · Gadgets con Pago Contra Entrega en Venezuela';
+  }
+  if (cap) cap.textContent = dest ? ('Recién llegado: ' + dest.titulo) : 'Envíos a domicilio en Venezuela con Pago Contra Entrega';
+  if (btn) {
+    if (dest) { btn.dataset.ficha = dest.sku; btn.setAttribute('aria-label', 'Ver ficha de ' + dest.titulo); }
+    else { delete btn.dataset.ficha; btn.removeAttribute('aria-label'); }
+  }
 }
 function pintarTodo() { pintarCats(); pintarSemana(); pintarGrid(); pintarCmp(); pintarNuevos(); aplicarStock(); }
 
