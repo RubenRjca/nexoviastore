@@ -2,10 +2,10 @@
 // Service worker de Nexovia Store. Objetivo: que la app abra rápido y muestre una página amable sin conexión.
 // REGLAS: NUNCA toca /api/* (pedidos, stock, rastreo, reseñas siempre van directo a la red), ni peticiones que no sean GET,
 // ni otros dominios, ni /data/ /lib/ /scripts/ /docs/. Para cambiar lo que se guarda, sube VERSION.
-const VERSION = 'nx-v3';
+const VERSION = 'nx-v4';
 const SHELL = `${VERSION}-shell`, ASSETS = `${VERSION}-assets`;
 const PRECACHE = ['/offline.html', '/assets/isotipo.png', '/assets/icons/icon-192.png', '/manifest.webmanifest'];
-const NUNCA = /^\/(api|data|lib|scripts|docs|tests|propuestas|_vercel)\//;
+const NUNCA = /^\/(api|data|lib|scripts|docs|tests|supabase|propuestas|_vercel)\//;
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(SHELL).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));

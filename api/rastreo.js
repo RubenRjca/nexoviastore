@@ -48,6 +48,7 @@ module.exports = async (req, res) => {
     console.warn(JSON.stringify({ nivel: 'AVISO', code: 'RASTREO_NO_ENCONTRADO', causa: v ? 'telefono_no_coincide' : 'orden_no_encontrada', ref }));
     falloTel(ref); return res.status(404).json(NO_ENCONTRADO);
   }
+  fallos.delete(ref);
   const a2 = await armar(ref, v);
   if (!a2.ok) {
     alertar(a2.clas, { ruta: 'rastreo', ref });
