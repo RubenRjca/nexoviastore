@@ -85,6 +85,12 @@ function validar() {
     if (p.costo_usd != null && venta < p.costo_usd * 1.15) (pub ? err : av).push(`${n}: el precio (US$ ${venta}) deja menos de 15 % sobre el costo (US$ ${p.costo_usd}); revisa tu margen y el flete.`);
     if (p.imagen && !/^(assets\/|https:\/\/)/.test(p.imagen)) err.push(`${n}: imagen debe empezar por assets/ o https://.`);
     if (p.imagen && p.imagen.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', p.imagen))) err.push(`${n}: no existe el archivo ${p.imagen}.`);
+    if (Array.isArray(p.imagenes)) {
+      p.imagenes.forEach((im, idx) => {
+        if (!/^(assets\/|https:\/\/)/.test(im || '')) err.push(`${n} imagenes[${idx}]: debe empezar por assets/ o https://.`);
+        else if (im.startsWith('assets/') && !fs.existsSync(path.join(__dirname, '..', im))) err.push(`${n} imagenes[${idx}]: no existe el archivo ${im}.`);
+      });
+    }
     if (p.variantes && typeof p.variantes === 'object') {
       Object.entries(p.variantes).forEach(([vid, v]) => {
         if (!v || !v.nombre) err.push(`${n} variante ${vid}: falta nombre.`);
@@ -102,6 +108,7 @@ function validar() {
     if (!Number.isInteger(p.producto_id) || !Number.isInteger(p.bodega_origen_id)) (estricto ? err : av).push(`${n}: falta producto_id o bodega_origen_id (no se podrá comprar).`);
   });
   if (d.productos.filter((p) => p.estado === 'publicado' && p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
+  if (d.productos.filter((p) => p.estado === 'publicado' && p.nuevo).length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
   av.forEach((m) => console.log('⚠ ' + m)); err.forEach((m) => console.error('✖ ' + m));
   console.log(`\n${d.productos.length} productos revisados: ${err.length} errores, ${av.length} avisos.`);
   process.exit(err.length ? 1 : 0);

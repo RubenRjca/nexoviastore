@@ -29,6 +29,11 @@
       "id": "hogar",
       "nombre": "Hogar",
       "icono": "todos"
+    },
+    {
+      "id": "tecnologia",
+      "nombre": "Tecnología",
+      "icono": "bank"
     }
   ],
   "productos": [
@@ -204,7 +209,7 @@
       "sku": "lampara-atrapazancudos",
       "estado": "publicado",
       "semana": false,
-      "nuevo": true,
+      "nuevo": false,
       "categoria": "hogar",
       "icono": "todos",
       "etiqueta": "",
@@ -306,6 +311,91 @@
           "d": "Es transparente y lo retiras para vaciar los insectos de forma fácil."
         }
       ]
+    },
+    {
+      "sku": "mini-ups-10400",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": true,
+      "categoria": "tecnologia",
+      "icono": "bank",
+      "etiqueta": "",
+      "imagen": "assets/mini-ups-10400.jpg",
+      "imagenes": [
+        "assets/mini-ups-10400.jpg",
+        "assets/mini-ups-10400-detalle.jpg"
+      ],
+      "titulo": "Mini UPS 10.400 mAh para Router WiFi y Módem",
+      "descripcion": "Respaldo de energía portátil de 10.400 mAh para mantener encendidos tu router WiFi, módem o equipo PoE cuando se va la luz. Salidas DC de 5V, 9V y 12V, puertos LAN y PoE (15V/24V) y salida USB.",
+      "por_que": "Evita que un corte o bajón eléctrico interrumpa tu internet en pleno teletrabajo, estudio o venta por WhatsApp. Mantiene tu conexión activa y estable para que no pierdas tiempo esperando reinicios.",
+      "beneficios": [
+        "Mantiene encendidos tu router WiFi, módem o equipo PoE durante cortes eléctricos",
+        "Batería de 10.400 mAh en formato compacto y portátil",
+        "Salidas versátiles en un solo equipo: DC 5V, 9V, 12V, PoE (15V/24V) y puerto USB",
+        "Indicador LED de nivel de carga (25 %, 50 %, 75 % y 100 %), botón Power y Reset",
+        "Entrada 100-240Vac con cable de corriente y cables de conexión DC incluidos"
+      ],
+      "specs": {
+        "Capacidad de batería": "10.400 mAh",
+        "Salidas DC": "5V, 9V y 12V",
+        "Puertos de red": "LAN y PoE (selector 15V / 24V)",
+        "Puerto adicional": "Salida USB",
+        "Entrada de corriente": "100-240Vac",
+        "Controles e indicadores": "LED de nivel (25 %, 50 %, 75 %, 100 %), botón Power y Reset",
+        "Incluye en la caja": "Mini UPS, cable de corriente AC y cables de conexión DC",
+        "Duración exacta (horas)": "No especificada por el fabricante (depende del consumo conectado)"
+      },
+      "precio_venta_usd": 55.0,
+      "precio_oferta_usd": null,
+      "costo_usd": 28.0,
+      "producto_id": 21702,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "Cuando falla la electricidad en Venezuela, lo primero que se apaga es el router o el módem, dejándote sin conexión justo cuando más la necesitas. Este Mini UPS de 10.400 mAh funciona como respaldo eléctrico directo para mantener tu router WiFi, módem o equipo PoE encendido sin cortes.",
+        "En tu día a día marca una diferencia inmediata: puedes seguir trabajando desde casa, asistir a clases en línea, atender clientes y confirmar pagos por WhatsApp, o ver contenido sin interrupciones ni tener que esperar a que el router vuelva a conectar tras cada bajón.",
+        "Integra en un solo equipo compacto salidas DC de 5V, 9V y 12V, puertos LAN y PoE con selector 15V/24V, salida USB y entrada 100-240Vac, además de LED indicador de batería del 25 % al 100 % y cables incluidos. Para total transparencia, el fabricante no especifica un número exacto de horas de autonomía ni amperajes por puerto."
+      ],
+      "como_funciona": [
+        {
+          "t": "1. Solo router WiFi o módem (mayor rendimiento orientativo)",
+          "d": "Al destinar los 10.400 mAh exclusivamente a un equipo de red de consumo bajo o moderado, obtienes la mayor duración relativa del respaldo durante un corte de luz (cifra exacta no especificada por el fabricante)."
+        },
+        {
+          "t": "2. Router / módem + carga puntual de celular",
+          "d": "Si además conectas un teléfono al puerto USB para salir de un apuro, la batería se reparte entre ambos equipos y la duración será menor que usando solo el router."
+        },
+        {
+          "t": "3. Equipos exigentes como laptops o múltiples cargas simultáneas",
+          "d": "Frente a una laptop o varios equipos exigentes a la vez, la autonomía cae rápido o puede no ser compatible en potencia/voltaje; este Mini UPS está pensado principalmente para routers, módems y respaldo ligero."
+        }
+      ],
+      "caracteristicas": [
+        {
+          "t": "Capacidad de 10.400 mAh",
+          "d": "Respaldo portátil pensado para mantener tu red encendida ante fallas eléctricas."
+        },
+        {
+          "t": "Salidas 5V, 9V y 12V",
+          "d": "Compatibilidad versátil con la mayoría de routers WiFi y módems domésticos."
+        },
+        {
+          "t": "LAN + PoE (15V / 24V)",
+          "d": "Puertos LAN y PoE dedicados con selector físico de 15V o 24V."
+        },
+        {
+          "t": "Puerto de salida USB",
+          "d": "Respaldo ligero adicional para carga puntual cuando lo necesites."
+        },
+        {
+          "t": "LED de 25 % a 100 %",
+          "d": "Visualiza fácilmente la carga disponible junto al botón Power y botón Reset."
+        },
+        {
+          "t": "Cables incluidos",
+          "d": "Viene con entrada 100-240Vac, cable de corriente y cables de conexión DC."
+        }
+      ],
+      "aviso": "Nota transparente: los escenarios de duración son ejemplos lógicos orientativos según el consumo conectado; el fabricante no especifica un número exacto de horas. Verifica el voltaje de tu equipo (5V, 9V, 12V o PoE 15V/24V) antes de conectarlo. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
     }
   ]
 }
