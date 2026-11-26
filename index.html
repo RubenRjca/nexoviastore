@@ -475,6 +475,8 @@ dialog.lg{width:min(420px,calc(100% - 24px));overflow:hidden auto}
 .vchip::before{content:"✓";font-weight:800;color:#2E9E57}
 .card .acts{display:grid;gap:6px;margin-top:auto}.card .acts .btn{width:100%}
 .btn-link{font:inherit;font-size:14px;font-weight:600;color:var(--head);background:none;border:0;padding:10px;min-height:44px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tit-btn{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;text-align:inherit;cursor:pointer;display:block;width:100%}
+.tit-btn:hover{color:var(--head);text-decoration:underline;text-underline-offset:3px}
 .img-btn{border:0;padding:0;margin:0;width:100%;font:inherit;cursor:pointer;appearance:none;-webkit-appearance:none;text-align:inherit}
 .img-btn img,.img-btn svg{transition:transform .25s var(--ease)}
 @media (hover:hover) and (prefers-reduced-motion:no-preference){.img-btn:hover img,.img-btn:hover svg{transform:scale(1.03)}}
@@ -903,14 +905,14 @@ function pintarGrid() {
   const q = consulta.trim().toLowerCase(), l = productos.filter((p) => (filtro === 'todos' || p.categoria === filtro) && (!q || (p.titulo + ' ' + p.descripcion).toLowerCase().includes(q)));
   grid.setAttribute('aria-busy', 'false'); grid.innerHTML = l.length ? l.map((p) =>
     '<article class="card"><button type="button" class="img img-btn" data-ficha="' + esc(p.sku) + '" aria-label="Ver ficha de ' + esc(p.titulo) + '">' + (etiqueta(p) ? '<span class="tag">' + esc(etiqueta(p)) + '</span>' : '') + media(p) + '</button>' +
-    '<h3>' + esc(p.titulo) + '</h3>' + precios(p) + '<p class="vchip">' + esc(CHIP_TXT) + '</p>' +
+    '<h3><button type="button" class="tit-btn" data-ficha="' + esc(p.sku) + '">' + esc(p.titulo) + '</button></h3>' + precios(p) + '<p class="vchip">' + esc(CHIP_TXT) + '</p>' +
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn-link btn-sh" type="button" data-share-card="' + esc(p.sku) + '">' + ICO_SH + ' Compartir producto</button></div></article>').join('')
     : '<p>No encontramos productos con esa búsqueda o categoría.</p>';
 }
 function pintarSemana() {
   const p = productos.find((x) => x.semana), s = $('semana'); if (!p) { s.hidden = true; return; }
   s.hidden = false;
-  $('wk-c').innerHTML = '<button type="button" class="img img-btn" data-ficha="' + esc(p.sku) + '" aria-label="Ver ficha de ' + esc(p.titulo) + '">' + media(p) + '</button><div><span class="wk-b">Producto de la semana</span><h3 id="wk-h">' + esc(p.titulo) + '</h3>' +
+  $('wk-c').innerHTML = '<button type="button" class="img img-btn" data-ficha="' + esc(p.sku) + '" aria-label="Ver ficha de ' + esc(p.titulo) + '">' + media(p) + '</button><div><span class="wk-b">Producto de la semana</span><h3 id="wk-h"><button type="button" class="tit-btn" data-ficha="' + esc(p.sku) + '">' + esc(p.titulo) + '</button></h3>' +
     (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' % esta semana</span>' : '') +
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + precios(p) +
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt btn-sh" type="button" data-share-card="' + esc(p.sku) + '">' + ICO_SH + ' Compartir producto</button></div></div>';
@@ -997,7 +999,7 @@ function fichaP(sku, completa, ir) {
       '<div class="cta-box big"><b>Aquí puedes comprar ahora</b><span>' + PAGO_TXT + ' · Envío a domicilio en ciudades con cobertura</span>' + buy + '</div>' +
       '<div class="resenas" id="resenas-box"></div>';
   }
-  aplicarStock(); if (!dlg.open) dlg.showModal(); dlg.scrollTop = 0; if (completa) cargarResenas(p.sku);
+  aplicarStock(); if (!dlg.open) dlg.showModal(); dlg.scrollTop = 0; requestAnimationFrame(() => { if (dlg.open && !ir) dlg.scrollTop = 0; }); if (completa) cargarResenas(p.sku);
   if (completa && ir) {
     const mover = () => {
       const h = $('fi-porque'); if (!h || !dlg.open) return;
@@ -1260,7 +1262,7 @@ getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; if (j.what
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha],[data-cmpcat],[data-fullficha],[data-backficha]'); if (!b) return;
   if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
-  else if (b.dataset.ficha) fichaP(b.dataset.ficha, true, true);
+  else if (b.dataset.ficha) fichaP(b.dataset.ficha, true, false);
   else if (b.dataset.fullficha) fichaP(b.dataset.fullficha, true, true);
   else if (b.dataset.backficha) fichaP(b.dataset.backficha, false);
   else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
