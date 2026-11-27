@@ -995,7 +995,7 @@ function fichaP(sku, completa, ir) {
     const como = (p.como_funciona || []).length ? '<h4>Cómo funciona</h4><ol class="como">' + p.como_funciona.map((s) => '<li><b>' + esc(s.t) + '</b><span>' + esc(s.d) + '</span></li>').join('') + '</ol>' : '';
     const vars = p.variantes && Object.keys(p.variantes).length ? '<h4>Modelos disponibles</h4><ul class="pay">' + Object.values(p.variantes).map((e) => '<li><b>' + esc(e.nombre) + ':</b> ' + esc(e.detalle) + '</li>').join('') + '</ul>' : '';
     const carac = (p.caracteristicas || []).length ? '<h4>Características del producto</h4><ul class="carac">' + p.caracteristicas.map((c) => '<li><b>' + esc(c.t) + '</b><span>' + esc(c.d) + '</span></li>').join('') + '</ul>' : '';
-    $('fi-b').innerHTML = '<button class="btn alt sm" type="button" data-backficha="' + esc(p.sku) + '">← Volver al resumen</button>' +
+    $('fi-b').innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn alt sm" type="button" data-backficha="' + esc(p.sku) + '">← Volver al resumen</button>' + (fiHist ? '<button class="btn alt sm" type="button" data-ver-tienda>Ver toda la tienda</button>' : '') + '</div>' +
       '<div class="fi-g" style="margin-top:12px"><div>' + fotoFicha(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') + precios(p) +
       '<h4>Opciones de pago</h4>' + pagos + '<div class="cta-box"><b>Aquí puedes comprar ahora</b>' + buy + '</div></div></div>' +
       '<h4 id="fi-porque">¿Por qué debes comprarlo?</h4><div class="largo">' + parr + '</div>' + como +
@@ -1077,8 +1077,8 @@ function notaTasa() {
   else n.hidden = true;
 }
 
-/* ---------- Compartir un producto (anuncio sin precio + enlace directo ?p=sku) ---------- */
-const urlProd = (sku) => location.origin + '/?p=' + encodeURIComponent(sku);
+/* ---------- Compartir un producto (anuncio sin precio + enlace directo /p/sku) ---------- */
+const urlProd = (sku) => location.origin + '/p/' + encodeURIComponent(sku);
 function anuncio(p) { // texto llamativo, con emojis y SIN precio; se puede editar antes de compartir
   const corto = String(p.descripcion || '').split(/(?<=[.!?])\s/)[0].slice(0, 150);
   const ben = (p.beneficios || []).slice(0, 3).map((b) => '✅ ' + b).join('\n');
@@ -1199,7 +1199,10 @@ lb.addEventListener('cancel', (e) => { e.preventDefault(); cerrarVisor(false); }
 lb.addEventListener('click', (e) => {
   if (e.target === lb || e.target === lbStage || e.target.classList.contains('lb-bar')) cerrarVisor(false);
 });
-window.addEventListener('popstate', () => { if (lb.open) cerrarVisor(true); });
+window.addEventListener('popstate', () => {
+  if (lb.open) { cerrarVisor(true); return; }
+  if ($('fi').open) cerrarFicha(true);
+});
 document.addEventListener('keydown', (e) => {
   if (!lb.open) return;
   if (e.key === 'ArrowLeft') { e.preventDefault(); moverVisor(-1); }
@@ -1212,7 +1215,39 @@ lbStage.addEventListener('touchend', (e) => {
   const dx = t.clientX - lbTx, dy = t.clientY - lbTy;
   if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) moverVisor(dx < 0 ? 1 : -1);
 }, { passive: true });
-function abrirEnlace() { const q = new URLSearchParams(location.search).get('p'); if (q && prod(q)) fichaP(q, false); } // enlace compartido → abre la ficha
+let fiHist = false;
+function skuEnUrl() {
+  const q = new URLSearchParams(location.search).get('p');
+  if (q) return q;
+  const m = location.pathname.match(/^\/p\/([^/?#]+)\/?$/);
+  return m ? decodeURIComponent(m[1]) : '';
+}
+function cerrarFicha(desdePop) {
+  const f = $('fi');
+  if (f.open) f.close();
+  if (!desdePop && fiHist) {
+    fiHist = false;
+    try { history.back(); } catch (e) {}
+    return;
+  }
+  fiHist = false;
+  if (/^\/p\//.test(location.pathname) || new URLSearchParams(location.search).has('p')) {
+    try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {}
+  }
+}
+function abrirEnlace() {
+  const q = skuEnUrl();
+  if (q && prod(q)) {
+    try {
+      history.replaceState({ nxStore: true }, '', '/');
+      history.pushState({ nxFicha: q, nxDirecto: true }, '', '/p/' + encodeURIComponent(q));
+      fiHist = true;
+    } catch (e) { fiHist = false; }
+    fichaP(q, true, false);
+  } else if (/^\/p\//.test(location.pathname)) {
+    try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {}
+  }
+} // enlace compartido → entra directo a la ficha técnica y prepara el retorno a la tienda completa
 function pintarNuevos() {
   const box = $('hero-new'), n = productos.filter((p) => p.nuevo);
   if (box) box.innerHTML = n.length ? '<span class="hn-t">' + (n.length === 1 ? '¡Recién llegado!' : '¡Recién llegados!') + '</span>' + n.map((p) => '<span class="hn-w"><button type="button" class="hn" data-ficha="' + esc(p.sku) + '"><span class="dot"></span>' + esc(p.titulo) + ' — ' + usd(p.usd) + '</button><button type="button" class="hn-sh" data-share="' + esc(p.sku) + '" aria-label="Compartir ' + esc(p.titulo) + '">' + ICO_SH + ' Compartir</button></span>').join('') : '';
@@ -1282,13 +1317,14 @@ function cargarCatalogo() {
 }
 cargarCatalogo();
 document.addEventListener('click', (e) => {
-  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha],[data-cmpcat],[data-fullficha],[data-backficha]'); if (!b) return;
-  if (b.dataset.buy) { if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
+  const b = e.target.closest('[data-buy],[data-ficha],[data-cat],[data-cmpficha],[data-cmpcat],[data-fullficha],[data-backficha],[data-ver-tienda]'); if (!b) return;
+  if ('verTienda' in b.dataset) { cerrarFicha(false); return; }
+  if (b.dataset.buy) { fiHist = false; if (/^\/p\//.test(location.pathname) || new URLSearchParams(location.search).has('p')) { try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {} } if ($('fi').open) $('fi').close(); abrir(b.dataset.buy); }
   else if (b.dataset.ficha) fichaP(b.dataset.ficha, true, false);
   else if (b.dataset.fullficha) fichaP(b.dataset.fullficha, true, true);
   else if (b.dataset.backficha) fichaP(b.dataset.backficha, false);
   else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
-  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
+  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); fiHist = false; if (/^\/p\//.test(location.pathname) || new URLSearchParams(location.search).has('p')) { try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {} } if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
   else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); aplicarStock(); }
 });
 document.addEventListener('change', (e) => {
@@ -1303,8 +1339,9 @@ document.addEventListener('change', (e) => {
     pintarCmp(); pintarGrid(); aplicarStock();
   }
 });
-$('fi-x').onclick = () => $('fi').close();
-$('fi').addEventListener('click', (e) => { if (e.target === $('fi')) $('fi').close(); });
+$('fi-x').onclick = () => cerrarFicha(false);
+$('fi').addEventListener('cancel', (e) => { e.preventDefault(); cerrarFicha(false); });
+$('fi').addEventListener('click', (e) => { if (e.target === $('fi')) cerrarFicha(false); });
 
 /* ---------- Checkout ---------- */
 const dlg = $('co'), form = $('f'), msg = $('msg'), go = $('go'), selE = $('estado'), selC = $('ciudad'), pmet = $('pmet');

@@ -1,5 +1,26 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/producto-pagina.js": {
+      "includeFiles": "index.html"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/p/:sku",
+      "destination": "/api/producto-pagina?p=:sku"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "p"
+        }
+      ],
+      "destination": "/api/producto-pagina"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

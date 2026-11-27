@@ -465,6 +465,27 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     const mal1 = await call(hRastreo, { query: { ref: REFX, tel: '0000' } }); eq(mal1.s, 404); si(logs.some((l) => /RASTREO_NO_ENCONTRADO/.test(l) && /telefono_no_coincide|orden_no_encontrada/.test(l)), 'falta diagnóstico'); });
   delete process.env.SESSION_SECRET;
 
+  out('\n== /api/producto-pagina: vista previa Open Graph por producto y entrada directa ==');
+  const hPag = require(path.join(root, 'api/producto-pagina.js'));
+  await t('producto publicado: og:image usa la foto del producto, og:title su título, <base href="/"> y sin datos internos', async () => {
+    for (const [sku, img] of [['uro-probiotic-vaginal', 'assets/uro-probiotic-vaginal.jpg'], ['mini-ups-10400', 'assets/mini-ups-10400.jpg'], ['lampara-atrapazancudos', 'assets/lampara-atrapazancudos.jpg']]) {
+      const r = await call(hPag, { query: { p: sku }, headers: { host: 'nexoviastore-kappa.vercel.app' } });
+      eq(r.s, 200); si(/text\/html/.test(r.h['content-type'] || ''), 'content-type');
+      si(r.b.includes('<base href="/">'), 'falta base href');
+      si(r.b.includes(`https://nexoviastore-kappa.vercel.app/${img}`), 'falta og:image del producto ' + sku);
+      si(r.b.includes(`https://nexoviastore-kappa.vercel.app/p/${sku}`), 'falta og:url de ' + sku);
+      si(!r.b.includes('og-image.jpg'), 'no debe usar la portada general en ' + sku);
+      si(!/DISTRIDROP|573106517341|SKU-21762|costo_usd|producto_id|bodega_origen_id/.test(r.b), 'dato interno expuesto en ' + sku);
+    }
+  });
+  await t('producto inexistente o en borrador: cae de forma segura a la portada general (og-image.jpg) y POST → 405', async () => {
+    for (const bad of ['no-existe', 'audifonos-tws', '../etc']) {
+      const r = await call(hPag, { query: { p: bad } }); eq(r.s, 200);
+      si(r.b.includes('og-image.jpg') && !r.b.includes('Audífonos Inalámbricos'), 'filtró borrador o no cayó a portada: ' + bad);
+    }
+    eq((await call(hPag, { method: 'POST', query: { p: 'uro-probiotic-vaginal' } })).s, 405);
+  });
+
   console.error = origErr; console.warn = origWarn; console.log = origLog;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);
   process.exit(mal ? 1 : 0);
