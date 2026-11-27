@@ -34,6 +34,11 @@
       "id": "tecnologia",
       "nombre": "Tecnología",
       "icono": "bank"
+    },
+    {
+      "id": "cuidado-personal",
+      "nombre": "Cuidado Personal",
+      "icono": "care"
     }
   ],
   "productos": [
@@ -316,7 +321,7 @@
       "sku": "mini-ups-10400",
       "estado": "publicado",
       "semana": false,
-      "nuevo": true,
+      "nuevo": false,
       "categoria": "tecnologia",
       "icono": "bank",
       "etiqueta": "",
@@ -396,6 +401,80 @@
         }
       ],
       "aviso": "Nota transparente: los escenarios de duración son ejemplos lógicos orientativos según el consumo conectado; el fabricante no especifica un número exacto de horas. Verifica el voltaje de tu equipo (5V, 9V, 12V o PoE 15V/24V) antes de conectarlo. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
+    },
+    {
+      "sku": "uro-probiotic-vaginal",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": true,
+      "categoria": "cuidado-personal",
+      "icono": "care",
+      "etiqueta": "",
+      "imagen": "assets/uro-probiotic-vaginal.jpg",
+      "imagenes": [
+        "assets/uro-probiotic-vaginal.jpg",
+        "assets/uro-probiotic-vaginal-detalle.jpg"
+      ],
+      "titulo": "URO Probiotic Vaginal · 60 Cápsulas",
+      "descripcion": "Suplemento probiótico en presentación de 60 cápsulas veganas (cápsula rosada) formulado para apoyar el equilibrio de la flora vaginal, regular el pH y ayudar a controlar los malos olores y molestias íntimas.",
+      "por_que": "El equilibrio del pH y la flora íntima puede verse alterado por estrés, cambios hormonales o rutinas diarias. URO Probiotic Vaginal te acompaña en tu cuidado íntimo diario para sentirte más cómoda, fresca y segura.",
+      "beneficios": [
+        "Presentación práctica de 60 cápsulas veganas (cápsula rosada)",
+        "Apoya el equilibrio natural del pH y la flora vaginal",
+        "Ayuda a controlar los malos olores y molestias íntimas",
+        "Acompaña el cuidado diario frente a desequilibrios e infecciones",
+        "Envase compacto (10 × 10 × 10 cm) fácil de guardar o llevar contigo"
+      ],
+      "specs": {
+        "Presentación": "Frasco con 60 cápsulas veganas (cápsula rosada)",
+        "Tipo": "Suplemento dietético probiótico (OPositiv Health)",
+        "Apoyo principal": "Equilibrio del pH, control de olores, flora vaginal y balance",
+        "Medidas del empaque": "10 cm de largo × 10 cm de ancho × 10 cm de alto",
+        "Cepas o dosis exacta": "Ver etiqueta trasera del envase (no detallada en portada)"
+      },
+      "precio_venta_usd": 30.0,
+      "precio_oferta_usd": null,
+      "costo_usd": 11.5,
+      "producto_id": 21762,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "El bienestar íntimo influye directamente en tu tranquilidad diaria. Cambios de rutina, humedad, calor, estrés o desajustes en el pH pueden generar incomodidad, olor o alteraciones en la flora vaginal.",
+        "URO Probiotic Vaginal (de OPositiv Health) viene en frasco de 60 cápsulas veganas diseñadas como suplemento dietético de apoyo para mantener un pH saludable, cuidar el equilibrio de la flora vaginal, apoyar el balance frente a levaduras y reducir malos olores.",
+        "Su formato compacto de 10 × 10 × 10 cm cabe sin problema en tu tocador o bolso. Para total transparencia, en esta ficha solo publicamos los datos confirmados en el envase y la descripción oficial, sin inventar cepas ni dosis no confirmadas."
+      ],
+      "como_funciona": [
+        {
+          "t": "1. Apoyo al equilibrio de la flora",
+          "d": "Su fórmula probiótica está orientada a respaldar la flora vaginal saludable en el cuidado diario."
+        },
+        {
+          "t": "2. Regulación del pH y frescura",
+          "d": "Ayuda a mantener niveles saludables de pH y a controlar el mal olor íntimo de forma práctica."
+        },
+        {
+          "t": "3. Uso responsable y constante",
+          "d": "Sigue las indicaciones de uso impresas en el frasco y acompáñalo de hábitos saludables e higiene adecuada."
+        }
+      ],
+      "caracteristicas": [
+        {
+          "t": "60 cápsulas veganas",
+          "d": "Frasco sellado con cápsula rosada en presentación de 60 unidades."
+        },
+        {
+          "t": "Equilibrio del pH vaginal",
+          "d": "Orientado a apoyar un pH íntimo saludable y equilibrado."
+        },
+        {
+          "t": "Cuidado de flora y olores",
+          "d": "Indicado en el envase para apoyar flora vaginal, balance y control de olor."
+        },
+        {
+          "t": "Suplemento dietético",
+          "d": "Presentación oral práctica de OPositiv Health, tamaño compacto de 10 × 10 × 10 cm."
+        }
+      ],
+      "aviso": "Este producto es un suplemento dietético y no sustituye una consulta ginecológica ni un tratamiento médico prescrito. Si presentas síntomas persistentes, embarazo, lactancia o tomas medicación, consulta a tu médico antes de usarlo y revisa la etiqueta completa del envase. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
     }
   ]
 }
