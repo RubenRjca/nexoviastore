@@ -354,6 +354,7 @@ dialog.fi .fg{display:block}
   body{padding-bottom:62px}
   .mnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:35;background:var(--hdr);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);justify-content:space-around;align-items:center;padding:max(4px,env(safe-area-inset-bottom,0px)) 0}
   .mnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;font-size:10.5px;font-weight:600;color:var(--muted);text-decoration:none}
+  .mnav a[hidden]{display:none}
   .mnav a:hover,.mnav a:focus-visible{color:var(--head)}.mnav a.active{color:var(--coral)}
   .mnav svg{width:22px;height:22px}
   .ai-fab{bottom:max(72px,calc(env(safe-area-inset-bottom,0px) + 64px))}
@@ -514,7 +515,15 @@ dialog.lb::backdrop{background:rgba(10,16,20,.75);-webkit-backdrop-filter:blur(8
 .vprev{display:flex;gap:12px;align-items:center;margin-top:8px}.vprev img{width:72px;height:72px;border-radius:8px;object-fit:contain;background:var(--hdr);flex:none}.vprev img[hidden]{display:none}
 .carac{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .carac li{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px;margin:0;display:flex;flex-direction:column;gap:4px;font-size:14px}.carac b{color:var(--head)}.carac span{color:var(--muted);font-size:13px}
-@media (max-width:520px){.carac{grid-template-columns:1fr}}
+.ad{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.ad-c{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.5}
+.ad-c b{display:block;font-size:12.5px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:4px}
+.ad-c.antes b{color:var(--muted)}
+.ad-c.despues{border-color:var(--coral);background:rgba(237,127,97,.08)}
+.ad-c.despues b{color:var(--head)}
+.ad-c p{margin:0;color:var(--ink)}
+.ad-c ul{margin:0;padding-left:16px;display:grid;gap:4px;color:var(--ink)}
+@media (max-width:520px){.carac,.ad{grid-template-columns:1fr}}
 .ft-leg{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:13px}
 .lg-ley{margin:8px 0 0;text-align:center;font-size:11px;color:var(--muted)}.lg-ley a{color:inherit;text-decoration:underline}
 
@@ -660,7 +669,7 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 <p class="tasa-nota" id="tasa-nota" hidden></p>
 <div class="grid" id="grid" aria-live="polite" aria-busy="true"><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div></div></section>
 
-<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h"><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
+<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h" hidden><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
 <p>Comparamos productos de la misma categoría. Elige la categoría y hasta 3 productos, y mira lo importante lado a lado.</p>
 <div class="cmp-cat" id="cmp-cat" role="group" aria-label="Categoría a comparar"></div>
 <div class="cmp-sel" id="cmp-sel"></div>
@@ -708,7 +717,7 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 <nav class="mnav" aria-label="Navegación inferior">
 <a href="#pago-contra-entrega" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 3l9 9M5 10v10h14V10"/></svg>Inicio</a>
 <a href="#productos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Productos</a>
-<a href="#comparador"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"/></svg>Comparar</a>
+<a href="#comparador" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"/></svg>Comparar</a>
 <a href="#rastreo" data-rastreo><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Rastrear</a>
 </nav>
 
@@ -922,7 +931,8 @@ function pintarSemana() {
     '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p><p class="why" style="margin-left:0"><b>¿Por qué comprarlo?</b> ' + esc(p.por_que) + '</p><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + precios(p) +
     '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button><button class="btn alt btn-sh" type="button" data-share-card="' + esc(p.sku) + '">' + ICO_SH + ' Compartir producto</button></div></div>';
 }
-let cmpCat = null, cmpListo = false;
+let cmpCat = null, cmpManual = false;
+const catsCmp = () => categorias.filter((c) => productos.filter((p) => p.categoria === c.id).length >= 2);
 const norm = (x) => String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 /* Etiqueta de una variante: 1) alias del nombre que manda DroPanas (si coincide, manda la coincidencia: evita cruces),
    2) etiqueta por ID del catálogo, 3) nombre de DroPanas, 4) "Opción N". Nunca muestra "No detallado". */
@@ -933,13 +943,16 @@ function varInfo(p, v) {
   return { nombre: (e && e.nombre) || v.nombre || 'Opción ' + v.id, detalle: (e && e.detalle) || '', imagen: (e && e.imagen && /^assets\//.test(e.imagen)) ? e.imagen : '' };
 }
 function pintarCmp() {
-  /* Solo se comparan productos de la MISMA categoría. Sin ninguna categoría con 2+ productos, la sección se oculta. */
-  const cs = $('comparador'), cats = categorias.filter((c) => productos.filter((p) => p.categoria === c.id).length >= 2);
-  if (cs) cs.hidden = !cats.length; if (!cats.length) return;
-  if (!cats.some((c) => c.id === cmpCat)) cmpCat = cats[0].id;
+  /* Solo se activa cuando hay productos coincidentes (2+ publicados en la misma categoría). Sin coincidencias se oculta junto con sus accesos. */
+  const cs = $('comparador'), cats = catsCmp(), links = document.querySelectorAll('a[href="#comparador"]');
+  if (cs) cs.hidden = !cats.length;
+  links.forEach((a) => { a.hidden = !cats.length; });
+  if (!cats.length) { $('cmp-cat').innerHTML = ''; $('cmp-sel').innerHTML = ''; $('cmp-t').innerHTML = ''; cmpCat = null; cmp = []; cmpManual = false; return; }
+  if (filtro !== 'todos' && cats.some((c) => c.id === filtro) && cmpCat !== filtro) { cmpCat = filtro; cmpManual = false; }
+  if (!cats.some((c) => c.id === cmpCat)) { cmpCat = cats[0].id; cmpManual = false; }
   const enCat = productos.filter((p) => p.categoria === cmpCat);
   cmp = cmp.filter((sku) => enCat.some((p) => p.sku === sku));
-  if (!cmpListo) { cmpListo = true; if (cmp.length < 2) cmp = enCat.slice(0, 3).map((p) => p.sku); }
+  if (!cmpManual && cmp.length < 2) cmp = enCat.slice(0, 3).map((p) => p.sku);
   $('cmp-cat').innerHTML = cats.map((c) => '<button type="button" data-cmpcat="' + esc(c.id) + '" aria-pressed="' + (c.id === cmpCat) + '">' + (ICONS[c.icono] || '') + esc(c.nombre) + '</button>').join('');
   const sel = $('cmp-sel');
   sel.innerHTML = [0, 1, 2].map((i) => '<select data-i="' + i + '" aria-label="Producto ' + (i + 1) + ' a comparar"><option value="">— Elige un producto —</option>' +
@@ -953,8 +966,9 @@ function pintarCmp() {
     keys.map((k) => '<tr><th scope="row">' + esc(k) + '</th>' + l.map((p) => '<td>' + esc((p.specs || {})[k] || '—') + '</td>').join('') + '</tr>').join('') +
     '<tr><th scope="row">Ventajas</th>' + l.map((p) => '<td><ul class="ben">' + lis(p.beneficios) + '</ul></td>').join('') + '</tr>' +
     (l.some((p) => (p.desventajas || []).length) ? '<tr><th scope="row">Desventajas</th>' + l.map((p) => '<td>' + ((p.desventajas || []).length ? '<ul class="neg">' + lis(p.desventajas) + '</ul>' : '—') + '</td>').join('') + '</tr>' : '') +
+    (l.some((p) => p.antes_despues && p.antes_despues.despues) ? '<tr><th scope="row">En tu día a día</th>' + l.map((p) => '<td>' + esc(Array.isArray(p.antes_despues && p.antes_despues.despues) ? p.antes_despues.despues.join(' · ') : (p.antes_despues && p.antes_despues.despues) || '—') + '</td>').join('') + '</tr>' : '') +
     (l.some((p) => p.por_que_conviene) ? '<tr><th scope="row">¿Por qué conviene?</th>' + l.map((p) => '<td>' + esc(p.por_que_conviene || '—') + '</td>').join('') + '</tr>' : '') +
-    (l.some((p) => p.beneficio_practico) ? '<tr><th scope="row">En tu día a día</th>' + l.map((p) => '<td>' + esc(p.beneficio_practico || '—') + '</td>').join('') + '</tr>' : '') +
+    (l.some((p) => p.beneficio_practico) ? '<tr><th scope="row">Beneficio práctico</th>' + l.map((p) => '<td>' + esc(p.beneficio_practico || '—') + '</td>').join('') + '</tr>' : '') +
     '<tr><th scope="row">¿Por qué comprarlo?</th>' + l.map((p) => '<td>' + esc(p.por_que) + '</td>').join('') + '</tr></tbody>';
 }
 const modelos = (p) => Object.values(p.variantes || {}).filter((e) => e.imagen && /^assets\//.test(e.imagen));
@@ -980,26 +994,33 @@ const fotoFicha = (p) => {
     : '<div class="img fi-img">' + inner + '</div>';
   return box + galeria(p);
 };
+const bloqueAd = (v) => Array.isArray(v) ? '<ul>' + lis(v) + '</ul>' : '<p>' + esc(v) + '</p>';
 function fichaP(sku, completa, ir) {
   const p = prod(sku); if (!p) return;
   const dlg = $('fi'); dlg.classList.toggle('full', !!completa);
+  const puedeCmp = productos.filter((x) => x.categoria === p.categoria).length >= 2;
   const pagos = '<ul class="pay"><li><b>Pago Contra Entrega:</b> pagas cuando recibes tu pedido.</li>' + (ANT_ON ? '<li><b>Pago Directo Anticipado:</b> pagas ahora (' + esc(metodos().map(([, m]) => m.nombre).join(', ')) + ') y despachamos al verificar tu pago.</li>' : '') + '</ul>';
   const buy = '<div class="acts"><button class="btn" type="button" data-buy="' + esc(p.sku) + '">Comprar ahora</button></div><button class="btn alt btn-sh" type="button" data-share="' + esc(p.sku) + '" style="margin-top:10px;width:100%">' + ICO_SH + ' Compartir este producto</button>';
   if (!completa) {
     $('fi-b').innerHTML = '<div class="fi-g"><div>' + fotoFicha(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') +
       '<p class="desc" style="margin-left:0">' + esc(p.descripcion) + '</p>' + precios(p) + '<ul class="ben" style="margin-left:0">' + lis(p.beneficios.slice(0, 4)) + '</ul>' +
       '<p class="cod-mini" style="margin-left:0">' + PAGO_TXT + '</p>' + buy +
-      '<div class="fi-cmp"><button class="btn alt" type="button" data-fullficha="' + esc(p.sku) + '">¿Por qué debes comprarlo? Ver detalles completos</button></div></div></div>';
+      '<div class="fi-cmp"><button class="btn alt" type="button" data-fullficha="' + esc(p.sku) + '">¿Por qué debes comprarlo? Ver detalles completos</button>' + (puedeCmp ? '<button class="btn alt" type="button" data-cmpficha="' + esc(p.sku) + '">Comparar</button>' : '') + '</div></div></div>';
   } else {
     const parr = (p.descripcion_larga || [p.por_que]).map((t) => '<p>' + esc(t) + '</p>').join('');
+    const ad = p.antes_despues && (p.antes_despues.antes || p.antes_despues.despues)
+      ? '<h4>Antes y después en tu día a día</h4><div class="ad">' +
+        (p.antes_despues.antes ? '<div class="ad-c antes"><b>Antes</b>' + bloqueAd(p.antes_despues.antes) + '</div>' : '') +
+        (p.antes_despues.despues ? '<div class="ad-c despues"><b>Después con este producto</b>' + bloqueAd(p.antes_despues.despues) + '</div>' : '') + '</div>'
+      : '';
     const como = (p.como_funciona || []).length ? '<h4>Cómo funciona</h4><ol class="como">' + p.como_funciona.map((s) => '<li><b>' + esc(s.t) + '</b><span>' + esc(s.d) + '</span></li>').join('') + '</ol>' : '';
     const vars = p.variantes && Object.keys(p.variantes).length ? '<h4>Modelos disponibles</h4><ul class="pay">' + Object.values(p.variantes).map((e) => '<li><b>' + esc(e.nombre) + ':</b> ' + esc(e.detalle) + '</li>').join('') + '</ul>' : '';
     const carac = (p.caracteristicas || []).length ? '<h4>Características del producto</h4><ul class="carac">' + p.caracteristicas.map((c) => '<li><b>' + esc(c.t) + '</b><span>' + esc(c.d) + '</span></li>').join('') + '</ul>' : '';
-    $('fi-b').innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn alt sm" type="button" data-backficha="' + esc(p.sku) + '">← Volver al resumen</button>' + (fiHist ? '<button class="btn alt sm" type="button" data-ver-tienda>Ver toda la tienda</button>' : '') + '</div>' +
+    $('fi-b').innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"><button class="btn alt sm" type="button" data-backficha="' + esc(p.sku) + '">← Volver al resumen</button>' + (fiHist ? '<button class="btn alt sm" type="button" data-ver-tienda>Ver toda la tienda</button>' : '') + (puedeCmp ? '<button class="btn alt sm" type="button" data-cmpficha="' + esc(p.sku) + '">Comparar en categoría</button>' : '') + '</div>' +
       '<div class="fi-g" style="margin-top:12px"><div>' + fotoFicha(p) + '</div><div><h3>' + esc(p.titulo) + '</h3>' + (p.usd_antes ? '<span class="save">Ahorras ' + ahorro(p) + ' %</span>' : '') + precios(p) +
       '<h4>Opciones de pago</h4>' + pagos + '<div class="cta-box"><b>Aquí puedes comprar ahora</b>' + buy + '</div></div></div>' +
-      '<h4 id="fi-porque">¿Por qué debes comprarlo?</h4><div class="largo">' + parr + '</div>' + como +
-      '<h4>Beneficios</h4><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' + carac + vars +
+      '<h4 id="fi-porque">¿Por qué debes comprarlo?</h4><div class="largo">' + parr + '</div>' + ad + como +
+      ((p.beneficios || []).length ? '<h4>Beneficios</h4><ul class="ben" style="margin-left:0">' + lis(p.beneficios) + '</ul>' : '') + carac + vars +
       ((p.desventajas || []).length ? '<h4>A tener en cuenta</h4><ul class="neg">' + lis(p.desventajas) + '</ul>' : '') +
       '<h4>Ficha técnica</h4><table class="spec">' + Object.entries(p.specs || {}).map(([k, v]) => '<tr><th scope="row">' + esc(k) + '</th><td>' + esc(v) + '</td></tr>').join('') + '</table>' +
       (p.aviso ? '<p class="aviso">' + esc(p.aviso) + '</p>' : '') +
@@ -1312,7 +1333,7 @@ document.addEventListener('submit', (e) => {
 function cargarCatalogo() {
   grid.setAttribute('aria-busy', 'true');
   if (!grid.querySelector('.sk-card')) grid.innerHTML = '<div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div>'.repeat(3);
-  getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; if (j.whatsapp) CONFIG.WHATSAPP_TIENDA = j.whatsapp; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = []; pintarTodo(); notaTasa(); cargarStock(); abrirEnlace(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
+  getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; if (j.whatsapp) CONFIG.WHATSAPP_TIENDA = j.whatsapp; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = []; cmpManual = false; pintarTodo(); notaTasa(); cargarStock(); abrirEnlace(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
     .catch(() => { grid.setAttribute('aria-busy', 'false'); grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:24px 0">No pudimos cargar los productos. <button type="button" class="btn alt" id="retry-cat" style="margin-left:8px;padding:8px 16px">Reintentar</button></p>'; const rb = $('retry-cat'); if (rb) rb.onclick = cargarCatalogo; });
 }
 cargarCatalogo();
@@ -1323,9 +1344,9 @@ document.addEventListener('click', (e) => {
   else if (b.dataset.ficha) fichaP(b.dataset.ficha, true, false);
   else if (b.dataset.fullficha) fichaP(b.dataset.fullficha, true, true);
   else if (b.dataset.backficha) fichaP(b.dataset.backficha, false);
-  else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
-  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); fiHist = false; if (/^\/p\//.test(location.pathname) || new URLSearchParams(location.search).has('p')) { try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {} } if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
-  else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); aplicarStock(); }
+  else if (b.dataset.cmpcat) { cmpCat = b.dataset.cmpcat; cmpManual = false; cmp = productos.filter((p) => p.categoria === cmpCat).slice(0, 3).map((p) => p.sku); pintarCmp(); pintarGrid(); aplicarStock(); }
+  else if (b.dataset.cmpficha) { const k = b.dataset.cmpficha, pk = prod(k); fiHist = false; if (/^\/p\//.test(location.pathname) || new URLSearchParams(location.search).has('p')) { try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {} } if ($('fi').open) $('fi').close(); if (pk && pk.categoria !== cmpCat) { cmpCat = pk.categoria; cmp = []; } cmpManual = false; if (!cmp.includes(k)) cmp = [k].concat(cmp).slice(0, 3); pintarCmp(); pintarGrid(); aplicarStock(); $('comparador').scrollIntoView({ behavior: 'smooth' }); }
+  else { filtro = b.dataset.cat; pintarCats(); pintarGrid(); pintarCmp(); aplicarStock(); }
 });
 document.addEventListener('change', (e) => {
   const c = e.target.closest('[data-cmp]'), s = e.target.closest('#cmp-sel select');
@@ -1336,7 +1357,7 @@ document.addEventListener('change', (e) => {
     $('cmp-msg').textContent = ''; pintarCmp(); aplicarStock();
   } else if (s) {
     const v = s.value, i = Number(s.dataset.i); cmp[i] = v; cmp = cmp.filter((x, k) => x && cmp.indexOf(x) === k);
-    pintarCmp(); pintarGrid(); aplicarStock();
+    cmpManual = true; pintarCmp(); pintarGrid(); aplicarStock();
   }
 });
 $('fi-x').onclick = () => cerrarFicha(false);

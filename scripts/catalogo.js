@@ -67,7 +67,7 @@ async function agregar() {
     tipo_producto: j.tipo_producto, producto_id: id, bodega_origen_id: bodega });
   guardar(d);
   console.log(`✔ Agregado "${sku}" como BORRADOR (precio sugerido US$ ${j.precio_sugerido_usd}, costo US$ ${j.precio_costo_usd}).`);
-  console.log('  Falta: título comercial, descripcion, por_que, beneficios (3+), specs, imagen en assets/productos/ y precio final. Luego cambia "estado" a "publicado".');
+  console.log('  Falta: título comercial, descripcion, por_que, descripcion_larga, antes_despues ({antes, despues}), beneficios (3+), specs (sin inventar datos ni repetir texto entre secciones), imagen en assets/ y precio final. Luego cambia "estado" a "publicado".');
   if (j.tipo_producto === 'variable') console.log('  ⚠ Es un producto variable (talla/color): la tienda aún no envía variante_id; no lo publiques todavía.');
 }
 
@@ -104,6 +104,7 @@ function validar() {
     if (p.tipo_producto === 'variable') err.push(`${n}: producto variable (talla/color) no soportado todavía.`);
     if (!p.titulo || !p.descripcion || !p.por_que) err.push(`${n}: falta título, descripcion o por_que.`);
     if (!Array.isArray(p.beneficios) || p.beneficios.length < 3) err.push(`${n}: necesita al menos 3 beneficios.`);
+    if (p.antes_despues != null && (typeof p.antes_despues !== 'object' || Array.isArray(p.antes_despues) || (!p.antes_despues.antes && !p.antes_despues.despues))) err.push(`${n}: antes_despues debe ser un objeto con "antes" y "despues".`);
     if (!p.specs || Object.keys(p.specs).length < 2) av.push(`${n}: pocas specs para el comparador.`);
     if (!Number.isInteger(p.producto_id) || !Number.isInteger(p.bodega_origen_id)) (estricto ? err : av).push(`${n}: falta producto_id o bodega_origen_id (no se podrá comprar).`);
   });

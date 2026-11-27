@@ -486,6 +486,23 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     eq((await call(hPag, { method: 'POST', query: { p: 'uro-probiotic-vaginal' } })).s, 405);
   });
 
+  out('\n== Fichas sin repetición ("antes y después") y comparador automático ==');
+  await t('productos publicados: exponen antes_despues verificable y URO incluye cepas/XOS reales de OPositiv', async () => {
+    const pub = require(path.join(root, 'lib/catalogo.js')).publico(null);
+    for (const sku of ['lampara-atrapazancudos', 'mini-ups-10400', 'uro-probiotic-vaginal']) {
+      const p = pub.find((x) => x.sku === sku);
+      si(p && p.antes_despues && p.antes_despues.antes && p.antes_despues.despues, 'falta antes_despues en ' + sku);
+    }
+    const uro = pub.find((x) => x.sku === 'uro-probiotic-vaginal');
+    si(/Lactobacillus acidophilus|L\. acidophilus/i.test(JSON.stringify(uro)) && /XOS/i.test(JSON.stringify(uro)) && !uro.caracteristicas, 'URO debe traer datos reales sin duplicar caracteristicas');
+  });
+  await t('index.html: renderiza "Antes y después" y oculta comparador + accesos hasta haber 2+ coincidentes', async () => {
+    const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+    si(/Antes y después en tu día a día/.test(idx) && /\.ad-c\.despues/.test(idx), 'falta bloque Antes y después en ficha');
+    si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
+    si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
+  });
+
   console.error = origErr; console.warn = origWarn; console.log = origLog;
   out(`\n${ok} pruebas correctas, ${mal} con fallos.`);
   process.exit(mal ? 1 : 0);
