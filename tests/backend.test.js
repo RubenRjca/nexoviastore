@@ -235,10 +235,11 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   out('\n== /api/productos: tasa en vivo, manual o de respaldo ==');
   const hProd = require(path.join(root, 'api/productos.js'));
   const limpiarEnv = () => { delete process.env.TASA_BS; delete process.env.TASA_BS_RESPALDO; };
-  await t('sin ninguna tasa: solo USD (tasa y fuente nulas) y NINGUNA reseña sembrada en el catálogo', async () => { reset(); limpiarEnv(); ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [null, null]); si(r.j.productos.every((p) => Array.isArray(p.resenas) && p.resenas.length === 0), 'resenas debe ir vacío'); });
+  const refProdRe = new RegExp('productos\\/' + catalogo.productoRef() + '$');
+  await t('sin ninguna tasa: solo USD (tasa y fuente nulas) y NINGUNA reseña sembrada en el catálogo', async () => { reset(); limpiarEnv(); ruta(refProdRe, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [null, null]); si(r.j.productos.every((p) => Array.isArray(p.resenas) && p.resenas.length === 0), 'resenas debe ir vacío'); });
   await t('WHATSAPP_TIENDA: /api/productos lo expone solo con dígitos; sin variable → null (el front usa su número por defecto)', async () => {
-    reset(); limpiarEnv(); ruta(/productos\/101$/, detSimple); eq((await call(hProd, {})).j.whatsapp, null);
-    reset(); limpiarEnv(); process.env.WHATSAPP_TIENDA = '+58 424-5474761'; ruta(/productos\/101$/, detSimple); const r = await call(hProd, {}); delete process.env.WHATSAPP_TIENDA; eq(r.j.whatsapp, '584245474761'); });
+    reset(); limpiarEnv(); ruta(refProdRe, detSimple); eq((await call(hProd, {})).j.whatsapp, null);
+    reset(); limpiarEnv(); process.env.WHATSAPP_TIENDA = '+58 424-5474761'; ruta(refProdRe, detSimple); const r = await call(hProd, {}); delete process.env.WHATSAPP_TIENDA; eq(r.j.whatsapp, '584245474761'); });
   await t('ficha de la lámpara: medidas de la caja, características confirmadas e imágenes de ambos modelos (sin inventar peso ni autonomía)', async () => {
     const fs = require('fs'), cat = JSON.parse(fs.readFileSync(path.join(root, 'data/catalogo.json'), 'utf8')), l = cat.productos.find((x) => x.sku === 'lampara-atrapazancudos');
     eq(l.specs['Medidas de la caja'], '23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo');
@@ -306,9 +307,9 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     si(b.contents.length <= 6 && b.contents.every((c) => c.parts[0].text.length <= 500) && b.contents[0].role === 'user' && b.contents[b.contents.length - 1].role === 'user', 'límites no aplicados');
     eq((await call(hChat, { method: 'POST', body: { mensajes: [] } })).s, 400); eq((await call(hChat, { method: 'GET' })).s, 405);
     eq((await call(hChat, { method: 'POST', body: M('hola'), headers: { origin: 'https://otro.com' } })).s, 403); });
-  await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
-  await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(/productos\/101$/, { s: 200, j: { data: { id: 101, tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
-  await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(/productos\/101$/, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });
+  await t('tasa de respaldo (TASA_BS_RESPALDO): se usa y se marca como "respaldo"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(refProdRe, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [140, 'respaldo']); eq(r.j.productos[0].ves, Math.round(r.j.productos[0].usd * 140 * 100) / 100); limpiarEnv(); });
+  await t('tasa en vivo deducida de DroPanas (precio sugerido USD y Bs) → "dropanas"', async () => { reset(); limpiarEnv(); process.env.TASA_BS_RESPALDO = '140'; ruta(refProdRe, { s: 200, j: { data: { id: catalogo.productoRef(), tipo_producto: 'simple', precio_sugerido_usd: 10, precio_sugerido_ves: 1500 } } }); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [150, 'dropanas']); limpiarEnv(); });
+  await t('TASA_BS manual → "manual"', async () => { reset(); limpiarEnv(); process.env.TASA_BS = '152.5'; ruta(refProdRe, detSimple); const r = await call(hProd); eq([r.j.tasa_bs, r.j.tasa_fuente], [152.5, 'manual']); limpiarEnv(); });
 
   out('\n== /api/resenas: solo reseñas reales, con moderación ==');
   const hRes = require(path.join(root, 'api/resenas.js')), moderar = require(path.join(root, 'scripts/resenas-moderar.js'));
@@ -487,6 +488,15 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   });
 
   out('\n== Fichas sin repetición ("antes y después") y comparador automático ==');
+  await t('orden del catálogo: el producto más reciente ("nuevo": true) va primero y los anteriores detrás', async () => {
+    const raw = JSON.parse(fs.readFileSync(path.join(root, 'data/catalogo.json'), 'utf8'));
+    const pubRaw = raw.productos.filter((x) => x.estado === 'publicado').map((x) => x.sku);
+    eq(pubRaw, ['uro-probiotic-vaginal', 'mini-ups-10400', 'lampara-atrapazancudos']);
+    const pub = require(path.join(root, 'lib/catalogo.js')).publico(null).map((x) => x.sku);
+    eq(pub[0], 'uro-probiotic-vaginal');
+    const sc = fs.readFileSync(path.join(root, 'scripts/catalogo.js'), 'utf8');
+    si(sc.includes('d.productos.unshift(') && sc.includes('debe ir al inicio de los productos publicados'), 'scripts/catalogo.js debe insertar al principio y validar orden');
+  });
   await t('productos publicados: exponen antes_despues verificable y URO incluye cepas/XOS reales de OPositiv', async () => {
     const pub = require(path.join(root, 'lib/catalogo.js')).publico(null);
     for (const sku of ['lampara-atrapazancudos', 'mini-ups-10400', 'uro-probiotic-vaginal']) {
@@ -499,8 +509,8 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('index.html: renderiza "Antes y después" y oculta comparador + accesos hasta haber 2+ coincidentes', async () => {
     const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
     si(/Antes y después en tu día a día/.test(idx) && /\.ad-c\.despues/.test(idx), 'falta bloque Antes y después en ficha');
-    si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
-    si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
+    si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx) && /\.cmpx\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
+    si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx) && /cs\.classList\.add\('in'\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
   });
 
   console.error = origErr; console.warn = origWarn; console.log = origLog;

@@ -284,6 +284,7 @@ body{background:var(--hdr)}
 .save{display:inline-block;background:rgba(237,127,97,.16);color:var(--coral-tx);font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;margin:0 0 12px}
 .wk .acts{margin-top:16px;max-width:420px}
 .cmpx{max-width:1200px;margin:48px auto 0;padding:0 20px}
+.cmpx[hidden]{display:none}
 .cmpx>p{margin:0 0 18px;color:var(--muted)}
 .cmp-sel{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
 .cmp-sel select{width:100%;font:inherit;font-weight:600;color:var(--ink);background:var(--field);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px}
@@ -948,6 +949,7 @@ function pintarCmp() {
   if (cs) cs.hidden = !cats.length;
   links.forEach((a) => { a.hidden = !cats.length; });
   if (!cats.length) { $('cmp-cat').innerHTML = ''; $('cmp-sel').innerHTML = ''; $('cmp-t').innerHTML = ''; cmpCat = null; cmp = []; cmpManual = false; return; }
+  if (cs) cs.classList.add('in');
   if (filtro !== 'todos' && cats.some((c) => c.id === filtro) && cmpCat !== filtro) { cmpCat = filtro; cmpManual = false; }
   if (!cats.some((c) => c.id === cmpCat)) { cmpCat = cats[0].id; cmpManual = false; }
   const enCat = productos.filter((p) => p.categoria === cmpCat);
@@ -1333,7 +1335,7 @@ document.addEventListener('submit', (e) => {
 function cargarCatalogo() {
   grid.setAttribute('aria-busy', 'true');
   if (!grid.querySelector('.sk-card')) grid.innerHTML = '<div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div>'.repeat(3);
-  getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; if (j.whatsapp) CONFIG.WHATSAPP_TIENDA = j.whatsapp; tasaFuente = j.tasa_fuente || null; productos = j.productos || []; categorias = j.categorias || []; cmp = []; cmpManual = false; pintarTodo(); notaTasa(); cargarStock(); abrirEnlace(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
+  getJSON(CONFIG.API_PRODUCTOS).then((j) => { tasa = j.tasa_bs || null; if (j.whatsapp) CONFIG.WHATSAPP_TIENDA = j.whatsapp; tasaFuente = j.tasa_fuente || null; productos = (j.productos || []).slice().sort((a, b) => (b.nuevo ? 1 : 0) - (a.nuevo ? 1 : 0)); categorias = j.categorias || []; cmp = []; cmpManual = false; pintarTodo(); notaTasa(); cargarStock(); abrirEnlace(); setInterval(() => { if (!document.hidden) cargarStock(); }, 60000); })
     .catch(() => { grid.setAttribute('aria-busy', 'false'); grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:24px 0">No pudimos cargar los productos. <button type="button" class="btn alt" id="retry-cat" style="margin-left:8px;padding:8px 16px">Reintentar</button></p>'; const rb = $('retry-cat'); if (rb) rb.onclick = cargarCatalogo; });
 }
 cargarCatalogo();

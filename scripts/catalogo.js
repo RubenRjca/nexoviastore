@@ -61,7 +61,7 @@ async function agregar() {
   const sku = flag('sku', String(j.nombre).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40));
   if (d.productos.some((p) => p.sku === sku)) salir(`El sku "${sku}" ya existe; usa --sku otro-nombre.`);
   const cat = d.categorias.find((c) => c.id === flag('categoria')) || d.categorias[0];
-  d.productos.push({ sku, estado: 'borrador', semana: false, categoria: cat.id, icono: cat.icono, etiqueta: '', imagen: '',
+  d.productos.unshift({ sku, estado: 'borrador', semana: false, categoria: cat.id, icono: cat.icono, etiqueta: '', imagen: '',
     titulo: j.nombre, descripcion: j.descripcion_corta || '', por_que: '', beneficios: [], specs: {},
     precio_venta_usd: Number(j.precio_sugerido_usd), precio_oferta_usd: null, costo_usd: Number(j.precio_costo_usd),
     tipo_producto: j.tipo_producto, producto_id: id, bodega_origen_id: bodega });
@@ -108,8 +108,11 @@ function validar() {
     if (!p.specs || Object.keys(p.specs).length < 2) av.push(`${n}: pocas specs para el comparador.`);
     if (!Number.isInteger(p.producto_id) || !Number.isInteger(p.bodega_origen_id)) (estricto ? err : av).push(`${n}: falta producto_id o bodega_origen_id (no se podrá comprar).`);
   });
-  if (d.productos.filter((p) => p.estado === 'publicado' && p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
-  if (d.productos.filter((p) => p.estado === 'publicado' && p.nuevo).length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
+  const pubList = d.productos.filter((p) => p.estado === 'publicado');
+  if (pubList.filter((p) => p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
+  const nuevos = pubList.filter((p) => p.nuevo);
+  if (nuevos.length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
+  if (nuevos.length === 1 && pubList[0] && pubList[0].sku !== nuevos[0].sku) err.push(`${nuevos[0].sku}: tiene "nuevo": true pero debe ir al inicio de los productos publicados en data/catalogo.json.`);
   av.forEach((m) => console.log('⚠ ' + m)); err.forEach((m) => console.error('✖ ' + m));
   console.log(`\n${d.productos.length} productos revisados: ${err.length} errores, ${av.length} avisos.`);
   process.exit(err.length ? 1 : 0);
