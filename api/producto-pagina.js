@@ -26,7 +26,7 @@ function imagenDe(p) {
 function origenDe(req) {
   const h = (req && req.headers) || {};
   const proto = String(h['x-forwarded-proto'] || 'https').split(',')[0].trim().toLowerCase() === 'http' ? 'http' : 'https';
-  const host = String(h['x-forwarded-host'] || h.host || 'nexoviastore-kappa.vercel.app').split(',')[0].trim().replace(/[^a-z0-9.:-]/gi, '') || 'nexoviastore-kappa.vercel.app';
+  const host = String(h['x-forwarded-host'] || h.host || 'nexoviastore.vercel.app').split(',')[0].trim().replace(/[^a-z0-9.:-]/gi, '') || 'nexoviastore.vercel.app';
   return `${proto}://${host}`;
 }
 
@@ -52,6 +52,7 @@ function renderProducto(p, base) {
   out = setMeta(out, 'property', 'og:title', p.titulo);
   out = setMeta(out, 'property', 'og:description', desc);
   out = setMeta(out, 'property', 'og:image', imgUrl);
+  out = setMeta(out, 'property', 'og:image:url', imgUrl);
   out = setMeta(out, 'property', 'og:image:secure_url', imgUrl);
   out = setMeta(out, 'property', 'og:image:type', imgType);
   out = out.replace(/<meta\s+property="og:image:(width|height)"[^>]*>\n?/gi, '');
@@ -59,6 +60,20 @@ function renderProducto(p, base) {
   out = setMeta(out, 'name', 'twitter:title', titulo);
   out = setMeta(out, 'name', 'twitter:description', desc);
   out = setMeta(out, 'name', 'twitter:image', imgUrl);
+  out = setMeta(out, 'name', 'twitter:image:alt', p.titulo);
+  return out;
+}
+
+function renderInicio(base) {
+  const ogImg = `${base}/og-image.jpg?v=2`;
+  const url = `${base}/`;
+  let out = HTML.replace(/(<meta\s+name="viewport"[^>]*>)/i, '$1\n<base href="/">');
+  out = out.replace(/(<link\s+rel="canonical"\s+href=")([^"]*)("[^>]*>)/i, `$1${esc(url)}$3`);
+  out = setMeta(out, 'property', 'og:url', url);
+  out = setMeta(out, 'property', 'og:image', ogImg);
+  out = setMeta(out, 'property', 'og:image:url', ogImg);
+  out = setMeta(out, 'property', 'og:image:secure_url', ogImg);
+  out = setMeta(out, 'name', 'twitter:image', ogImg);
   return out;
 }
 
@@ -74,9 +89,7 @@ module.exports = async (req, res) => {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=300, stale-while-revalidate=600');
-  if (!p) {
-    const out = HTML.replace(/(<meta\s+name="viewport"[^>]*>)/i, '$1\n<base href="/">');
-    return res.status(200).send(out);
-  }
+  if (req.method === 'HEAD') { const r = res.status(200); return typeof r.end === 'function' ? r.end() : r.send(''); }
+  if (!p) return res.status(200).send(renderInicio(base));
   return res.status(200).send(renderProducto(p, base));
 };

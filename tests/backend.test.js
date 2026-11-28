@@ -470,11 +470,11 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   const hPag = require(path.join(root, 'api/producto-pagina.js'));
   await t('producto publicado: og:image usa la foto del producto, og:title su título, <base href="/"> y sin datos internos', async () => {
     for (const [sku, img] of [['auricular-casco-bt57', 'assets/auricular-casco-bt57.jpg'], ['uro-probiotic-vaginal', 'assets/uro-probiotic-vaginal.jpg'], ['mini-ups-10400', 'assets/mini-ups-10400.jpg'], ['lampara-atrapazancudos', 'assets/lampara-atrapazancudos.jpg']]) {
-      const r = await call(hPag, { query: { p: sku }, headers: { host: 'nexoviastore-kappa.vercel.app' } });
+      const r = await call(hPag, { query: { p: sku }, headers: { host: 'nexoviastore.vercel.app' } });
       eq(r.s, 200); si(/text\/html/.test(r.h['content-type'] || ''), 'content-type');
       si(r.b.includes('<base href="/">'), 'falta base href');
-      si(r.b.includes(`https://nexoviastore-kappa.vercel.app/${img}`), 'falta og:image del producto ' + sku);
-      si(r.b.includes(`https://nexoviastore-kappa.vercel.app/p/${sku}`), 'falta og:url de ' + sku);
+      si(r.b.includes(`https://nexoviastore.vercel.app/${img}`), 'falta og:image del producto ' + sku);
+      si(r.b.includes(`https://nexoviastore.vercel.app/p/${sku}`), 'falta og:url de ' + sku);
       si(!r.b.includes('og-image.jpg'), 'no debe usar la portada general en ' + sku);
       si(!/DISTRIDROP|573106517341|SKU-21762|Baruch|584221758634|SKU-21536|costo_usd|producto_id|bodega_origen_id/.test(r.b), 'dato interno expuesto en ' + sku);
     }
@@ -504,7 +504,7 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
       si(p && p.antes_despues && p.antes_despues.antes && p.antes_despues.despues, 'falta antes_despues en ' + sku);
     }
     const bt = pub.find((x) => x.sku === 'auricular-casco-bt57');
-    si(bt && !bt.caracteristicas && !/Baruch|584221758634|SKU-21536/.test(JSON.stringify(bt)), 'BT57 sin caracteristicas duplicadas ni datos internos');
+    si(bt && bt.usd === 30 && !bt.caracteristicas && !/Baruch|584221758634|SKU-21536/.test(JSON.stringify(bt)), 'BT57 debe costar $30 sin caracteristicas duplicadas ni datos internos');
     const uro = pub.find((x) => x.sku === 'uro-probiotic-vaginal');
     si(/Lactobacillus acidophilus|L\. acidophilus/i.test(JSON.stringify(uro)) && /XOS/i.test(JSON.stringify(uro)) && !uro.caracteristicas, 'URO debe traer datos reales sin duplicar caracteristicas');
   });
@@ -513,6 +513,26 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     si(/Antes y después en tu día a día/.test(idx) && /\.ad-c\.despues/.test(idx), 'falta bloque Antes y después en ficha');
     si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx) && /\.cmpx\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
     si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx) && /cs\.classList\.add\('in'\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
+  });
+  await t('bienvenida y diseño responsivo: bienvenida sin recuadro (móvil vertical / PC horizontal) con botón ×, banner de entrega y Open Graph consistente', async () => {
+    const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+    const vj = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+    si(/<dialog class="wl" id="wl"/.test(idx) && /id="wl-x"/.test(idx) && !/class="wl-top"/.test(idx) && !/class="wl-body"/.test(idx), 'bienvenida debe mostrarse sola sin recuadro y con botón ×');
+    si(/assets\/bienvenida-nexovia\.png/.test(idx) && /assets\/bienvenida-nexovia-pc\.png/.test(idx) && /assets\/banner-contra-entrega\.png/.test(idx), 'faltan las imágenes de bienvenida móvil/PC y banner');
+    si(/<picture>/.test(idx) && /bienvenida-nexovia-pc\.png/.test(idx), 'bienvenida debe alternar entre versión vertical y horizontal');
+    si(!/id="hero-fig"/.test(idx) && /id="hero-new"/.test(idx), '¡Recién llegado! debe mostrar solo controles sin recuadro de imagen en el hero');
+    si(/grid-auto-flow:column/.test(idx) && /overflow-x:clip/.test(idx), 'catálogo debe usar scroll lateral controlado sin desborde de página');
+    si(/assets\/hero-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia-noche\.jpg/.test(idx), 'faltan recursos visuales día/noche del hero en index.html');
+    si(/property="og:image:url"/.test(idx) && /https:\/\/nexoviastore\.vercel\.app\/og-image\.jpg/.test(idx) && /name="twitter:image:alt"/.test(idx), 'faltan metadatos Open Graph / Twitter completos con el dominio real en portada');
+    si(vj.headers.some((h) => h.source === '/og-image.jpg'), 'vercel.json debe definir cabeceras públicas para /og-image.jpg');
+    const rHead = await call(hPag, { method: 'HEAD', query: { p: 'auricular-casco-bt57' }, headers: { host: 'nexoviastore.vercel.app' } });
+    eq(rHead.s, 200);
+    const rProd = await call(hPag, { query: { p: 'auricular-casco-bt57' }, headers: { host: 'nexoviastore.vercel.app' } });
+    si(rProd.b.includes('og:image:url" content="https://nexoviastore.vercel.app/assets/auricular-casco-bt57.jpg"'), 'og:image:url debe actualizarse en /p/<sku>');
+    si(/abrirBienvenida\(\)/.test(idx) && /skuEnUrl\(\)/.test(idx), 'modal de bienvenida debe respetar enlaces directos a producto');
+    for (const f of ['og-image.jpg', 'assets/bienvenida-nexovia.png', 'assets/bienvenida-nexovia-pc.png', 'assets/banner-contra-entrega.png', 'assets/hero-nexovia.jpg', 'assets/hero-nexovia-noche.jpg']) {
+      si(fs.existsSync(path.join(root, f)), 'falta archivo ' + f);
+    }
   });
 
   console.error = origErr; console.warn = origWarn; console.log = origLog;
