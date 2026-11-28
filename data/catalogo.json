@@ -43,6 +43,298 @@
   ],
   "productos": [
     {
+      "sku": "auricular-casco-bt57",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": true,
+      "categoria": "audio",
+      "icono": "buds",
+      "etiqueta": "",
+      "imagen": "assets/auricular-casco-bt57.jpg",
+      "imagenes": [
+        "assets/auricular-casco-bt57.jpg",
+        "assets/auricular-casco-bt57-detalle.jpg"
+      ],
+      "titulo": "Auricular Bluetooth para Casco de Moto BT57 con Micrófono",
+      "descripcion": "Auricular inalámbrico BT57 para instalar en cascos de moto compatibles. Incluye altavoces acolchados internos, micrófono de brazo flexible, luz LED azul y roja trasera y cable USB-C.",
+      "por_que": "Sacar el teléfono en moto o usar audífonos comunes bajo el casco resulta incómodo e inseguro. El BT57 fija el audio dentro de tu casco para escuchar indicaciones o llamadas sin soltar el manubrio.",
+      "beneficios": [
+        "Conducción más práctica al integrar audio y llamadas sin sostener el teléfono",
+        "Altavoces planos acolchados pensados para no molestar dentro de cascos compatibles",
+        "Controles amplios en la unidad exterior con tira LED azul frontal y luz roja trasera",
+        "Diseño anunciado como resistente al agua y polvo para traslados cotidianos"
+      ],
+      "specs": {
+        "Modelo": "BT57 (Helmet Wireless Earphone)",
+        "Conectividad": "Bluetooth inalámbrico (audio y llamadas con equipo vinculado)",
+        "Audio y micrófono": "Altavoces internos acolchados + micrófono de brazo flexible con espuma",
+        "Iluminación y controles": "Botón de encendido, control amplio frontal, tira LED azul y luz roja trasera",
+        "Resistencia (empaque)": "Resistente al agua y al polvo (confirmar grado IP exacto en el manual)",
+        "Carga": "Cable USB-A a USB-C incluido",
+        "Medidas de la caja": "10 cm de alto × 15 cm de ancho × 6 cm de largo",
+        "Contenido de la caja": "Unidad BT57, kit de altavoces con micrófono, cable USB, accesorios de montaje y manual",
+        "Autonomía / alcance exacto": "Ver manual incluido del BT57 (no especificado en portada)"
+      },
+      "precio_venta_usd": 29.0,
+      "precio_oferta_usd": null,
+      "costo_usd": 14.99,
+      "producto_id": 21536,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "Cuando te trasladas en motocicleta por trabajo, entregas o diligencias diarias, detenerte a cada momento para revisar el mapa o atender una llamada rompe el ritmo del viaje, mientras que los audífonos tradicionales se mueven o lastiman al presionar el casco.",
+        "El BT57 integra una unidad compacta para el exterior del casco junto a un par de altavoces planos acolchados y micrófono que se fijan en el interior. Una vez emparejado con tu teléfono, centraliza audio multimedia y llamadas desde controles físicos accesibles."
+      ],
+      "antes_despues": {
+        "antes": "Orillarte en la vía para mirar el teléfono, quitarte el casco para contestar o lidiar con cables y audífonos que aprietan las orejas.",
+        "despues": "Escuchar audio o indicaciones de ruta cómodamente dentro del casco con micrófono listo cerca de la boca, controles al alcance y luz trasera roja visible."
+      },
+      "como_funciona": [
+        {
+          "t": "1. Carga y montaje exterior",
+          "d": "Carga la unidad con el cable USB incluido y fíjala en el lateral del casco compatible usando el soporte de montaje."
+        },
+        {
+          "t": "2. Instalación interior",
+          "d": "Ubica los altavoces acolchados a la altura de las orejas y el micrófono frente a la boca, verificando que los cables no estorben al ajustar el casco."
+        },
+        {
+          "t": "3. Vinculación Bluetooth",
+          "d": "Enciende la unidad, activa el Bluetooth de tu celular, selecciona BT57 y regula un volumen prudente para seguir atento al tránsito."
+        }
+      ],
+      "aviso": "Seguridad vial: mantén siempre un volumen que te permita escuchar bocinas, sirenas y señales del entorno. Las funciones exactas de botones, autonomía, alcance Bluetooth y grado de resistencia al agua deben confirmarse en el manual físico que acompaña al BT57. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
+    },
+    {
+      "sku": "uro-probiotic-vaginal",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": false,
+      "categoria": "cuidado-personal",
+      "icono": "care",
+      "etiqueta": "",
+      "imagen": "assets/uro-probiotic-vaginal.jpg",
+      "imagenes": [
+        "assets/uro-probiotic-vaginal.jpg",
+        "assets/uro-probiotic-vaginal-detalle.jpg"
+      ],
+      "titulo": "URO Probiotic Vaginal · 60 Cápsulas",
+      "descripcion": "Simbiótico oral (probiótico + prebiótico) de OPositiv Health con 60 cápsulas veganas rosadas. Combina 4 cepas de Lactobacillus (5 mil millones de UFC) y prebióticos XOS para el cuidado íntimo diario.",
+      "por_que": "Cuando baja la población de lactobacilos, el pH íntimo pierde su acidez natural y aparecen olores o incomodidad. URO apoya ese equilibrio desde adentro en una toma diaria simple.",
+      "beneficios": [
+        "Ayuda a mantener un pH vaginal saludable y ácido de forma natural",
+        "Contribuye a controlar el mal olor íntimo desde la causa",
+        "Respalda el balance de la flora vaginal y el equilibrio frente a levaduras",
+        "Fórmula vegana, sin gluten y sin OMG según el fabricante",
+        "Formato oral práctico que no mancha ni interrumpe tu rutina diaria"
+      ],
+      "specs": {
+        "Marca": "OPositiv Health",
+        "Presentación": "Frasco con 60 cápsulas veganas (cápsula rosada) · 30 porciones",
+        "Mezcla probiótica": "V-Positiv Probiotic Blend® 50 mg (5 mil millones de UFC): L. acidophilus, L. rhamnosus, L. reuteri, L. fermentum",
+        "Prebiótico": "Xilooligosacáridos (XOS) 400 mg",
+        "Otros ingredientes": "Maltodextrina, celulosa (cápsula vegetariana), color natural",
+        "Uso sugerido (fabricante)": "2 cápsulas al día con agua · adultos 18+ · conservar en lugar fresco y seco",
+        "Medidas del empaque": "10 cm × 10 cm × 10 cm"
+      },
+      "precio_venta_usd": 30,
+      "precio_oferta_usd": null,
+      "costo_usd": 11.5,
+      "producto_id": 21762,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "Factores cotidianos como el calor, la humedad, el estrés, el ciclo menstrual, la ropa ajustada o las relaciones íntimas pueden alterar el pH natural de la zona íntima. Cuando faltan bacterias benéficas (Lactobacillus), el pH tiende a subir y favorece desequilibrios, mal olor o molestias recurrentes.",
+        "A diferencia de óvulos puntuales, fragancias o lavados agresivos que solo tapan el olor por unas horas, URO Probiotic Vaginal actúa desde el interior como simbiótico oral: aporta bacterias benéficas junto con su propio alimento prebiótico para acompañar tu rutina diaria sin complicaciones."
+      ],
+      "antes_despues": {
+        "antes": "Incomodidad recurrente, sensación de desajuste después del período, el gimnasio o días de calor, e inseguridad por cambios en el olor íntimo.",
+        "despues": "Una rutina oral discreta de 2 cápsulas al día con agua que respalda el equilibrio natural del pH y la flora íntima, ayudándote a sentir mayor frescura y comodidad (el fabricante recomienda uso diario constante de al menos 8 semanas para resultados completos)."
+      },
+      "como_funciona": [
+        {
+          "t": "1. Refuerza la flora con 4 cepas",
+          "d": "Aporta 5 mil millones de UFC de Lactobacillus acidophilus, L. rhamnosus, L. reuteri y L. fermentum para ayudar a desplazar bacterias no deseables."
+        },
+        {
+          "t": "2. Los prebióticos XOS las mantienen activas",
+          "d": "Incluye 400 mg de xilooligosacáridos (XOS), fibra prebiótica que sirve de alimento directo a los probióticos."
+        },
+        {
+          "t": "3. Constancia diaria sin complicaciones",
+          "d": "Toma 2 cápsulas una vez al día con agua y guarda el frasco en un lugar fresco y seco. Cada envase rinde 30 días."
+        }
+      ],
+      "aviso": "Suplemento dietético para adultas (18+); no está destinado a diagnosticar, tratar, curar ni prevenir enfermedades ni sustituye consulta ginecológica. Si estás embarazada, lactando, tomas medicación o tienes síntomas persistentes, consulta a tu médico y revisa siempre la etiqueta física del frasco. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
+    },
+    {
+      "sku": "mini-ups-10400",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": false,
+      "categoria": "tecnologia",
+      "icono": "bank",
+      "etiqueta": "",
+      "imagen": "assets/mini-ups-10400.jpg",
+      "imagenes": [
+        "assets/mini-ups-10400.jpg",
+        "assets/mini-ups-10400-detalle.jpg"
+      ],
+      "titulo": "Mini UPS 10.400 mAh para Router WiFi y Módem",
+      "descripcion": "Respaldo de energía de 10.400 mAh diseñado para mantener encendidos tu router WiFi, módem o antena PoE durante cortes eléctricos, con salidas DC (5V/9V/12V), PoE (15V/24V) y USB.",
+      "por_que": "Un power bank común solo da 5V USB y no alimenta routers ni equipos PoE sin adaptadores. Este Mini UPS se queda conectado en línea para que tu internet no se caiga cuando falla la luz.",
+      "beneficios": [
+        "Evita desconexiones repentinas durante teletrabajo, clases y cobros por WhatsApp",
+        "Reemplaza adaptadores improvisados al entregar voltajes de red y PoE directamente",
+        "Te permite calcular el respaldo restante de un vistazo gracias a sus 4 indicadores LED",
+        "Instalación rápida desde el primer día con los cables de corriente y DC incluidos"
+      ],
+      "specs": {
+        "Capacidad de batería": "10.400 mAh",
+        "Salidas DC": "5V, 9V y 12V",
+        "Puertos de red": "LAN y PoE (selector 15V / 24V)",
+        "Puerto adicional": "Salida USB",
+        "Entrada de corriente": "100-240Vac",
+        "Controles e indicadores": "LED de nivel (25 %, 50 %, 75 %, 100 %), botón Power y Reset",
+        "Incluye en la caja": "Mini UPS, cable de corriente AC y cables de conexión DC",
+        "Duración exacta (horas)": "No especificada por el fabricante (depende del consumo conectado)"
+      },
+      "precio_venta_usd": 55,
+      "precio_oferta_usd": null,
+      "costo_usd": 28,
+      "producto_id": 21702,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "En Venezuela, cualquier fluctuación o corte eléctrico apaga de inmediato el router o el módem, dejándote desconectado en mitad de una videollamada, una clase o una venta por WhatsApp, y obligándote a esperar varios minutos a que el servicio vuelva a sincronizar.",
+        "A diferencia de una batería portátil convencional, un Mini UPS actúa como puente continuo entre la corriente (100-240Vac) y tu red doméstica: entrega directamente el voltaje que usan la mayoría de módems, routers y equipos PoE, todo desde una caja compacta que ya trae sus cables."
+      ],
+      "antes_despues": {
+        "antes": "Se va la electricidad y pierdes el WiFi al instante; quedas desconectado del trabajo, dependes de datos móviles lentos o esperas cada reinicio del módem.",
+        "despues": "Tu router o módem sigue operando con los 10.400 mAh de respaldo mientras revisas el nivel de carga (LED 25 %–100 %), permitiéndote terminar tus tareas o atender clientes sin interrupciones bruscas."
+      },
+      "como_funciona": [
+        {
+          "t": "1. Solo router WiFi o módem (uso recomendado)",
+          "d": "Conectado únicamente a tu equipo de red de bajo consumo aprovecha al máximo la capacidad disponible (el fabricante no especifica horas exactas de autonomía)."
+        },
+        {
+          "t": "2. Router + carga puntual de teléfono por USB",
+          "d": "Si conectas también un celular al puerto USB en una emergencia, la energía se reparte entre ambos equipos y el tiempo de respaldo disminuye."
+        },
+        {
+          "t": "3. Equipos de alto consumo",
+          "d": "No está pensado para laptops ni varios equipos exigentes al mismo tiempo; su propósito es sostener conectividad esencial."
+        }
+      ],
+      "aviso": "Nota transparente: los escenarios de duración son orientativos según el consumo conectado; el fabricante no especifica un número exacto de horas. Verifica el voltaje de tu equipo (5V, 9V, 12V o PoE 15V/24V) antes de conectarlo. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
+    },
+    {
+      "sku": "lampara-atrapazancudos",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": false,
+      "categoria": "hogar",
+      "icono": "todos",
+      "etiqueta": "",
+      "imagen": "assets/lampara-atrapazancudos.jpg",
+      "titulo": "Lámpara Atrapazancudos con Luz Violeta",
+      "descripcion": "Trampa física de mosquitos con luz violeta y ventilador de succión silencioso hacia un depósito inferior desmontable, sin humo ni aerosoles. Elige versión enchufable (USB) o recargable.",
+      "por_que": "Dormir con el zumbido de zancudos o respirando espirales e insecticidas afecta el descanso. Esta lámpara reduce insectos en tu habitación de forma limpia, silenciosa y continua.",
+      "beneficios": [
+        "Descanso sin olor a humo, aerosoles ni químicos en habitaciones cerradas",
+        "Operación discreta pensada para usar toda la noche junto a la cama",
+        "Ahorro frente a recambios desechables o espirales de un solo uso",
+        "Doble utilidad como luz de compañía nocturna tenue",
+        "Disponible en versión fija por cable USB o inalámbrica recargable"
+      ],
+      "specs": {
+        "Tipo": "Lámpara atrapamosquitos",
+        "Luz": "Violeta (tipo UV)",
+        "Mecanismo": "Ventilador motorizado de alta succión + depósito inferior",
+        "Control": "100 % físico (botón de encendido)",
+        "Modelos": "Enchufable (USB) o con pila recargable",
+        "Medidas de la caja": "23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo",
+        "Colocación": "Superficie plana y seca, con las aberturas libres",
+        "Energía": "USB (enchufable) o pila recargable (puerto USB-C visible en la tapa)",
+        "Depósito": "Inferior, transparente y desmontable, para vaciar los insectos"
+      },
+      "precio_venta_usd": 29,
+      "precio_oferta_usd": null,
+      "costo_usd": 14.99,
+      "producto_id": 21692,
+      "bodega_origen_id": 1,
+      "variantes": {
+        "1950": {
+          "alias": [
+            "enchufable",
+            "echufable"
+          ],
+          "nombre": "Modelo 1 · Enchufable (USB)",
+          "detalle": "Funciona conectado por USB mientras la usas. Ideal para dejarla fija cerca de un tomacorriente.",
+          "imagen": "assets/lampara-atrapazancudos.jpg"
+        },
+        "1951": {
+          "alias": [
+            "recargable"
+          ],
+          "nombre": "Modelo 2 · Recargable con pila",
+          "detalle": "Funciona con pila recargable: cárgala y úsala sin cable, con botón de encendido en la parte superior.",
+          "imagen": "assets/lampara-modelo-2.jpg"
+        }
+      },
+      "descripcion_larga": [
+        "Además de interrumpir el sueño con picaduras y zumbidos, en zonas tropicales los mosquitos representan un riesgo sanitario (dengue, zika o chikungunya). Muchos hogares evitan los insecticidas en aerosol o espirales porque dejan olor fuerte en cuartos cerrados, especialmente donde duermen niños o mascotas.",
+        "Este equipo ofrece una alternativa física y limpia: combina atracción visual en ambientes oscuros con succión de aire silenciosa en un cuerpo compacto que puedes colocar en la mesa de noche o una repisa."
+      ],
+      "antes_despues": {
+        "antes": "Desvelos por zumbidos cerca de la cama, picaduras al amanecer y habitaciones cargadas de humo o olor a repelente químico.",
+        "despues": "Noches más tranquilas con una luz nocturna suave, aire libre de químicos y mosquitos atrapados en el depósito inferior listos para desechar en segundos."
+      },
+      "como_funciona": [
+        {
+          "t": "1. Atracción en oscuridad",
+          "d": "La luz violeta actúa como punto focal para insectos voladores; funciona mejor al encenderla en un espacio con poca o ninguna otra luz."
+        },
+        {
+          "t": "2. Succión silenciosa",
+          "d": "Al acercarse, la corriente del ventilador los arrastra hacia el interior sin descargas eléctricas ruidosas."
+        },
+        {
+          "t": "3. Vaciado higiénico",
+          "d": "Apaga o desconecta el equipo, desenrosca el depósito inferior translúcido, vacíalo y límpialo antes del próximo uso."
+        }
+      ],
+      "aviso": "Ayuda a reducir mosquitos en el ambiente, pero no sustituye las medidas de prevención: elimina el agua estancada, usa repelente y mosquiteros cuando sea necesario. Su efecto depende del lugar y de la cantidad de insectos.",
+      "caracteristicas": [
+        {
+          "t": "Control 100 % físico",
+          "d": "Sistema libre de insecticidas, pastillas o humo."
+        },
+        {
+          "t": "Luz violeta biomimética",
+          "d": "Emite espectro violeta diseñado para atraer insectos voladores."
+        },
+        {
+          "t": "Ventilador motorizado de alta succión",
+          "d": "Genera flujo descendente constante hacia la cámara inferior."
+        },
+        {
+          "t": "Diseño silencioso",
+          "d": "Motor de bajo ruido apto para dormitorios y cuartos infantiles."
+        },
+        {
+          "t": "Función de luz nocturna",
+          "d": "Iluminación ambiental tenue útil para orientarse de noche."
+        },
+        {
+          "t": "Alimentación USB versátil",
+          "d": "Modelo 1 por cable USB directo y Modelo 2 con batería interna y puerto USB-C superior."
+        },
+        {
+          "t": "Depósito inferior desmontable",
+          "d": "Base translúcida removible que permite ver y vaciar los insectos sin tocarlos."
+        }
+      ]
+    },
+    {
       "sku": "cargador-65w",
       "estado": "borrador",
       "semana": true,
@@ -209,272 +501,6 @@
       "costo_usd": null,
       "producto_id": null,
       "bodega_origen_id": null
-    },
-    {
-      "sku": "lampara-atrapazancudos",
-      "estado": "publicado",
-      "semana": false,
-      "nuevo": false,
-      "categoria": "hogar",
-      "icono": "todos",
-      "etiqueta": "",
-      "imagen": "assets/lampara-atrapazancudos.jpg",
-      "titulo": "Lámpara Atrapazancudos con Luz Violeta",
-      "descripcion": "Lámpara con luz violeta y ventilador de succión que atrae a los mosquitos hacia un depósito inferior, sin humo ni químicos. Disponible en modelo enchufable (USB) o recargable con pila.",
-      "por_que": "Los mosquitos arruinan el descanso y pueden transmitir enfermedades. Esta lámpara te ayuda a reducirlos dentro del ambiente donde duermes, trabajas o descansas, de forma silenciosa y sin aerosoles.",
-      "beneficios": [
-        "Luz violeta biomimética que atrae a los mosquitos",
-        "Ventilador de succión que los dirige al depósito",
-        "Diseño silencioso, ideal para dormir toda la noche",
-        "Función de luz nocturna",
-        "Depósito inferior desmontable para vaciar fácil",
-        "Control 100 % físico, sin humo ni aerosoles",
-        "Carga USB: modelo enchufable o recargable con pila"
-      ],
-      "specs": {
-        "Tipo": "Lámpara atrapamosquitos",
-        "Luz": "Violeta (tipo UV)",
-        "Mecanismo": "Ventilador motorizado de alta succión + depósito inferior",
-        "Control": "100 % físico (botón de encendido)",
-        "Modelos": "Enchufable (USB) o con pila recargable",
-        "Medidas de la caja": "23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo",
-        "Colocación": "Superficie plana y seca, con las aberturas libres",
-        "Energía": "USB (enchufable) o pila recargable (puerto USB-C visible en la tapa)",
-        "Depósito": "Inferior, transparente y desmontable, para vaciar los insectos"
-      },
-      "precio_venta_usd": 29.0,
-      "precio_oferta_usd": null,
-      "costo_usd": 14.99,
-      "producto_id": 21692,
-      "bodega_origen_id": 1,
-      "variantes": {
-        "1950": {
-          "alias": [
-            "enchufable",
-            "echufable"
-          ],
-          "nombre": "Modelo 1 · Enchufable (USB)",
-          "detalle": "Funciona conectado por USB mientras la usas. Ideal para dejarla fija cerca de un tomacorriente.",
-          "imagen": "assets/lampara-atrapazancudos.jpg"
-        },
-        "1951": {
-          "alias": [
-            "recargable"
-          ],
-          "nombre": "Modelo 2 · Recargable con pila",
-          "detalle": "Funciona con pila recargable: cárgala y úsala sin cable, con botón de encendido en la parte superior.",
-          "imagen": "assets/lampara-modelo-2.jpg"
-        }
-      },
-      "descripcion_larga": [
-        "Los mosquitos no solo molestan: sus picaduras interrumpen el sueño y, en Venezuela y otras zonas tropicales, algunas especies transmiten enfermedades como el dengue, el zika o el chikungunya. Reducir la cantidad de mosquitos dentro del hogar es una de las medidas que ayudan a proteger a tu familia y a dormir mejor.",
-        "Esta lámpara atrapazancudos combina dos mecanismos: una luz violeta (cercana a la ultravioleta), que atrae a muchos insectos voladores, y un ventilador de succión que los arrastra hacia la abertura y los deja en un depósito inferior translúcido. No usa humo, vapores ni aerosoles.",
-        "Su formato compacto (la caja mide 23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo) se adapta a una mesa auxiliar, una repisa o una mesa de noche, y además incluye función de luz nocturna."
-      ],
-      "como_funciona": [
-        {
-          "t": "1. La luz violeta atrae",
-          "d": "Muchos insectos voladores, entre ellos los mosquitos, se sienten atraídos por la luz violeta/ultravioleta en la oscuridad."
-        },
-        {
-          "t": "2. El ventilador succiona",
-          "d": "Al acercarse a la abertura, el ventilador crea una corriente de aire que los arrastra hacia dentro."
-        },
-        {
-          "t": "3. El depósito los retiene",
-          "d": "Los insectos quedan en el depósito inferior translúcido. Para vaciarlo, apaga o desconecta la lámpara, retira el depósito y límpialo antes del siguiente uso."
-        }
-      ],
-      "aviso": "Ayuda a reducir mosquitos en el ambiente, pero no sustituye las medidas de prevención: elimina el agua estancada, usa repelente y mosquiteros cuando sea necesario. Su efecto depende del lugar y de la cantidad de insectos.",
-      "caracteristicas": [
-        {
-          "t": "Control 100 % físico",
-          "d": "Control físico de mosquitos, sin químicos, humo ni aerosoles."
-        },
-        {
-          "t": "Luz violeta biomimética",
-          "d": "Su luz violeta imita señales que atraen a los mosquitos hacia la lámpara."
-        },
-        {
-          "t": "Ventilador motorizado de alta succión",
-          "d": "Su ventilador motorizado de alta succión los dirige hacia el depósito."
-        },
-        {
-          "t": "Diseño silencioso",
-          "d": "Funciona en silencio, pensada para dormir toda la noche."
-        },
-        {
-          "t": "Función de luz nocturna",
-          "d": "Además de atraer mosquitos, sirve como luz nocturna suave."
-        },
-        {
-          "t": "Carga USB",
-          "d": "Se alimenta por USB. El modelo recargable tiene puerto USB-C en la tapa superior."
-        },
-        {
-          "t": "Depósito inferior desmontable",
-          "d": "Es transparente y lo retiras para vaciar los insectos de forma fácil."
-        }
-      ]
-    },
-    {
-      "sku": "mini-ups-10400",
-      "estado": "publicado",
-      "semana": false,
-      "nuevo": false,
-      "categoria": "tecnologia",
-      "icono": "bank",
-      "etiqueta": "",
-      "imagen": "assets/mini-ups-10400.jpg",
-      "imagenes": [
-        "assets/mini-ups-10400.jpg",
-        "assets/mini-ups-10400-detalle.jpg"
-      ],
-      "titulo": "Mini UPS 10.400 mAh para Router WiFi y Módem",
-      "descripcion": "Respaldo de energía portátil de 10.400 mAh para mantener encendidos tu router WiFi, módem o equipo PoE cuando se va la luz. Salidas DC de 5V, 9V y 12V, puertos LAN y PoE (15V/24V) y salida USB.",
-      "por_que": "Evita que un corte o bajón eléctrico interrumpa tu internet en pleno teletrabajo, estudio o venta por WhatsApp. Mantiene tu conexión activa y estable para que no pierdas tiempo esperando reinicios.",
-      "beneficios": [
-        "Mantiene encendidos tu router WiFi, módem o equipo PoE durante cortes eléctricos",
-        "Batería de 10.400 mAh en formato compacto y portátil",
-        "Salidas versátiles en un solo equipo: DC 5V, 9V, 12V, PoE (15V/24V) y puerto USB",
-        "Indicador LED de nivel de carga (25 %, 50 %, 75 % y 100 %), botón Power y Reset",
-        "Entrada 100-240Vac con cable de corriente y cables de conexión DC incluidos"
-      ],
-      "specs": {
-        "Capacidad de batería": "10.400 mAh",
-        "Salidas DC": "5V, 9V y 12V",
-        "Puertos de red": "LAN y PoE (selector 15V / 24V)",
-        "Puerto adicional": "Salida USB",
-        "Entrada de corriente": "100-240Vac",
-        "Controles e indicadores": "LED de nivel (25 %, 50 %, 75 %, 100 %), botón Power y Reset",
-        "Incluye en la caja": "Mini UPS, cable de corriente AC y cables de conexión DC",
-        "Duración exacta (horas)": "No especificada por el fabricante (depende del consumo conectado)"
-      },
-      "precio_venta_usd": 55.0,
-      "precio_oferta_usd": null,
-      "costo_usd": 28.0,
-      "producto_id": 21702,
-      "bodega_origen_id": 1,
-      "descripcion_larga": [
-        "Cuando falla la electricidad en Venezuela, lo primero que se apaga es el router o el módem, dejándote sin conexión justo cuando más la necesitas. Este Mini UPS de 10.400 mAh funciona como respaldo eléctrico directo para mantener tu router WiFi, módem o equipo PoE encendido sin cortes.",
-        "En tu día a día marca una diferencia inmediata: puedes seguir trabajando desde casa, asistir a clases en línea, atender clientes y confirmar pagos por WhatsApp, o ver contenido sin interrupciones ni tener que esperar a que el router vuelva a conectar tras cada bajón.",
-        "Integra en un solo equipo compacto salidas DC de 5V, 9V y 12V, puertos LAN y PoE con selector 15V/24V, salida USB y entrada 100-240Vac, además de LED indicador de batería del 25 % al 100 % y cables incluidos. Para total transparencia, el fabricante no especifica un número exacto de horas de autonomía ni amperajes por puerto."
-      ],
-      "como_funciona": [
-        {
-          "t": "1. Solo router WiFi o módem (mayor rendimiento orientativo)",
-          "d": "Al destinar los 10.400 mAh exclusivamente a un equipo de red de consumo bajo o moderado, obtienes la mayor duración relativa del respaldo durante un corte de luz (cifra exacta no especificada por el fabricante)."
-        },
-        {
-          "t": "2. Router / módem + carga puntual de celular",
-          "d": "Si además conectas un teléfono al puerto USB para salir de un apuro, la batería se reparte entre ambos equipos y la duración será menor que usando solo el router."
-        },
-        {
-          "t": "3. Equipos exigentes como laptops o múltiples cargas simultáneas",
-          "d": "Frente a una laptop o varios equipos exigentes a la vez, la autonomía cae rápido o puede no ser compatible en potencia/voltaje; este Mini UPS está pensado principalmente para routers, módems y respaldo ligero."
-        }
-      ],
-      "caracteristicas": [
-        {
-          "t": "Capacidad de 10.400 mAh",
-          "d": "Respaldo portátil pensado para mantener tu red encendida ante fallas eléctricas."
-        },
-        {
-          "t": "Salidas 5V, 9V y 12V",
-          "d": "Compatibilidad versátil con la mayoría de routers WiFi y módems domésticos."
-        },
-        {
-          "t": "LAN + PoE (15V / 24V)",
-          "d": "Puertos LAN y PoE dedicados con selector físico de 15V o 24V."
-        },
-        {
-          "t": "Puerto de salida USB",
-          "d": "Respaldo ligero adicional para carga puntual cuando lo necesites."
-        },
-        {
-          "t": "LED de 25 % a 100 %",
-          "d": "Visualiza fácilmente la carga disponible junto al botón Power y botón Reset."
-        },
-        {
-          "t": "Cables incluidos",
-          "d": "Viene con entrada 100-240Vac, cable de corriente y cables de conexión DC."
-        }
-      ],
-      "aviso": "Nota transparente: los escenarios de duración son ejemplos lógicos orientativos según el consumo conectado; el fabricante no especifica un número exacto de horas. Verifica el voltaje de tu equipo (5V, 9V, 12V o PoE 15V/24V) antes de conectarlo. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
-    },
-    {
-      "sku": "uro-probiotic-vaginal",
-      "estado": "publicado",
-      "semana": false,
-      "nuevo": true,
-      "categoria": "cuidado-personal",
-      "icono": "care",
-      "etiqueta": "",
-      "imagen": "assets/uro-probiotic-vaginal.jpg",
-      "imagenes": [
-        "assets/uro-probiotic-vaginal.jpg",
-        "assets/uro-probiotic-vaginal-detalle.jpg"
-      ],
-      "titulo": "URO Probiotic Vaginal · 60 Cápsulas",
-      "descripcion": "Suplemento probiótico en presentación de 60 cápsulas veganas (cápsula rosada) formulado para apoyar el equilibrio de la flora vaginal, regular el pH y ayudar a controlar los malos olores y molestias íntimas.",
-      "por_que": "El equilibrio del pH y la flora íntima puede verse alterado por estrés, cambios hormonales o rutinas diarias. URO Probiotic Vaginal te acompaña en tu cuidado íntimo diario para sentirte más cómoda, fresca y segura.",
-      "beneficios": [
-        "Presentación práctica de 60 cápsulas veganas (cápsula rosada)",
-        "Apoya el equilibrio natural del pH y la flora vaginal",
-        "Ayuda a controlar los malos olores y molestias íntimas",
-        "Acompaña el cuidado diario frente a desequilibrios e infecciones",
-        "Envase compacto (10 × 10 × 10 cm) fácil de guardar o llevar contigo"
-      ],
-      "specs": {
-        "Presentación": "Frasco con 60 cápsulas veganas (cápsula rosada)",
-        "Tipo": "Suplemento dietético probiótico (OPositiv Health)",
-        "Apoyo principal": "Equilibrio del pH, control de olores, flora vaginal y balance",
-        "Medidas del empaque": "10 cm de largo × 10 cm de ancho × 10 cm de alto",
-        "Cepas o dosis exacta": "Ver etiqueta trasera del envase (no detallada en portada)"
-      },
-      "precio_venta_usd": 30.0,
-      "precio_oferta_usd": null,
-      "costo_usd": 11.5,
-      "producto_id": 21762,
-      "bodega_origen_id": 1,
-      "descripcion_larga": [
-        "El bienestar íntimo influye directamente en tu tranquilidad diaria. Cambios de rutina, humedad, calor, estrés o desajustes en el pH pueden generar incomodidad, olor o alteraciones en la flora vaginal.",
-        "URO Probiotic Vaginal (de OPositiv Health) viene en frasco de 60 cápsulas veganas diseñadas como suplemento dietético de apoyo para mantener un pH saludable, cuidar el equilibrio de la flora vaginal, apoyar el balance frente a levaduras y reducir malos olores.",
-        "Su formato compacto de 10 × 10 × 10 cm cabe sin problema en tu tocador o bolso. Para total transparencia, en esta ficha solo publicamos los datos confirmados en el envase y la descripción oficial, sin inventar cepas ni dosis no confirmadas."
-      ],
-      "como_funciona": [
-        {
-          "t": "1. Apoyo al equilibrio de la flora",
-          "d": "Su fórmula probiótica está orientada a respaldar la flora vaginal saludable en el cuidado diario."
-        },
-        {
-          "t": "2. Regulación del pH y frescura",
-          "d": "Ayuda a mantener niveles saludables de pH y a controlar el mal olor íntimo de forma práctica."
-        },
-        {
-          "t": "3. Uso responsable y constante",
-          "d": "Sigue las indicaciones de uso impresas en el frasco y acompáñalo de hábitos saludables e higiene adecuada."
-        }
-      ],
-      "caracteristicas": [
-        {
-          "t": "60 cápsulas veganas",
-          "d": "Frasco sellado con cápsula rosada en presentación de 60 unidades."
-        },
-        {
-          "t": "Equilibrio del pH vaginal",
-          "d": "Orientado a apoyar un pH íntimo saludable y equilibrado."
-        },
-        {
-          "t": "Cuidado de flora y olores",
-          "d": "Indicado en el envase para apoyar flora vaginal, balance y control de olor."
-        },
-        {
-          "t": "Suplemento dietético",
-          "d": "Presentación oral práctica de OPositiv Health, tamaño compacto de 10 × 10 × 10 cm."
-        }
-      ],
-      "aviso": "Este producto es un suplemento dietético y no sustituye una consulta ginecológica ni un tratamiento médico prescrito. Si presentas síntomas persistentes, embarazo, lactancia o tomas medicación, consulta a tu médico antes de usarlo y revisa la etiqueta completa del envase. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
     }
   ]
 }

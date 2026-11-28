@@ -61,13 +61,13 @@ async function agregar() {
   const sku = flag('sku', String(j.nombre).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40));
   if (d.productos.some((p) => p.sku === sku)) salir(`El sku "${sku}" ya existe; usa --sku otro-nombre.`);
   const cat = d.categorias.find((c) => c.id === flag('categoria')) || d.categorias[0];
-  d.productos.push({ sku, estado: 'borrador', semana: false, categoria: cat.id, icono: cat.icono, etiqueta: '', imagen: '',
+  d.productos.unshift({ sku, estado: 'borrador', semana: false, categoria: cat.id, icono: cat.icono, etiqueta: '', imagen: '',
     titulo: j.nombre, descripcion: j.descripcion_corta || '', por_que: '', beneficios: [], specs: {},
     precio_venta_usd: Number(j.precio_sugerido_usd), precio_oferta_usd: null, costo_usd: Number(j.precio_costo_usd),
     tipo_producto: j.tipo_producto, producto_id: id, bodega_origen_id: bodega });
   guardar(d);
   console.log(`✔ Agregado "${sku}" como BORRADOR (precio sugerido US$ ${j.precio_sugerido_usd}, costo US$ ${j.precio_costo_usd}).`);
-  console.log('  Falta: título comercial, descripcion, por_que, beneficios (3+), specs, imagen en assets/productos/ y precio final. Luego cambia "estado" a "publicado".');
+  console.log('  Falta: título comercial, descripcion, por_que, descripcion_larga, antes_despues ({antes, despues}), beneficios (3+), specs (sin inventar datos ni repetir texto entre secciones), imagen en assets/ y precio final. Luego cambia "estado" a "publicado".');
   if (j.tipo_producto === 'variable') console.log('  ⚠ Es un producto variable (talla/color): la tienda aún no envía variante_id; no lo publiques todavía.');
 }
 
@@ -104,11 +104,15 @@ function validar() {
     if (p.tipo_producto === 'variable') err.push(`${n}: producto variable (talla/color) no soportado todavía.`);
     if (!p.titulo || !p.descripcion || !p.por_que) err.push(`${n}: falta título, descripcion o por_que.`);
     if (!Array.isArray(p.beneficios) || p.beneficios.length < 3) err.push(`${n}: necesita al menos 3 beneficios.`);
+    if (p.antes_despues != null && (typeof p.antes_despues !== 'object' || Array.isArray(p.antes_despues) || (!p.antes_despues.antes && !p.antes_despues.despues))) err.push(`${n}: antes_despues debe ser un objeto con "antes" y "despues".`);
     if (!p.specs || Object.keys(p.specs).length < 2) av.push(`${n}: pocas specs para el comparador.`);
     if (!Number.isInteger(p.producto_id) || !Number.isInteger(p.bodega_origen_id)) (estricto ? err : av).push(`${n}: falta producto_id o bodega_origen_id (no se podrá comprar).`);
   });
-  if (d.productos.filter((p) => p.estado === 'publicado' && p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
-  if (d.productos.filter((p) => p.estado === 'publicado' && p.nuevo).length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
+  const pubList = d.productos.filter((p) => p.estado === 'publicado');
+  if (pubList.filter((p) => p.semana).length > 1) av.push('Hay más de un "Producto de la semana"; se mostrará el primero.');
+  const nuevos = pubList.filter((p) => p.nuevo);
+  if (nuevos.length > 1) err.push('Solo un producto publicado puede tener "nuevo": true (regla de «Recién llegado»).');
+  if (nuevos.length === 1 && pubList[0] && pubList[0].sku !== nuevos[0].sku) err.push(`${nuevos[0].sku}: tiene "nuevo": true pero debe ir al inicio de los productos publicados en data/catalogo.json.`);
   av.forEach((m) => console.log('⚠ ' + m)); err.forEach((m) => console.error('✖ ' + m));
   console.log(`\n${d.productos.length} productos revisados: ${err.length} errores, ${av.length} avisos.`);
   process.exit(err.length ? 1 : 0);
