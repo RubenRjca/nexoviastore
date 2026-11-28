@@ -514,11 +514,12 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx) && /\.cmpx\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
     si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx) && /cs\.classList\.add\('in'\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
   });
-  await t('bienvenida y diseño responsivo: modal vertical #wl con botón ×, banner de entrega y Open Graph consistente', async () => {
+  await t('bienvenida y diseño responsivo: bienvenida sin recuadro (móvil vertical / PC horizontal) con botón ×, banner de entrega y Open Graph consistente', async () => {
     const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
     const vj = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
-    si(/<dialog class="co wl" id="wl"/.test(idx) && /id="wl-x"/.test(idx) && /id="wl-go"/.test(idx), 'falta modal vertical de bienvenida o botón ×');
-    si(/assets\/bienvenida-nexovia\.webp/.test(idx) && /assets\/banner-contra-entrega\.jpg/.test(idx), 'faltan las imágenes integradas de bienvenida y banner');
+    si(/<dialog class="wl" id="wl"/.test(idx) && /id="wl-x"/.test(idx) && !/class="wl-top"/.test(idx) && !/class="wl-body"/.test(idx), 'bienvenida debe mostrarse sola sin recuadro y con botón ×');
+    si(/assets\/bienvenida-nexovia\.png/.test(idx) && /assets\/bienvenida-nexovia-pc\.png/.test(idx) && /assets\/banner-contra-entrega\.png/.test(idx), 'faltan las imágenes de bienvenida móvil/PC y banner');
+    si(/<picture>/.test(idx) && /bienvenida-nexovia-pc\.png/.test(idx), 'bienvenida debe alternar entre versión vertical y horizontal');
     si(!/id="hero-fig"/.test(idx) && /id="hero-new"/.test(idx), '¡Recién llegado! debe mostrar solo controles sin recuadro de imagen en el hero');
     si(/grid-auto-flow:column/.test(idx) && /overflow-x:clip/.test(idx), 'catálogo debe usar scroll lateral controlado sin desborde de página');
     si(/assets\/hero-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia-noche\.jpg/.test(idx), 'faltan recursos visuales día/noche del hero en index.html');
@@ -529,7 +530,7 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     const rProd = await call(hPag, { query: { p: 'auricular-casco-bt57' }, headers: { host: 'nexoviastore.vercel.app' } });
     si(rProd.b.includes('og:image:url" content="https://nexoviastore.vercel.app/assets/auricular-casco-bt57.jpg"'), 'og:image:url debe actualizarse en /p/<sku>');
     si(/abrirBienvenida\(\)/.test(idx) && /skuEnUrl\(\)/.test(idx), 'modal de bienvenida debe respetar enlaces directos a producto');
-    for (const f of ['og-image.jpg', 'assets/bienvenida-nexovia.webp', 'assets/banner-contra-entrega.jpg', 'assets/hero-nexovia.jpg', 'assets/hero-nexovia-noche.jpg']) {
+    for (const f of ['og-image.jpg', 'assets/bienvenida-nexovia.png', 'assets/bienvenida-nexovia-pc.png', 'assets/banner-contra-entrega.png', 'assets/hero-nexovia.jpg', 'assets/hero-nexovia-noche.jpg']) {
       si(fs.existsSync(path.join(root, f)), 'falta archivo ' + f);
     }
   });

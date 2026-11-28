@@ -398,12 +398,12 @@ dialog.fi .fg{display:block}
 .banner-c .b-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--coral-press);font-weight:800;font-size:15.5px;padding:13px 24px;border-radius:999px;text-decoration:none;transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
 .banner-c .b-cta:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.2)}
 .banner-c .b-cta svg{width:20px;height:20px}
-.banner-media{position:relative;width:100%;background:rgba(255,255,255,.94);border-radius:16px;padding:clamp(6px,1vw,10px);box-shadow:0 12px 28px rgba(20,30,36,.18);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.banner-media{position:relative;width:100%;max-width:520px;margin-inline:auto;background:transparent;border-radius:16px;padding:0;box-shadow:0 14px 32px rgba(18,30,40,.22);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .banner-media:empty{min-height:clamp(140px,22vw,220px);background:rgba(255,255,255,.14);border:1.5px dashed rgba(255,255,255,.46);box-shadow:none;padding:0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.banner-media img{display:block;max-width:100%;width:100%;height:auto;aspect-ratio:1376 / 768;max-height:290px;object-fit:contain;object-position:center;border-radius:10px}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .banner-c{background:linear-gradient(118deg,#1A3444 0%,#264A5F 56%,#B85238 100%);box-shadow:0 18px 44px rgba(0,0,0,.38)}:root:not([data-theme="light"]) .banner-media{background:rgba(16,25,34,.78);border:1px solid var(--line)}:root:not([data-theme="light"]) .banner-media:empty{background:rgba(12,19,27,.30);border:1.5px dashed rgba(255,255,255,.28)}}
+.banner-media img{display:block;width:100%;max-width:100%;height:auto;aspect-ratio:1376 / 768;object-fit:contain;object-position:center;border-radius:16px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .banner-c{background:linear-gradient(118deg,#1A3444 0%,#264A5F 56%,#B85238 100%);box-shadow:0 18px 44px rgba(0,0,0,.38)}:root:not([data-theme="light"]) .banner-media{background:transparent;border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 38px rgba(0,0,0,.42)}:root:not([data-theme="light"]) .banner-media:empty{background:rgba(12,19,27,.30);border:1.5px dashed rgba(255,255,255,.28)}}
 :root[data-theme="dark"] .banner-c{background:linear-gradient(118deg,#1A3444 0%,#264A5F 56%,#B85238 100%);box-shadow:0 18px 44px rgba(0,0,0,.38)}
-:root[data-theme="dark"] .banner-media{background:rgba(16,25,34,.78);border:1px solid var(--line)}
+:root[data-theme="dark"] .banner-media{background:transparent;border:1px solid rgba(255,255,255,.16);box-shadow:0 16px 38px rgba(0,0,0,.42)}
 :root[data-theme="dark"] .banner-media:empty{background:rgba(12,19,27,.30);border:1.5px dashed rgba(255,255,255,.28)}
 @media (max-width:820px){.banner-c{grid-template-columns:1fr;padding:28px 22px;text-align:center}.banner-c p{margin:0 auto 18px}.banner-c .b-cta{justify-self:center}}
 .hero-new{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
@@ -667,22 +667,17 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 /* Validación amigable */
 .fe{display:block;margin-top:4px;font-size:13px;line-height:1.35;color:var(--err);font-weight:600}
 [aria-invalid="true"]{border-color:var(--err)!important;box-shadow:0 0 0 3px rgba(180,35,24,.15)}
-/* Modal de bienvenida vertical */
-dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border-radius:22px;overflow:auto}
-.wl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--hdr);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
-.wl-brand{display:flex;align-items:center;gap:10px}
-.wl-brand img{height:30px;width:auto;display:block}
-.wl-brand b{display:block;font-size:16px;font-weight:800;line-height:1;color:var(--head)}
-.wl-brand small{display:block;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-top:2px;font-weight:600}
-.wl-x{color:var(--ink);background:var(--cream);border:1px solid var(--line);width:44px;height:44px;font-size:26px;flex:none}
-.wl-x:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
-.wl-media{background:var(--cream);padding:12px 14px 0;display:flex;justify-content:center}
-.wl-media:empty{width:min(250px,calc(100% - 32px));aspect-ratio:9 / 16;max-height:36dvh;margin:14px auto 0;padding:0;border-radius:16px;border:1.5px dashed var(--line);background:var(--cat-tile) url("assets/isotipo.png") center/68px auto no-repeat}
-.wl-media img{display:block;max-width:100%;width:auto;height:auto;max-height:min(60dvh,540px);object-fit:contain;border-radius:14px;box-shadow:0 10px 26px rgba(18,43,58,.16)}
-.wl-body{padding:16px 22px 22px;text-align:center}
-.wl-body h2{margin:0 0 6px;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--head)}
-.wl-body p{margin:0 0 16px;font-size:14px;color:var(--muted);line-height:1.45}
-.wl-go{width:100%;text-align:center}
+/* Bienvenida sin recuadro: imagen sola adaptada al navegador (vertical móvil / horizontal PC, laptop, TV) */
+dialog.wl{width:fit-content;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:0;border:0;margin:auto;background:transparent;box-shadow:none;overflow:visible}
+dialog.wl[open]{display:grid;place-items:center}
+dialog.wl::backdrop{background:rgba(11,17,23,.74);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.wl-stage{position:relative;display:inline-flex;align-items:center;justify-content:center;max-width:100%;max-height:calc(100dvh - 24px)}
+.wl-media{display:block;max-width:100%;max-height:calc(100dvh - 24px);background:transparent;padding:0;border:0}
+.wl-media picture{display:block;max-width:100%;max-height:calc(100dvh - 24px)}
+.wl-media img{display:block;max-width:min(94vw,1080px);max-height:calc(100dvh - 32px);width:auto;height:auto;object-fit:contain;border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.48);cursor:pointer}
+.wl-x{position:absolute;top:10px;right:10px;z-index:3;width:42px;height:42px;border-radius:50%;background:rgba(14,21,28,.82);color:#fff;border:1.5px solid rgba(255,255,255,.65);font-size:26px;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.38);transition:background .18s,border-color .18s,transform .18s}
+.wl-x:hover{background:var(--coral);color:#fff;border-color:#fff;transform:scale(1.06)}
+.wl-x:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -760,7 +755,7 @@ dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);p
 <div class="banner-c"><div><h2>Paga cuando lo recibas</h2>
 <p>Pide hoy tu producto Nexovia y paga solo cuando lo tengas en tus manos. Sin riesgo, sin pagar antes.</p>
 <a class="b-cta" href="#productos">Ver productos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-<div class="banner-media" id="banner-media" data-slot="banner"><img src="assets/banner-contra-entrega.jpg" alt="Mensajero entregando pedido de Nexovia Store en la puerta con Pago Contra Entrega" width="1376" height="768" loading="lazy"></div></div></section>
+<div class="banner-media" id="banner-media" data-slot="banner"><img src="assets/banner-contra-entrega.png" alt="Mensajero entregando pedido de Nexovia Store en la puerta con Pago Contra Entrega" width="1376" height="768" loading="lazy"></div></div></section>
 
 <section class="how reveal" id="como-funciona" aria-labelledby="h2"><span class="eyebrow">Compra en 3 pasos</span><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
 <ol><li><h3>Elige tu producto</h3><p>Agrégalo al carrito y revisa el total en dólares o bolívares.</p></li>
@@ -827,16 +822,10 @@ dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);p
 </dialog>
 <div class="nx-toast" id="nx-toast" role="status" aria-live="polite" hidden></div>
 
-<dialog class="co wl" id="wl" aria-labelledby="wl-t">
-<div class="wl-top">
-<div class="wl-brand"><img src="assets/isotipo.png" alt="" width="34" height="28"><span><b>NEXOVIA</b><small>STORE</small></span></div>
+<dialog class="wl" id="wl" aria-label="¡Bienvenido a Nexovia Store!">
+<div class="wl-stage">
+<div class="wl-media" id="wl-media" data-slot="bienvenida"><picture><source media="(min-width: 768px) and (orientation: landscape), (min-width: 900px), (orientation: landscape) and (max-height: 540px)" srcset="assets/bienvenida-nexovia-pc.png" width="1376" height="768"><img src="assets/bienvenida-nexovia.png" alt="¡Bienvenido a Nexovia Store! La tienda en línea para todo lo que necesitas" width="768" height="1376"></picture></div>
 <button class="x wl-x" type="button" id="wl-x" aria-label="Cerrar bienvenida">×</button>
-</div>
-<div class="wl-media" id="wl-media" data-slot="bienvenida"><img src="assets/bienvenida-nexovia.webp" alt="¡Bienvenido a Nexovia Store! Envío rápido, gran variedad y garantía" width="768" height="1376"></div>
-<div class="wl-body">
-<h2 id="wl-t">¡Bienvenido a Nexovia Store!</h2>
-<p>Productos seleccionados con envíos a domicilio en Venezuela y Pago Contra Entrega.</p>
-<button class="btn wl-go" type="button" id="wl-go">Explorar tienda</button>
 </div>
 </dialog>
 
@@ -1387,7 +1376,7 @@ function abrirBienvenida() {
 }
 if (wl) {
   $('wl-x').onclick = () => cerrarBienvenida(false);
-  $('wl-go').onclick = () => cerrarBienvenida(true);
+  $('wl-media').onclick = () => cerrarBienvenida(true);
   wl.addEventListener('click', (e) => { if (e.target === wl) cerrarBienvenida(false); });
   wl.addEventListener('cancel', (e) => { e.preventDefault(); cerrarBienvenida(false); });
   abrirBienvenida();
