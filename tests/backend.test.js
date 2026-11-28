@@ -517,9 +517,11 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('bienvenida y diseño responsivo: modal vertical #wl con botón × y recursos reales en assets/', async () => {
     const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
     si(/<dialog class="co wl" id="wl"/.test(idx) && /id="wl-x"/.test(idx) && /id="wl-go"/.test(idx), 'falta modal vertical de bienvenida o botón ×');
-    si(/assets\/bienvenida-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia\.jpg/.test(idx) && /assets\/banner-contra-entrega\.jpg/.test(idx), 'faltan recursos visuales Nexovia en index.html');
+    si(!/id="hero-fig"/.test(idx) && /id="hero-new"/.test(idx), '¡Recién llegado! debe mostrar solo controles sin recuadro de imagen en el hero');
+    si(/grid-auto-flow:column/.test(idx) && /overflow-x:clip/.test(idx), 'catálogo debe usar scroll lateral controlado sin desborde de página');
+    si(/assets\/bienvenida-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia-noche\.jpg/.test(idx) && /assets\/banner-contra-entrega\.jpg/.test(idx), 'faltan recursos visuales día/noche Nexovia en index.html');
     si(/abrirBienvenida\(\)/.test(idx) && /skuEnUrl\(\)/.test(idx), 'modal de bienvenida debe respetar enlaces directos a producto');
-    for (const f of ['assets/bienvenida-nexovia.jpg', 'assets/hero-nexovia.jpg', 'assets/banner-contra-entrega.jpg']) {
+    for (const f of ['assets/bienvenida-nexovia.jpg', 'assets/hero-nexovia.jpg', 'assets/hero-nexovia-noche.jpg', 'assets/banner-contra-entrega.jpg']) {
       si(fs.existsSync(path.join(root, f)), 'falta archivo ' + f);
     }
   });
