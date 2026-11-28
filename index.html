@@ -257,10 +257,17 @@ body{background:var(--hdr)}
 .hero .btn.alt{color:#fff;border-color:rgba(255,255,255,.78)}.hero .btn.alt:hover{background:#fff;color:#2C5D76;border-color:#fff}
 .hero-img figcaption{color:#D5E3EA;font-weight:500}
 .ft{background:var(--foot)}
-.cats{max-width:1200px;margin:30px auto 0;padding:4px 20px;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;justify-content:center}
-.cat-b{flex:none;width:104px;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--ink)}
-.cat-b .c{width:76px;height:76px;border-radius:20px;background:var(--cream);border:1.5px solid var(--line);display:grid;place-items:center;color:var(--head);transition:border-color .18s,transform .18s,box-shadow .18s,background-color .18s}
-.cat-b .c svg{width:36px;height:auto}.cat-b:hover .c{border-color:var(--head);transform:translateY(-2px);box-shadow:0 6px 16px rgba(32,60,76,.10)}
+.cats-sec{max-width:1200px;margin:38px auto 0;padding:0 20px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-all{all:unset;cursor:pointer;font-family:var(--font-disp);font-size:13.5px;font-weight:700;color:var(--head);padding:6px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--hdr);transition:border-color .15s,background-color .15s}
+.sec-all:hover{border-color:var(--coral);background:rgba(237,127,97,.08)}
+.sec-all[hidden]{display:none}
+.cats{margin:0;padding:4px 0 6px;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+.cat-b{flex:none;width:112px;display:flex;flex-direction:column;align-items:center;gap:9px;background:none;border:0;padding:2px;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--ink)}
+.cat-b .c{width:84px;height:84px;border-radius:20px;background:var(--cream);border:1.5px solid var(--line);display:grid;place-items:center;color:var(--head);overflow:hidden;padding:8px;transition:border-color .18s,transform .18s,box-shadow .18s,background-color .18s}
+.cat-b .c svg{width:38px;height:auto}
+.cat-b .c img{display:block;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;border-radius:12px}
+.cat-b:hover .c{border-color:var(--head);transform:translateY(-2px);box-shadow:0 6px 16px rgba(32,60,76,.10)}
 .cat-b[aria-pressed="true"] .c{border-color:var(--coral);border-width:2px;background:rgba(237,127,97,.14);box-shadow:0 6px 16px rgba(237,127,97,.18)}
 .sec-t{margin:0 0 6px;font-size:clamp(24px,2.8vw,30px);font-weight:800;letter-spacing:-.02em;color:var(--head)}
 .card .img,.wk .img,.fi .img{position:relative;aspect-ratio:1;min-width:0;min-height:0;border-radius:12px;background:var(--hdr);display:grid;place-items:center;color:var(--head);overflow:hidden}
@@ -618,7 +625,7 @@ dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);p
 .wl-brand img{height:30px;width:auto;display:block}
 .wl-brand b{display:block;font-size:16px;font-weight:800;line-height:1;color:var(--head)}
 .wl-brand small{display:block;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-top:2px;font-weight:600}
-.wl-x{color:var(--ink);background:var(--cream);border:1px solid var(--line);width:40px;height:40px;font-size:24px;flex:none}
+.wl-x{color:var(--ink);background:var(--cream);border:1px solid var(--line);width:44px;height:44px;font-size:26px;flex:none}
 .wl-x:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
 .wl-media{background:var(--cream);padding:14px 16px 0;display:flex;justify-content:center}
 .wl-media img{display:block;max-width:100%;width:auto;height:auto;max-height:46dvh;object-fit:contain;border-radius:14px;box-shadow:0 10px 26px rgba(18,43,58,.14)}
@@ -683,7 +690,10 @@ dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);p
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></span><div><h3>Rastrea tu pedido</h3><p>Sigue el estado de tu compra hasta que llegue a tu puerta. <a href="#rastreo" data-rastreo style="color:var(--head);font-weight:700;text-decoration:underline">Consultar ahora</a></p></div></article>
 <article><span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.2c-.5-1-1.5-1.5-2.8-1.5-1.6 0-2.7.8-2.7 2 0 3 5.6 1.4 5.6 4.3 0 1.2-1.1 2-2.9 2-1.4 0-2.5-.6-3-1.7M12 6v1.7M12 16.3V18"/></svg></span><div><h3>Precios en USD y Bs</h3><p>Ve el precio en dólares o en bolívares, como te convenga.</p></div></article>
 </section>
+<section class="cats-sec reveal" aria-labelledby="cats-h">
+<div class="sec-head"><div><span class="eyebrow">Explora por categoría</span><h2 id="cats-h" class="sec-t">Categorías</h2></div><button type="button" class="sec-all" id="cats-all" data-cat="todos" hidden>Ver todos →</button></div>
 <nav class="cats" id="cats" aria-label="Categorías"></nav>
+</section>
 <section class="wk reveal" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
 
 <section class="cat reveal" id="productos" aria-labelledby="h3c"><span class="eyebrow">Catálogo Nexovia</span><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
@@ -947,7 +957,14 @@ const etiqueta = (p) => p.etiqueta || (p.nuevo ? 'Nuevo' : '') || (p.usd_antes ?
 function pintarCats() {
   const hay = (id) => productos.some((p) => p.categoria === id);
   const todas = [{ id: 'todos', nombre: 'Todos', icono: 'todos' }].concat(categorias.filter((c) => hay(c.id)));
-  $('cats').innerHTML = todas.map((c) => '<button class="cat-b" type="button" data-cat="' + esc(c.id) + '" aria-pressed="' + (c.id === filtro) + '"><span class="c">' + (ICONS[c.icono] || '') + '</span>' + esc(c.nombre) + '</button>').join('');
+  const visualCat = (c) => {
+    if (c.id === 'todos') return '<img src="assets/isotipo.png" alt="" loading="lazy">';
+    const rep = productos.find((p) => p.categoria === c.id && p.imagen && /^assets\//.test(p.imagen));
+    return rep ? '<img src="' + esc(rep.imagen) + '" alt="" loading="lazy">' : (ICONS[c.icono] || '');
+  };
+  $('cats').innerHTML = todas.map((c) => '<button class="cat-b" type="button" data-cat="' + esc(c.id) + '" aria-pressed="' + (c.id === filtro) + '"><span class="c">' + visualCat(c) + '</span>' + esc(c.nombre) + '</button>').join('');
+  const allBtn = $('cats-all');
+  if (allBtn) allBtn.hidden = filtro === 'todos';
 }
 const ICO_SH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
 const ICO_ZOOM = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M11 8v6M8 11h6"/></svg>';
