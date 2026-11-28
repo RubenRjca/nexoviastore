@@ -469,14 +469,14 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   out('\n== /api/producto-pagina: vista previa Open Graph por producto y entrada directa ==');
   const hPag = require(path.join(root, 'api/producto-pagina.js'));
   await t('producto publicado: og:image usa la foto del producto, og:title su título, <base href="/"> y sin datos internos', async () => {
-    for (const [sku, img] of [['uro-probiotic-vaginal', 'assets/uro-probiotic-vaginal.jpg'], ['mini-ups-10400', 'assets/mini-ups-10400.jpg'], ['lampara-atrapazancudos', 'assets/lampara-atrapazancudos.jpg']]) {
+    for (const [sku, img] of [['auricular-casco-bt57', 'assets/auricular-casco-bt57.jpg'], ['uro-probiotic-vaginal', 'assets/uro-probiotic-vaginal.jpg'], ['mini-ups-10400', 'assets/mini-ups-10400.jpg'], ['lampara-atrapazancudos', 'assets/lampara-atrapazancudos.jpg']]) {
       const r = await call(hPag, { query: { p: sku }, headers: { host: 'nexoviastore-kappa.vercel.app' } });
       eq(r.s, 200); si(/text\/html/.test(r.h['content-type'] || ''), 'content-type');
       si(r.b.includes('<base href="/">'), 'falta base href');
       si(r.b.includes(`https://nexoviastore-kappa.vercel.app/${img}`), 'falta og:image del producto ' + sku);
       si(r.b.includes(`https://nexoviastore-kappa.vercel.app/p/${sku}`), 'falta og:url de ' + sku);
       si(!r.b.includes('og-image.jpg'), 'no debe usar la portada general en ' + sku);
-      si(!/DISTRIDROP|573106517341|SKU-21762|costo_usd|producto_id|bodega_origen_id/.test(r.b), 'dato interno expuesto en ' + sku);
+      si(!/DISTRIDROP|573106517341|SKU-21762|Baruch|584221758634|SKU-21536|costo_usd|producto_id|bodega_origen_id/.test(r.b), 'dato interno expuesto en ' + sku);
     }
   });
   await t('producto inexistente o en borrador: cae de forma segura a la portada general (og-image.jpg) y POST → 405', async () => {
@@ -491,18 +491,20 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
   await t('orden del catálogo: el producto más reciente ("nuevo": true) va primero y los anteriores detrás', async () => {
     const raw = JSON.parse(fs.readFileSync(path.join(root, 'data/catalogo.json'), 'utf8'));
     const pubRaw = raw.productos.filter((x) => x.estado === 'publicado').map((x) => x.sku);
-    eq(pubRaw, ['uro-probiotic-vaginal', 'mini-ups-10400', 'lampara-atrapazancudos']);
+    eq(pubRaw, ['auricular-casco-bt57', 'uro-probiotic-vaginal', 'mini-ups-10400', 'lampara-atrapazancudos']);
     const pub = require(path.join(root, 'lib/catalogo.js')).publico(null).map((x) => x.sku);
-    eq(pub[0], 'uro-probiotic-vaginal');
+    eq(pub[0], 'auricular-casco-bt57');
     const sc = fs.readFileSync(path.join(root, 'scripts/catalogo.js'), 'utf8');
     si(sc.includes('d.productos.unshift(') && sc.includes('debe ir al inicio de los productos publicados'), 'scripts/catalogo.js debe insertar al principio y validar orden');
   });
   await t('productos publicados: exponen antes_despues verificable y URO incluye cepas/XOS reales de OPositiv', async () => {
     const pub = require(path.join(root, 'lib/catalogo.js')).publico(null);
-    for (const sku of ['lampara-atrapazancudos', 'mini-ups-10400', 'uro-probiotic-vaginal']) {
+    for (const sku of ['auricular-casco-bt57', 'lampara-atrapazancudos', 'mini-ups-10400', 'uro-probiotic-vaginal']) {
       const p = pub.find((x) => x.sku === sku);
       si(p && p.antes_despues && p.antes_despues.antes && p.antes_despues.despues, 'falta antes_despues en ' + sku);
     }
+    const bt = pub.find((x) => x.sku === 'auricular-casco-bt57');
+    si(bt && !bt.caracteristicas && !/Baruch|584221758634|SKU-21536/.test(JSON.stringify(bt)), 'BT57 sin caracteristicas duplicadas ni datos internos');
     const uro = pub.find((x) => x.sku === 'uro-probiotic-vaginal');
     si(/Lactobacillus acidophilus|L\. acidophilus/i.test(JSON.stringify(uro)) && /XOS/i.test(JSON.stringify(uro)) && !uro.caracteristicas, 'URO debe traer datos reales sin duplicar caracteristicas');
   });

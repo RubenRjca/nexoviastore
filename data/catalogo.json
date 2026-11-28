@@ -43,10 +43,72 @@
   ],
   "productos": [
     {
-      "sku": "uro-probiotic-vaginal",
+      "sku": "auricular-casco-bt57",
       "estado": "publicado",
       "semana": false,
       "nuevo": true,
+      "categoria": "audio",
+      "icono": "buds",
+      "etiqueta": "",
+      "imagen": "assets/auricular-casco-bt57.jpg",
+      "imagenes": [
+        "assets/auricular-casco-bt57.jpg",
+        "assets/auricular-casco-bt57-detalle.jpg"
+      ],
+      "titulo": "Auricular Bluetooth para Casco de Moto BT57 con Micrófono",
+      "descripcion": "Auricular inalámbrico BT57 para instalar en cascos de moto compatibles. Incluye altavoces acolchados internos, micrófono de brazo flexible, luz LED azul y roja trasera y cable USB-C.",
+      "por_que": "Sacar el teléfono en moto o usar audífonos comunes bajo el casco resulta incómodo e inseguro. El BT57 fija el audio dentro de tu casco para escuchar indicaciones o llamadas sin soltar el manubrio.",
+      "beneficios": [
+        "Conducción más práctica al integrar audio y llamadas sin sostener el teléfono",
+        "Altavoces planos acolchados pensados para no molestar dentro de cascos compatibles",
+        "Controles amplios en la unidad exterior con tira LED azul frontal y luz roja trasera",
+        "Diseño anunciado como resistente al agua y polvo para traslados cotidianos"
+      ],
+      "specs": {
+        "Modelo": "BT57 (Helmet Wireless Earphone)",
+        "Conectividad": "Bluetooth inalámbrico (audio y llamadas con equipo vinculado)",
+        "Audio y micrófono": "Altavoces internos acolchados + micrófono de brazo flexible con espuma",
+        "Iluminación y controles": "Botón de encendido, control amplio frontal, tira LED azul y luz roja trasera",
+        "Resistencia (empaque)": "Resistente al agua y al polvo (confirmar grado IP exacto en el manual)",
+        "Carga": "Cable USB-A a USB-C incluido",
+        "Medidas de la caja": "10 cm de alto × 15 cm de ancho × 6 cm de largo",
+        "Contenido de la caja": "Unidad BT57, kit de altavoces con micrófono, cable USB, accesorios de montaje y manual",
+        "Autonomía / alcance exacto": "Ver manual incluido del BT57 (no especificado en portada)"
+      },
+      "precio_venta_usd": 29.0,
+      "precio_oferta_usd": null,
+      "costo_usd": 14.99,
+      "producto_id": 21536,
+      "bodega_origen_id": 1,
+      "descripcion_larga": [
+        "Cuando te trasladas en motocicleta por trabajo, entregas o diligencias diarias, detenerte a cada momento para revisar el mapa o atender una llamada rompe el ritmo del viaje, mientras que los audífonos tradicionales se mueven o lastiman al presionar el casco.",
+        "El BT57 integra una unidad compacta para el exterior del casco junto a un par de altavoces planos acolchados y micrófono que se fijan en el interior. Una vez emparejado con tu teléfono, centraliza audio multimedia y llamadas desde controles físicos accesibles."
+      ],
+      "antes_despues": {
+        "antes": "Orillarte en la vía para mirar el teléfono, quitarte el casco para contestar o lidiar con cables y audífonos que aprietan las orejas.",
+        "despues": "Escuchar audio o indicaciones de ruta cómodamente dentro del casco con micrófono listo cerca de la boca, controles al alcance y luz trasera roja visible."
+      },
+      "como_funciona": [
+        {
+          "t": "1. Carga y montaje exterior",
+          "d": "Carga la unidad con el cable USB incluido y fíjala en el lateral del casco compatible usando el soporte de montaje."
+        },
+        {
+          "t": "2. Instalación interior",
+          "d": "Ubica los altavoces acolchados a la altura de las orejas y el micrófono frente a la boca, verificando que los cables no estorben al ajustar el casco."
+        },
+        {
+          "t": "3. Vinculación Bluetooth",
+          "d": "Enciende la unidad, activa el Bluetooth de tu celular, selecciona BT57 y regula un volumen prudente para seguir atento al tránsito."
+        }
+      ],
+      "aviso": "Seguridad vial: mantén siempre un volumen que te permita escuchar bocinas, sirenas y señales del entorno. Las funciones exactas de botones, autonomía, alcance Bluetooth y grado de resistencia al agua deben confirmarse en el manual físico que acompaña al BT57. Compra segura con tu código de compra, pago contra entrega previa aprobación y soporte por WhatsApp (+58 424-5474761)."
+    },
+    {
+      "sku": "uro-probiotic-vaginal",
+      "estado": "publicado",
+      "semana": false,
+      "nuevo": false,
       "categoria": "cuidado-personal",
       "icono": "care",
       "etiqueta": "",

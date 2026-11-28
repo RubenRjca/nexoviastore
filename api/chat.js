@@ -19,12 +19,15 @@ const sistema = () => {
   const l = pub.find((i) => i.sku === 'lampara-atrapazancudos');
   const u = pub.find((i) => i.sku === 'mini-ups-10400');
   const p = pub.find((i) => i.sku === 'uro-probiotic-vaginal');
+  const b = pub.find((i) => i.sku === 'auricular-casco-bt57');
   const precio = l ? precioVigente(l).toFixed(2).replace('.', ',') : '29,00';
   const precioUps = u ? precioVigente(u).toFixed(2).replace('.', ',') : '55,00';
   const precioUro = p ? precioVigente(p).toFixed(2).replace('.', ',') : '30,00';
+  const precioBt = b ? precioVigente(b).toFixed(2).replace('.', ',') : '29,00';
   return `Eres el asistente de Nexovia Store, una tienda en línea en Venezuela con envíos a domicilio y pago contra entrega. Respondes en español de Venezuela, cálido, claro y MUY breve (máximo 3 frases cortas). Sin tablas ni listas largas.
 
 DATOS OFICIALES (lo único que puedes afirmar):
+- Producto: Auricular Bluetooth para Casco de Moto BT57 con Micrófono. Precio final único: US$ ${precioBt}, con envío incluido y sin cargos ocultos. Incluye unidad BT57 para el lateral del casco, altavoces internos acolchados, micrófono de brazo flexible, cable USB-A a USB-C, accesorios de montaje y manual. Medidas de la caja: 10 × 15 × 6 cm. Tiene tira LED azul frontal, luz roja trasera y diseño anunciado como resistente al agua y polvo; autonomía exacta, alcance y grado IP se confirman en el manual incluido.
 - Producto: Lámpara atrapazancudos con luz violeta (Physical Mosquito Trap Lamp, con función de luz nocturna). Precio final único: US$ ${precio}, con envío incluido y sin cargos ocultos. En la tienda también se muestra el equivalente en bolívares.
 - Modelo 1: enchufable por cable USB. Modelo 2: recargable con pila y puerto USB-C en la tapa superior. El cliente elige el modelo al comprar.
 - Características de la lámpara: control 100 % físico y sin químicos, luz violeta biomimética que atrae a los mosquitos, ventilador motorizado de alta succión, diseño silencioso para dormir toda la noche, función de luz nocturna suave, depósito inferior transparente y desmontable. Medidas de la caja: 23,5 cm de alto × 12,5 cm de ancho × 12,5 cm de largo.
