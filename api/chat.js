@@ -23,7 +23,7 @@ const sistema = () => {
   const precio = l ? precioVigente(l).toFixed(2).replace('.', ',') : '29,00';
   const precioUps = u ? precioVigente(u).toFixed(2).replace('.', ',') : '55,00';
   const precioUro = p ? precioVigente(p).toFixed(2).replace('.', ',') : '30,00';
-  const precioBt = b ? precioVigente(b).toFixed(2).replace('.', ',') : '29,00';
+  const precioBt = b ? precioVigente(b).toFixed(2).replace('.', ',') : '30,00';
   return `Eres el asistente de Nexovia Store, una tienda en línea en Venezuela con envíos a domicilio y pago contra entrega. Respondes en español de Venezuela, cálido, claro y MUY breve (máximo 3 frases cortas). Sin tablas ni listas largas.
 
 DATOS OFICIALES (lo único que puedes afirmar):

@@ -504,7 +504,7 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
       si(p && p.antes_despues && p.antes_despues.antes && p.antes_despues.despues, 'falta antes_despues en ' + sku);
     }
     const bt = pub.find((x) => x.sku === 'auricular-casco-bt57');
-    si(bt && !bt.caracteristicas && !/Baruch|584221758634|SKU-21536/.test(JSON.stringify(bt)), 'BT57 sin caracteristicas duplicadas ni datos internos');
+    si(bt && bt.usd === 30 && !bt.caracteristicas && !/Baruch|584221758634|SKU-21536/.test(JSON.stringify(bt)), 'BT57 debe costar $30 sin caracteristicas duplicadas ni datos internos');
     const uro = pub.find((x) => x.sku === 'uro-probiotic-vaginal');
     si(/Lactobacillus acidophilus|L\. acidophilus/i.test(JSON.stringify(uro)) && /XOS/i.test(JSON.stringify(uro)) && !uro.caracteristicas, 'URO debe traer datos reales sin duplicar caracteristicas');
   });
@@ -513,6 +513,15 @@ const detVar = { s: 200, j: { data: { id: 202, tipo_producto: 'variable', varian
     si(/Antes y después en tu día a día/.test(idx) && /\.ad-c\.despues/.test(idx), 'falta bloque Antes y después en ficha');
     si(/<section[^>]*id="comparador"[^>]*\bhidden\b/.test(idx) && /<a href="#comparador" hidden>/.test(idx) && /\.mnav a\[hidden\]\{display:none\}/.test(idx) && /\.cmpx\[hidden\]\{display:none\}/.test(idx), 'comparador debe iniciar oculto con sus enlaces');
     si(/const catsCmp = \(\) => categorias\.filter/.test(idx) && /links\.forEach\(\(a\) => \{ a\.hidden = !cats\.length; \}\)/.test(idx) && /cs\.classList\.add\('in'\)/.test(idx), 'comparador debe activarse/ocultarse automáticamente por coincidencia');
+  });
+  await t('bienvenida y diseño responsivo: modal vertical #wl con botón × y recursos reales en assets/', async () => {
+    const idx = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+    si(/<dialog class="co wl" id="wl"/.test(idx) && /id="wl-x"/.test(idx) && /id="wl-go"/.test(idx), 'falta modal vertical de bienvenida o botón ×');
+    si(/assets\/bienvenida-nexovia\.jpg/.test(idx) && /assets\/hero-nexovia\.jpg/.test(idx) && /assets\/banner-contra-entrega\.jpg/.test(idx), 'faltan recursos visuales Nexovia en index.html');
+    si(/abrirBienvenida\(\)/.test(idx) && /skuEnUrl\(\)/.test(idx), 'modal de bienvenida debe respetar enlaces directos a producto');
+    for (const f of ['assets/bienvenida-nexovia.jpg', 'assets/hero-nexovia.jpg', 'assets/banner-contra-entrega.jpg']) {
+      si(fs.existsSync(path.join(root, f)), 'falta archivo ' + f);
+    }
   });
 
   console.error = origErr; console.warn = origWarn; console.log = origLog;

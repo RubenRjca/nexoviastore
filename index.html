@@ -31,15 +31,18 @@
 <meta name="twitter:image" content="https://nexoviastore-kappa.vercel.app/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--teal:#2C5D76;--coral:#ED7F61;--coral-press:#D96B4D;--coral-tx:#C24D2E;--ink:#444444;--cream:#F8F8F8;--line:#E3E6E8;--field:#FFFFFF;--hdr:#FFFFFF;--muted:#6B7378;--on-teal:#FFFFFF;--err:#B42318;--ok:#1E6B34;--warn-bg:#FFF4E5;--warn-ink:#5B3A00;--warn-bd:#F0C27A;
+:root{--teal:#2C5D76;--coral:#ED7F61;--coral-press:#D96B4D;--coral-tx:#C24D2E;--ink:#333E44;--cream:#F6F8F9;--line:#E1E6E9;--field:#FFFFFF;--hdr:#FFFFFF;--muted:#5E6A70;--on-teal:#FFFFFF;--err:#B42318;--ok:#1E6B34;--warn-bg:#FFF4E5;--warn-ink:#5B3A00;--warn-bd:#F0C27A;--font-body:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--font-disp:"Plus Jakarta Sans",Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#E9ECEE;--cream:#171D21;--line:#2C363C;--field:#222B30;--hdr:#1D252A;--muted:#9AA5AB;--teal:#2C5D76;--coral-tx:#FF9A7D;--err:#FF8B80;--ok:#7CE09B;--warn-bg:rgba(91,58,0,.42);--warn-ink:#FFE2A8;--warn-bd:#9C6D1A}}
-:root[data-theme="dark"]{--ink:#E9ECEE;--cream:#171D21;--line:#2C363C;--field:#222B30;--hdr:#1D252A;--muted:#9AA5AB;--coral-tx:#FF9A7D;--err:#FF8B80;--ok:#7CE09B;--warn-bg:rgba(91,58,0,.42);--warn-ink:#FFE2A8;--warn-bd:#9C6D1A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#ECF1F4;--cream:#151B1F;--line:#2A353C;--field:#1F282E;--hdr:#1A2227;--muted:#9CA8AF;--teal:#2C5D76;--coral-tx:#FF9A7D;--err:#FF8B80;--ok:#7CE09B;--warn-bg:rgba(91,58,0,.42);--warn-ink:#FFE2A8;--warn-bd:#9C6D1A}}
+:root[data-theme="dark"]{--ink:#ECF1F4;--cream:#151B1F;--line:#2A353C;--field:#1F282E;--hdr:#1A2227;--muted:#9CA8AF;--coral-tx:#FF9A7D;--err:#FF8B80;--ok:#7CE09B;--warn-bg:rgba(91,58,0,.42);--warn-ink:#FFE2A8;--warn-bd:#9C6D1A}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px);overflow-x:clip}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:Montserrat,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.5;overflow-x:clip}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3,h4,.sec-t,.brand .n b,.btn,.p-usd,.wk .p-usd,.tot strong{font-family:var(--font-disp)}
+.p-usd,.p-ves,.tot strong,.wk .p-usd{font-variant-numeric:tabular-nums}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;margin:0 0 8px;font-family:var(--font-disp);font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-tx)}
 img{max-width:100%;height:auto}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:4px}
@@ -243,22 +246,23 @@ dialog.co::backdrop{background:rgba(20,30,36,.6)}
 @media (max-width:520px){.ai-p{right:10px;left:10px;width:auto;height:min(78dvh,620px);bottom:max(76px,calc(env(safe-area-inset-bottom,0px) + 70px))}}
 @media (max-width:520px){.pm{grid-template-columns:1fr}.ai-fab span{display:none}.ai-fab{padding:15px}}
 @media (prefers-reduced-motion:no-preference){.ai-p{animation:aiin .18s ease-out}@keyframes aiin{from{opacity:0;transform:translateY(8px)}}}
-/* ===== Estilo v2: fondo blanco, banner teal, tira de categorías, footer oscuro ===== */
-:root{--foot:#1B2A33}
+/* ===== Estilo v2: fondo limpio, banner arquitectónico, tira de categorías, footer oscuro ===== */
+:root{--foot:#16242C}
 body{background:var(--hdr)}
-.hero-card{background:linear-gradient(120deg,#2C5D76 0%,#1E465A 100%);border:0;color:#fff;box-shadow:0 14px 36px rgba(44,93,118,.25)}
-.hero h1{color:#fff}
-.hero .cod-line{display:inline-block;margin-top:14px;background:var(--coral);color:#fff;text-decoration:none;padding:6px 18px;border-radius:12px}
-.hero p.lead{color:#E6EEF2}
-.hero .btn.alt{color:#fff;border-color:#fff}.hero .btn.alt:hover{background:#fff;color:#2C5D76}
-.hero-img figcaption{color:#C9D9E1}
+.hero-card{background:linear-gradient(122deg,rgba(20,48,64,.94) 0%,rgba(28,66,86,.86) 58%,rgba(44,93,118,.78) 100%),url("assets/hero-nexovia.jpg") center/cover no-repeat;border:0;color:#fff;box-shadow:0 18px 44px rgba(18,43,58,.24)}
+.hero .eyebrow{color:#FFD3C6;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);padding:5px 12px;border-radius:999px;margin-bottom:14px}
+.hero h1{color:#fff;letter-spacing:-.025em}
+.hero .cod-line{display:inline-block;margin-top:14px;background:var(--coral);color:#fff;text-decoration:none;padding:6px 18px;border-radius:12px;box-shadow:0 6px 18px rgba(237,127,97,.32)}
+.hero p.lead{color:#E8F0F4}
+.hero .btn.alt{color:#fff;border-color:rgba(255,255,255,.78)}.hero .btn.alt:hover{background:#fff;color:#2C5D76;border-color:#fff}
+.hero-img figcaption{color:#D5E3EA;font-weight:500}
 .ft{background:var(--foot)}
-.cats{max-width:1200px;margin:30px auto 0;padding:0 20px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;justify-content:center}
-.cat-b{flex:none;width:100px;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--ink)}
-.cat-b .c{width:74px;height:74px;border-radius:50%;background:var(--cream);border:2px solid var(--line);display:grid;place-items:center;color:var(--head);transition:border-color .15s}
-.cat-b .c svg{width:38px;height:auto}.cat-b:hover .c{border-color:var(--head)}
-.cat-b[aria-pressed="true"] .c{border-color:var(--coral);background:rgba(237,127,97,.14)}
-.sec-t{margin:0 0 6px;font-size:26px;font-weight:800;color:var(--head)}
+.cats{max-width:1200px;margin:30px auto 0;padding:4px 20px;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;justify-content:center}
+.cat-b{flex:none;width:104px;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--ink)}
+.cat-b .c{width:76px;height:76px;border-radius:20px;background:var(--cream);border:1.5px solid var(--line);display:grid;place-items:center;color:var(--head);transition:border-color .18s,transform .18s,box-shadow .18s,background-color .18s}
+.cat-b .c svg{width:36px;height:auto}.cat-b:hover .c{border-color:var(--head);transform:translateY(-2px);box-shadow:0 6px 16px rgba(32,60,76,.10)}
+.cat-b[aria-pressed="true"] .c{border-color:var(--coral);border-width:2px;background:rgba(237,127,97,.14);box-shadow:0 6px 16px rgba(237,127,97,.18)}
+.sec-t{margin:0 0 6px;font-size:clamp(24px,2.8vw,30px);font-weight:800;letter-spacing:-.02em;color:var(--head)}
 .card .img,.wk .img,.fi .img{position:relative;aspect-ratio:1;min-width:0;min-height:0;border-radius:12px;background:var(--hdr);display:grid;place-items:center;color:var(--head);overflow:hidden}
 .card .img svg,.wk .img svg,.fi .img svg{width:58%;height:auto}
 .card .img img,.wk .img img,.fi .img img{display:block;max-width:100%;max-height:100%;width:100%;height:100%;min-width:0;min-height:0;object-fit:contain}
@@ -336,14 +340,16 @@ dialog.fi .fg{display:block}
 .reveal.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;transition:none!important}}
 .banner{max-width:1200px;margin:56px auto;padding:0 20px}
-.banner-c{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(115deg,#ED7F61 0%,#D96B4D 55%,#C85A3E 100%);color:#fff;padding:40px 44px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px}
+.banner-c{position:relative;overflow:hidden;border-radius:22px;background:linear-gradient(115deg,#ED7F61 0%,#D96B4D 55%,#C85A3E 100%);color:#fff;padding:34px 40px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:28px;box-shadow:0 16px 38px rgba(217,107,77,.24)}
 .banner-c::before{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none}
-.banner-c h2{margin:0 0 8px;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.15}
-.banner-c p{margin:0;font-size:16px;max-width:48ch}
-.banner-c .b-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--coral-press);font-weight:800;font-size:16px;padding:14px 26px;border-radius:999px;text-decoration:none;transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.banner-c h2{margin:0 0 8px;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.15;letter-spacing:-.02em}
+.banner-c p{margin:0 0 20px;font-size:16px;max-width:46ch;color:rgba(255,255,255,.95)}
+.banner-c .b-cta{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--coral-press);font-weight:800;font-size:15.5px;padding:13px 24px;border-radius:999px;text-decoration:none;transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
 .banner-c .b-cta:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(0,0,0,.2)}
 .banner-c .b-cta svg{width:20px;height:20px}
-@media (max-width:700px){.banner-c{grid-template-columns:1fr;padding:30px 24px;text-align:center}.banner-c .b-cta{justify-self:center}}
+.banner-media{position:relative;background:rgba(255,255,255,.94);border-radius:16px;padding:10px;box-shadow:0 12px 28px rgba(20,30,36,.18);display:flex;align-items:center;justify-content:center}
+.banner-media img{display:block;max-width:100%;width:100%;height:auto;max-height:240px;object-fit:contain;border-radius:10px}
+@media (max-width:820px){.banner-c{grid-template-columns:1fr;padding:28px 22px;text-align:center}.banner-c p{margin:0 auto 18px}.banner-c .b-cta{justify-self:center}}
 .hero-new{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
 .hero-new .hn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:8px 14px;font-size:13.5px;font-weight:600;color:#fff}
 .hero-new .hn:hover{background:rgba(255,255,255,.28)}.hero-new .hn:focus-visible{outline:3px solid #fff}
@@ -605,6 +611,21 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 /* Validación amigable */
 .fe{display:block;margin-top:4px;font-size:13px;line-height:1.35;color:var(--err);font-weight:600}
 [aria-invalid="true"]{border-color:var(--err)!important;box-shadow:0 0 0 3px rgba(180,35,24,.15)}
+/* Modal de bienvenida vertical */
+dialog.co.wl{width:min(440px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:0;border-radius:22px;overflow:auto}
+.wl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--hdr);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.wl-brand{display:flex;align-items:center;gap:10px}
+.wl-brand img{height:30px;width:auto;display:block}
+.wl-brand b{display:block;font-size:16px;font-weight:800;line-height:1;color:var(--head)}
+.wl-brand small{display:block;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-top:2px;font-weight:600}
+.wl-x{color:var(--ink);background:var(--cream);border:1px solid var(--line);width:40px;height:40px;font-size:24px;flex:none}
+.wl-x:hover{background:var(--coral);color:#fff;border-color:var(--coral)}
+.wl-media{background:var(--cream);padding:14px 16px 0;display:flex;justify-content:center}
+.wl-media img{display:block;max-width:100%;width:auto;height:auto;max-height:46dvh;object-fit:contain;border-radius:14px;box-shadow:0 10px 26px rgba(18,43,58,.14)}
+.wl-body{padding:16px 22px 22px;text-align:center}
+.wl-body h2{margin:0 0 6px;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--head)}
+.wl-body p{margin:0 0 16px;font-size:14px;color:var(--muted);line-height:1.45}
+.wl-go{width:100%;text-align:center}
 </style>
 <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
 </head>
@@ -649,11 +670,11 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 
 <main>
 <section class="hero" id="pago-contra-entrega" aria-labelledby="h1"><div class="hero-card">
-<div><h1 id="h1">¡Envíos a domicilio en Venezuela!<span class="cod-line">Pago Contra Entrega</span></h1>
+<div><span class="eyebrow">Envíos a domicilio en Venezuela</span><h1 id="h1">¡Envíos a domicilio en Venezuela!<span class="cod-line">Pago Contra Entrega</span></h1>
 <p class="lead">Elige tu producto, haz tu pedido y paga cuando lo recibas en tu casa. Sin pagar por adelantado.</p>
 <div class="cta"><a class="btn" href="#productos">Pedir ahora</a><a class="btn alt" href="#como-funciona">Cómo funciona</a></div>
 <div class="hero-new" id="hero-new"></div></div>
-<figure class="hero-img" id="hero-fig"><button type="button" class="img-btn" id="hero-btn" data-ficha="uro-probiotic-vaginal" aria-label="Ver ficha de URO Probiotic Vaginal · 60 Cápsulas"><img id="hero-im" src="assets/uro-probiotic-vaginal.jpg" alt="URO Probiotic Vaginal · 60 Cápsulas" width="1024" height="1024"></button><figcaption id="hero-cap">Recién llegado: URO Probiotic Vaginal · 60 Cápsulas</figcaption></figure>
+<figure class="hero-img" id="hero-fig"><button type="button" class="img-btn" id="hero-btn" data-ficha="auricular-casco-bt57" aria-label="Ver ficha de Auriculares Inalámbricos para Casco BT57 · Manos Libres"><img id="hero-im" src="assets/auricular-casco-bt57.jpg" alt="Auriculares Inalámbricos para Casco BT57 · Manos Libres" width="1024" height="1024"></button><figcaption id="hero-cap">Recién llegado: Auriculares Inalámbricos para Casco BT57 · Manos Libres</figcaption></figure>
 </div></section>
 
 <section class="trust reveal" aria-label="Por qué comprar en Nexovia Store">
@@ -665,12 +686,12 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 <nav class="cats" id="cats" aria-label="Categorías"></nav>
 <section class="wk reveal" id="semana" aria-labelledby="wk-h" hidden><div class="wk-c" id="wk-c"></div></section>
 
-<section class="cat reveal" id="productos" aria-labelledby="h3c"><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
+<section class="cat reveal" id="productos" aria-labelledby="h3c"><span class="eyebrow">Catálogo Nexovia</span><h2 id="h3c" class="sec-t">Gadgets más pedidos</h2>
 <p>Elige el tuyo y págalo cuando te llegue. Precios en dólares y bolívares.</p>
 <p class="tasa-nota" id="tasa-nota" hidden></p>
 <div class="grid" id="grid" aria-live="polite" aria-busy="true"><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div><div class="sk-card" aria-hidden="true"><i></i><i></i><i></i></div></div></section>
 
-<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h" hidden><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
+<section class="cmpx reveal" id="comparador" aria-labelledby="cmp-h" hidden><span class="eyebrow">Comparador inteligente</span><h2 class="sec-t" id="cmp-h">Compara y elige el mejor para ti</h2>
 <p>Comparamos productos de la misma categoría. Elige la categoría y hasta 3 productos, y mira lo importante lado a lado.</p>
 <div class="cmp-cat" id="cmp-cat" role="group" aria-label="Categoría a comparar"></div>
 <div class="cmp-sel" id="cmp-sel"></div>
@@ -679,10 +700,11 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 
 <section class="banner reveal" aria-label="Promoción contra entrega">
 <div class="banner-c"><div><h2>Paga cuando lo recibas</h2>
-<p>Pide hoy tu gadget y paga solo cuando lo tengas en tus manos. Sin riesgo, sin pagar antes.</p></div>
-<a class="b-cta" href="#productos">Ver productos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div></section>
+<p>Pide hoy tu producto Nexovia y paga solo cuando lo tengas en tus manos. Sin riesgo, sin pagar antes.</p>
+<a class="b-cta" href="#productos">Ver productos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+<div class="banner-media"><img src="assets/banner-contra-entrega.jpg" alt="Productos destacados de Nexovia Store con Pago Contra Entrega" width="1408" height="768" loading="lazy"></div></div></section>
 
-<section class="how reveal" id="como-funciona" aria-labelledby="h2"><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
+<section class="how reveal" id="como-funciona" aria-labelledby="h2"><span class="eyebrow">Compra en 3 pasos</span><h2 id="h2">Así funciona el Pago Contra Entrega</h2><p>Tres pasos y recibes tu pedido sin pagar nada antes.</p>
 <ol><li><h3>Elige tu producto</h3><p>Agrégalo al carrito y revisa el total en dólares o bolívares.</p></li>
 <li><h3>Haz tu pedido</h3><p>Déjanos tu nombre, teléfono y dirección de entrega. No necesitas pagar todavía.</p></li>
 <li><h3>Recibe y paga</h3><p>Cuando el mensajero llegue con tu pedido, pagas el monto acordado.</p></li></ol></section>
@@ -746,6 +768,19 @@ section[id],h2[id],h3[id],h4[id]{scroll-margin-top:84px}
 <div class="lb-dots" id="lb-dots" hidden></div>
 </dialog>
 <div class="nx-toast" id="nx-toast" role="status" aria-live="polite" hidden></div>
+
+<dialog class="co wl" id="wl" aria-labelledby="wl-t">
+<div class="wl-top">
+<div class="wl-brand"><img src="assets/isotipo.png" alt="" width="34" height="28"><span><b>NEXOVIA</b><small>STORE</small></span></div>
+<button class="x wl-x" type="button" id="wl-x" aria-label="Cerrar bienvenida">×</button>
+</div>
+<div class="wl-media"><img src="assets/bienvenida-nexovia.jpg" alt="Bienvenido a Nexovia Store: productos seleccionados con Pago Contra Entrega" width="768" height="1024"></div>
+<div class="wl-body">
+<h2 id="wl-t">¡Bienvenido a Nexovia Store!</h2>
+<p>Productos seleccionados con envíos a domicilio en Venezuela y Pago Contra Entrega.</p>
+<button class="btn wl-go" type="button" id="wl-go">Explorar tienda</button>
+</div>
+</dialog>
 
 <dialog class="co lg" id="lg" aria-labelledby="lg-t">
 <button class="x lg-x" type="button" id="lg-x" aria-label="Cerrar">×</button>
@@ -1258,9 +1293,29 @@ function cerrarFicha(desdePop) {
     try { history.replaceState({ nxStore: true }, '', '/'); } catch (e) {}
   }
 }
+const wl = $('wl');
+function cerrarBienvenida(irAProductos) {
+  try { sessionStorage.setItem('nx-wl-off', '1'); } catch (e) {}
+  if (wl && wl.open) wl.close();
+  if (irAProductos) { const p = $('productos'); if (p) p.scrollIntoView({ behavior: 'smooth' }); }
+}
+function abrirBienvenida() {
+  if (!wl || wl.open || skuEnUrl() || location.hash === '#rastreo') return;
+  try { if (sessionStorage.getItem('nx-wl-off') === '1') return; } catch (e) {}
+  if ($('fi').open || $('co').open || $('rs').open || $('lg').open || $('pf').open || $('mp').open || $('lb').open) return;
+  try { wl.showModal(); } catch (e) {}
+}
+if (wl) {
+  $('wl-x').onclick = () => cerrarBienvenida(false);
+  $('wl-go').onclick = () => cerrarBienvenida(true);
+  wl.addEventListener('click', (e) => { if (e.target === wl) cerrarBienvenida(false); });
+  wl.addEventListener('cancel', (e) => { e.preventDefault(); cerrarBienvenida(false); });
+  abrirBienvenida();
+}
 function abrirEnlace() {
   const q = skuEnUrl();
   if (q && prod(q)) {
+    if (wl && wl.open) wl.close();
     try {
       history.replaceState({ nxStore: true }, '', '/');
       history.pushState({ nxFicha: q, nxDirecto: true }, '', '/p/' + encodeURIComponent(q));
